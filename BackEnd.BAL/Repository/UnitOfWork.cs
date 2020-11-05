@@ -1,5 +1,7 @@
 using BackEnd.BAL.Interfaces;
+using BackEnd.BAL.Models;
 using BackEnd.DAL.Context;
+using BackEnd.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -122,5 +124,20 @@ namespace BackEnd.BAL.Repository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-    }
+
+    //begin workspace
+      private GenericRepository<WorkSpace> workSpaceRepository;
+      public GenericRepository<WorkSpace> WorkSpaceRepository
+    {
+        get
+        {
+          if (this.workSpaceRepository == null)
+          {
+            this.workSpaceRepository = new GenericRepository<WorkSpace>(Context);
+          }
+          return workSpaceRepository;
+        }
+      }
+    //end workspace
+  }
 }

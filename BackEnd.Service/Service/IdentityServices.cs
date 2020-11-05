@@ -113,7 +113,7 @@ namespace BackEnd.Service.Service
       }
       //-----------------------------------------------------------------
 
-      var res= await sendVerficationToEMail(newUser.verficationCode.Value,newUser.Id,newUser.Email);
+      var res= await sendVerficationToEMail(newUser.verficationCode.Value,newUser.Email);
       if (res != true)
       {
         return new AuthenticationResult
@@ -176,7 +176,7 @@ namespace BackEnd.Service.Service
       };
     }
 
-    private async Task<Boolean> sendVerficationToEMail(int verficationCode,string userId,string Email) {
+    public async Task<Boolean> sendVerficationToEMail(int verficationCode,string Email) {
       return await _emailService.sendVerfication(verficationCode, Email);
     }
 
@@ -203,7 +203,7 @@ namespace BackEnd.Service.Service
         return new Result
         {
           success = true,
-          message = "user is confirmed"
+          message = "user is confirmed",
         };
       }
       else
@@ -215,6 +215,17 @@ namespace BackEnd.Service.Service
         };
 
       }
+    }
+
+    public async Task<Result> updateVerficationCode(int num,string Email)
+    {
+      var User= await _userManager.FindByEmailAsync(Email);
+      User.verficationCode = num;
+      await _userManager.UpdateAsync(User);
+      return new Result {
+        success = true,
+        Data= User
+      };
     }
   }
 }

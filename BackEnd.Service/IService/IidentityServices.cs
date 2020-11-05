@@ -12,5 +12,7 @@ namespace BackEnd.Service.ISercice
     Task<AuthenticationResult> LoginAsync(string Email, string Password);
     Task<Result> verfayUser(int verficationCode);
     Task<Result> CheckverfayUserByEmail(string Email);
+    Task<Boolean> sendVerficationToEMail(int verficationCode, string Email);
+    Task<Result> updateVerficationCode(int num,string Email);
   }
 }

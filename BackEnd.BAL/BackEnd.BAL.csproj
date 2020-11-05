@@ -9,9 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
     <Folder Include="ApiRoute\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>

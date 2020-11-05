@@ -16,6 +16,6 @@ namespace BackEnd.DAL.Context
     {
       
     }
-
+    public virtual DbSet<WorkSpace> WorkSpaces { get; set; }
   }
 }

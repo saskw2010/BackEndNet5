@@ -4,6 +4,7 @@ using BackEnd.DAL.Context;
 using BackEnd.Service.ISercice;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Project.Controllers.V1
  
   public class IdentityController: Controller
   {
+    private readonly Random _random = new Random();
     private IidentityServices _identityService;
     private readonly BakEndContext _BakEndContext;
     public IdentityController(IidentityServices identityServices,
@@ -47,8 +49,6 @@ namespace Project.Controllers.V1
     [HttpPost(ApiRoute.Identity.Login)]
     public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
     {
-     
-   
         var authResponse = await _identityService.LoginAsync(request.Email, request.Password);
         if (!authResponse.Success)
         {
@@ -73,7 +73,7 @@ namespace Project.Controllers.V1
         else {
           return Ok(new AuthFaildResponse
           {
-            success = false,
+            success = true,
             Errors = new List<string>() {
               res.message
             },
@@ -83,10 +83,6 @@ namespace Project.Controllers.V1
       
       }
 
-       
-      
-    
-   
     }
 
     [HttpGet(ApiRoute.Identity.Roles)]
@@ -102,7 +98,22 @@ namespace Project.Controllers.V1
       return Ok(res);
     }
 
- 
+    [HttpPost(ApiRoute.Identity.ResendVerficationCode)]
+    public async Task<ActionResult> ResendVerficationCode([FromBody] UserVerfayRequest request)
+    {
+      if (!ModelState.IsValid)
+      {
+        ModelState.Values.SelectMany(x => x.Errors.Select(xx => xx.ErrorMessage));
+        return Ok(ModelState.Values);
+
+      }
+      int num = _random.Next();
+      Result res = await _identityService.updateVerficationCode(num, request.Email);
+      if (res.success == true) {
+       await _identityService.sendVerficationToEMail(num, request.Email);
+      }
+      return Ok(res);
+    }
 
 
 

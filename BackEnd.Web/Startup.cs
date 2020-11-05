@@ -28,6 +28,8 @@ using BackEnd.Service.ISercice;
 using BackEnd.Service.Service;
 using EmailService;
 using BackEnd.Service.IService;
+using BackEnd.BAL.Interfaces;
+using BackEnd.BAL.Repository;
 
 namespace BackEnd.Web
 {
@@ -155,8 +157,15 @@ namespace BackEnd.Web
         x.TokenValidationParameters = tokenValidationParameters;
       });
       //----------------------------end jwtSettings-------------------------------------
+      //-------------------------inject service-----------------------------------------
       services.AddScoped<IidentityServices, IdentityServices>();
+      services.AddScoped<IwebsiteServices, websiteServices>();
+      //--------------------------end of inject service--------------------------------
 
+
+      //-------------------------inject repo-----------------------------------------
+      services.AddTransient<IUnitOfWork, UnitOfWork>();
+      //------------------------==end of inject repo------------------------------------
       //----------------------------email configuration------------------------------------
       var emailConfig = Configuration
      .GetSection("EmailConfiguration")
