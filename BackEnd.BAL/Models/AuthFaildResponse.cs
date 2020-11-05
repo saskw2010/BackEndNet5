@@ -9,5 +9,6 @@ namespace BackEnd.BAL.Models
   {
     public Boolean success { get; set; }
     public IEnumerable<string> Errors { get; set; }
+    public Boolean confirmd { get; set; }
   }
 }
