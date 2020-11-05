@@ -187,12 +187,34 @@ namespace BackEnd.Service.Service
       {
         user.confirmed = true;
         await _userManager.UpdateAsync(user);
-        return new Result { success = true };
+        return new Result { success = true};
       }
       else {
         return new Result { success = false };
       }
 
+    }
+
+    public async Task<Result> CheckverfayUserByEmail(string Email)
+    {
+      var user = await _userManager.FindByEmailAsync(Email);
+      if (user.confirmed == true)
+      {
+        return new Result
+        {
+          success = true,
+          message = "user is confirmed"
+        };
+      }
+      else
+      {
+        return new Result
+        {
+          success = false,
+          message = "user is not confirmed"
+        };
+
+      }
     }
   }
 }

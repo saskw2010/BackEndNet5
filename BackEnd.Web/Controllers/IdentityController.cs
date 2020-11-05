@@ -47,21 +47,45 @@ namespace Project.Controllers.V1
     [HttpPost(ApiRoute.Identity.Login)]
     public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
     {
-      var authResponse = await _identityService.LoginAsync(request.Email, request.Password);
-      if (!authResponse.Success)
-      {
-        return BadRequest(
-            new AuthFaildResponse
-            {
-              Errors = authResponse.Errors
+     
+   
+        var authResponse = await _identityService.LoginAsync(request.Email, request.Password);
+        if (!authResponse.Success)
+        {
+          return Ok(
+              new AuthFaildResponse
+              {
+                success = false,
+                Errors = authResponse.Errors
+              }
+            );
+        }
+        else {
+        var res = await _identityService.CheckverfayUserByEmail(request.Email);
+        if (res.success == true)
+        {
+          return Ok(new AuthSuccessResponse
+          {
+            success = true,
+            Token = authResponse.Token
+          });
+        }
+        else {
+          return Ok(new AuthFaildResponse
+          {
+            success = false,
+            Errors = new List<string>() {
+              res.message
             }
-          );
+          }) ;
+        }
+      
       }
 
-      return Ok(new AuthSuccessResponse
-      {
-        Token = authResponse.Token
-      });
+       
+      
+    
+   
     }
 
     [HttpGet(ApiRoute.Identity.Roles)]
@@ -77,6 +101,7 @@ namespace Project.Controllers.V1
       return Ok(res);
     }
 
+ 
 
 
 
