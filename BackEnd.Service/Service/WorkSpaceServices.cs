@@ -1,3 +1,4 @@
+using AutoMapper;
 using BackEnd.BAL.Interfaces;
 using BackEnd.BAL.Models;
 using BackEnd.BAL.Repository;
@@ -13,14 +14,17 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Service.Service
 {
-  public class websiteServices : IwebsiteServices
+  public class WorkSpaceServices : IworkSapceServices
   {
     private UnitOfWork unitOfWork;
-    public websiteServices(IUnitOfWork unitOfWork,
-      BakEndContext context
+    private IMapper _mapper;
+    public WorkSpaceServices(IUnitOfWork unitOfWork,
+      BakEndContext context,
+      IMapper mapper
       )
     {
       this.unitOfWork = new UnitOfWork(context);
+      _mapper = mapper;
     }
     public async Task<Boolean> CreateWorkspace(WorkSpaceVm workspace)
     {
@@ -55,11 +59,12 @@ namespace BackEnd.Service.Service
 
     public async Task<bool> InsertWorkspace(WorkSpaceVm workSpaceVm)
     {
-      WorkSpace workspace = new WorkSpace {
-        UserName = workSpaceVm.UserName,
-        WorkSpaceName= workSpaceVm.WorkSpaceName,
-        DatabaseName= workSpaceVm.DatabaseName
-      };
+      //WorkSpace workspace = new WorkSpace {
+      //  UserName = workSpaceVm.UserName,
+      //  WorkSpaceName= workSpaceVm.WorkSpaceName,
+      //  DatabaseName= workSpaceVm.DatabaseName
+      //};
+      WorkSpace workspace = _mapper.Map<WorkSpace>(workSpaceVm);
       unitOfWork.WorkSpaceRepository.Insert(workspace);
       await  unitOfWork.SaveAsync();
       return true;

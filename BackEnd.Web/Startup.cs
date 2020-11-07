@@ -30,6 +30,8 @@ using EmailService;
 using BackEnd.Service.IService;
 using BackEnd.BAL.Interfaces;
 using BackEnd.BAL.Repository;
+using AutoMapper;
+using BackEnd.Service.MappingProfiles;
 
 namespace BackEnd.Web
 {
@@ -159,9 +161,19 @@ namespace BackEnd.Web
       //----------------------------end jwtSettings-------------------------------------
       //-------------------------inject service-----------------------------------------
       services.AddScoped<IidentityServices, IdentityServices>();
-      services.AddScoped<IwebsiteServices, websiteServices>();
+      services.AddScoped<IworkSapceServices, WorkSpaceServices>();
       //--------------------------end of inject service--------------------------------
 
+      //begin::autmapper
+      // Auto Mapper Configurations
+      var mapperConfig = new MapperConfiguration(mc =>
+      {
+        mc.AddProfile(new MappingProfiles());
+      });
+
+      IMapper mapper = mapperConfig.CreateMapper();
+      services.AddSingleton(mapper);
+      //end::automapper
 
       //-------------------------inject repo-----------------------------------------
       services.AddTransient<IUnitOfWork, UnitOfWork>();

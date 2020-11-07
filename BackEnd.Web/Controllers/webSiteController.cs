@@ -12,16 +12,16 @@ namespace BackEnd.Web.Controllers
 {
   public class webSiteController: Controller
   {
-    private IwebsiteServices _websiteServices;
-    public webSiteController(IwebsiteServices websiteServices)
+    private IworkSapceServices _websiteServices;
+    public webSiteController(IworkSapceServices websiteServices)
     {
       _websiteServices = websiteServices;
     }
     [HttpPost(ApiRoute.WebSite.CreateWebsite)]
     public async Task<IActionResult> CreateWebsite([FromBody] WorkSpaceVm request)
     {
-     var res=await _websiteServices.CreateWorkspace(request);
-      var res2 = await _websiteServices.InsertWorkspace(request);
+     //var res=await _websiteServices.CreateWorkspace(request);
+        var   res = await _websiteServices.InsertWorkspace(request);
       return Ok(new Result {success= res });
     }
 

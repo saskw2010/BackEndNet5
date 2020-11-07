@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Service.IService
 {
-  public interface IwebsiteServices
+  public interface IworkSapceServices
   {
     Task<Boolean> CreateWorkspace(WorkSpaceVm workSpaceVm);
     Task<Boolean> InsertWorkspace(WorkSpaceVm workSpace);
