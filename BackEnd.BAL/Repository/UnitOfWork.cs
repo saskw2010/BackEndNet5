@@ -75,23 +75,24 @@ namespace BackEnd.BAL.Repository
                     await Context.SaveChangesAsync();
                     dbContextTransaction.Commit();
                 }
-                catch (DbUpdateException ex)
-                {
-                    var sqlException = ex.GetBaseException() as SqlException;
+        //        catch (DbUpdateException ex)
+        //        {
+        //            var sqlException = ex.GetBaseException() as SqlException;
 
-                    if (sqlException != null)
-                    {
-                        var number = sqlException.Number;
+        //            if (sqlException != null)
+        //            {
+        //                var number = sqlException.Number;
 
-                        if (number == 547)
-                        {
-                            returnValue = 501;
+        //                if (number == 547)
+        //                {
+        //                    returnValue = 501;
 
-                        }
-                        else
-                            returnValue = 500;
-                    }
-                }
+        //                }
+        //                else
+        //                    returnValue = 500;
+        //            }
+        //           returnValue = 500;
+        //}
                 catch (Exception)
                 {
                     //Log Exception Handling message                      

@@ -22,7 +22,13 @@ namespace BackEnd.Web.Controllers
     {
      //var res=await _websiteServices.CreateWorkspace(request);
         var   res = await _websiteServices.InsertWorkspace(request);
-      return Ok(new Result {success= res });
+      return Ok(res);
+    }
+
+    [HttpGet(ApiRoute.WebSite.Get)]
+    public IActionResult Get(int pageNumber = 1, int pageSize = 2) {
+    var res=_websiteServices.pagginationFunction(pageNumber, pageSize);
+     return Ok(res);
     }
 
   }

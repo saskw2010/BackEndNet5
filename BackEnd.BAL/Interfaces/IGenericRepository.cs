@@ -12,7 +12,7 @@ namespace BackEnd.BAL.Interfaces
         IEnumerable<T> Get(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            string includeProperties = "", int page = 0, string NoTrack = "");
+            string includeProperties = "", int page = 0, int Take = 0, string NoTrack = "");
 
         T GetByID(object id);
 

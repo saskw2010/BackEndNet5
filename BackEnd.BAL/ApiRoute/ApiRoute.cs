@@ -23,6 +23,7 @@ namespace BackEnd.BAL.ApiRoute
     public static class WebSite
     {
       public const string CreateWebsite = Base + "webSite/CreateWebsite";
+      public const string Get = Base + "webSite/Get";
     }
 
 

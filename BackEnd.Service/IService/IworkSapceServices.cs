@@ -8,7 +8,8 @@ namespace BackEnd.Service.IService
 {
   public interface IworkSapceServices
   {
-    Task<Boolean> CreateWorkspace(WorkSpaceVm workSpaceVm);
-    Task<Boolean> InsertWorkspace(WorkSpaceVm workSpace);
+    Task<Result> CreateWorkspace(WorkSpaceVm workSpaceVm);
+    Task<Result> InsertWorkspace(WorkSpaceVm workSpace);
+    Result pagginationFunction(int pageNumber = 0, int pageSize = 0);
   }
 }

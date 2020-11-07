@@ -24,7 +24,7 @@ namespace BackEnd.BAL.Repository
 
         public virtual IEnumerable<T> Get(Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            string includeProperties = "", int page = 0, string NoTrack = "")
+            string includeProperties = "", int page = 0,int Take=10 , string NoTrack = "")
         {
             IQueryable<T> query = dbSet;
 
@@ -51,7 +51,7 @@ namespace BackEnd.BAL.Repository
                 // Paging
                 if (page > 0)
                 {
-                    return query.ToList().Skip(page - 1).Take(1);
+                    return query.ToList().Skip((page - 1)*Take).Take(Take);
                 }
                 else
                     return query.ToList();

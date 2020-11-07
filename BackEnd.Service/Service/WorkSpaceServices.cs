@@ -26,7 +26,7 @@ namespace BackEnd.Service.Service
       this.unitOfWork = new UnitOfWork(context);
       _mapper = mapper;
     }
-    public async Task<Boolean> CreateWorkspace(WorkSpaceVm workspace)
+    public async Task<Result> CreateWorkspace(WorkSpaceVm workspace)
     {
       string domainName = workspace.WorkSpaceName;
       string appPoolName = "Classic .NET AppPool";
@@ -37,11 +37,11 @@ namespace BackEnd.Service.Service
         iisManager.Sites.Add(domainName, "http", "*:8080:", webFiles);
         iisManager.ApplicationDefaults.ApplicationPoolName = appPoolName;
         iisManager.CommitChanges();
-        return true;
+        return new Result { success = true };
       }
       else
       {
-        return false;
+        return new Result { success = true };
       }
     }
 
@@ -57,7 +57,7 @@ namespace BackEnd.Service.Service
       return flagset;
     }
 
-    public async Task<bool> InsertWorkspace(WorkSpaceVm workSpaceVm)
+    public async Task<Result> InsertWorkspace(WorkSpaceVm workSpaceVm)
     {
       //WorkSpace workspace = new WorkSpace {
       //  UserName = workSpaceVm.UserName,
@@ -67,7 +67,62 @@ namespace BackEnd.Service.Service
       WorkSpace workspace = _mapper.Map<WorkSpace>(workSpaceVm);
       unitOfWork.WorkSpaceRepository.Insert(workspace);
       await  unitOfWork.SaveAsync();
-      return true;
+      return new Result { success = true };
     }
+
+
+    public Result pagginationFunction( int pageNumber = 1, int pageSize = 2)
+    {
+      // Get's No of Rows Count 
+      int count = unitOfWork.WorkSpaceRepository.Get().Count();
+
+      // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1
+      int CurrentPage = pageNumber;
+
+      // Parameter is passed from Query string if it is null then it default Value will be pageSize:20
+      int PageSize = pageSize;
+
+      // Display TotalCount to Records to User
+      int TotalCount = count;
+
+      // Calculating Totalpage by Dividing (No of Records / Pagesize)
+      int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+
+
+      // Returns List of Customer after applying Paging 
+      var items = unitOfWork.WorkSpaceRepository.Get(page:pageNumber,Take:pageSize);
+
+      // if CurrentPage is greater than 1 means it has previousPage
+      var previousPage = CurrentPage > 1 ? "Yes" : "No";
+
+      // if TotalPages is greater than CurrentPage means it has nextPage
+      var nextPage = CurrentPage < TotalPages ? "Yes" : "No";
+
+      // Object which we are going to send in header 
+      paginationMetadata paginationMetadata = new paginationMetadata
+      {
+        totalCount = TotalCount,
+        pageSize = PageSize,
+        currentPage = CurrentPage,
+        nextPage = nextPage,
+        previousPage = previousPage,
+        data = items
+      };
+
+      // Setting Header
+      // HttpContext.Current.Response.Headers.Add("Paging-Headers", JsonConvert.SerializeObject(paginationMetadata));
+
+      // Returing List of Customers Collections
+     
+      var res = new Result
+      {
+        success = true,
+        Data = paginationMetadata,
+        code = "200",
+        message = null
+      };
+      return res;
+    }
+
   }
 }
