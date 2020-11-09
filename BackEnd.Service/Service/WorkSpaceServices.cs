@@ -117,7 +117,7 @@ namespace BackEnd.Service.Service
       var res = new Result
       {
         success = true,
-        Data = paginationMetadata,
+        data = paginationMetadata,
         code = "200",
         message = null
       };

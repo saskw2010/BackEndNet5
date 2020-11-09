@@ -23,6 +23,7 @@ namespace BackEnd.Service.Service
     private readonly TokenValidationParameters _TokenValidationParameters;
     private readonly BakEndContext _dataContext;
     private readonly IemailService _emailService;
+    private readonly BakEndContext _BakEndContext;
     private readonly Random _random = new Random();
     public IdentityServices(UserManager<ApplicationUser> userManager,
       ApplicationSettings jwtSettings,
@@ -37,6 +38,7 @@ namespace BackEnd.Service.Service
       _TokenValidationParameters = TokenValidationParameters;
       _dataContext = dataContext;
       _emailService = emailService;
+      _BakEndContext = dataContext;
     }
 
     public async Task<AuthenticationResult> LoginAsync(string Email, string Password)
@@ -224,8 +226,42 @@ namespace BackEnd.Service.Service
       await _userManager.UpdateAsync(User);
       return new Result {
         success = true,
-        Data= User
+        data= User
       };
+    }
+
+    public async Task<Result> getUserByEmail(string Email)
+    {
+      if (!string.IsNullOrEmpty(Email)) {
+        var user = await _userManager.FindByEmailAsync(Email);
+        if (user != null)
+        {
+          return new Result
+          {
+            success = true,
+            data = user
+          };
+        }
+        else {
+          return new Result
+          {
+            success = false,
+            message="user does not exist"
+          };
+        }
+      
+      }
+      return new Result
+      {
+        success=false
+      };
+
+    }
+
+    public Result getAllRoles()
+    {
+      var res= _BakEndContext.Roles.ToList();
+      return new Result {data=res};
     }
   }
 }

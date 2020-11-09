@@ -32,6 +32,9 @@ using BackEnd.BAL.Interfaces;
 using BackEnd.BAL.Repository;
 using AutoMapper;
 using BackEnd.Service.MappingProfiles;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BackEnd.Web
 {
@@ -47,15 +50,21 @@ namespace BackEnd.Web
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+
       // Inject Appsettings
       services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
       // Serialized Returned Object With Same Format 
       #region AddController
+      //services.AddControllers().AddNewtonsoftJson(options =>
+      //{
+      //  options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+      //  options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+      //}).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
       services.AddControllers().AddNewtonsoftJson(options =>
       {
-        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-        options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-      }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+        options.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+      });
       #endregion
       // Add service and create Policy with options
       #region CorsPolicy

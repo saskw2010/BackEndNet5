@@ -16,12 +16,12 @@ namespace Project.Controllers.V1
   {
     private readonly Random _random = new Random();
     private IidentityServices _identityService;
-    private readonly BakEndContext _BakEndContext;
+    
     public IdentityController(IidentityServices identityServices,
       BakEndContext Context)
     {
       _identityService = identityServices;
-      _BakEndContext = Context;
+      
     }
     [HttpPost(ApiRoute.Identity.Register)]
     public async Task<IActionResult> Register([FromBody] UserRegisterationRequest request) {
@@ -86,8 +86,8 @@ namespace Project.Controllers.V1
     }
 
     [HttpGet(ApiRoute.Identity.Roles)]
-    public List<IdentityRole> GetAllROles() {
-      return _BakEndContext.Roles.ToList();
+    public Result GetAllROles() {
+      return _identityService.getAllRoles();
     }
 
 
@@ -115,6 +115,11 @@ namespace Project.Controllers.V1
       return Ok(res);
     }
 
+    [HttpGet(ApiRoute.Identity.GetUser)]
+    public async Task<IActionResult> GetUser(string Email) {
+      var res=_identityService.getUserByEmail(Email);
+      return Ok(res);
+    }
 
 
 

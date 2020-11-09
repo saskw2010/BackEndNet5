@@ -18,6 +18,7 @@ namespace BackEnd.BAL.ApiRoute
       public const string Roles = Base + "/Identity/Roles";
       public const string verfayUser = Base + "Identity/verfayUser";
       public const string ResendVerficationCode = Base + "Identity/ResendVerficationCode";
+      public const string GetUser = Base + "Identity/GetUser";
     }
 
     public static class WebSite

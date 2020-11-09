@@ -14,5 +14,7 @@ namespace BackEnd.Service.ISercice
     Task<Result> CheckverfayUserByEmail(string Email);
     Task<Boolean> sendVerficationToEMail(int verficationCode, string Email);
     Task<Result> updateVerficationCode(int num,string Email);
+    Task<Result> getUserByEmail(string Email);
+    Result getAllRoles();
   }
 }
