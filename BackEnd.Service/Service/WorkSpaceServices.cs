@@ -129,7 +129,9 @@ namespace BackEnd.Service.Service
       // Get's No of Rows Count 
       int count = unitOfWork.WorkSpaceRepository.Get(filter: x => (x.UserId == userId)
       &&
-      (x.WorkSpaceName.Contains(searchword) || x.DatabaseName.Contains(searchword) || x.UserName.Contains(searchword))
+      (searchword != null?
+      x.WorkSpaceName.Contains(searchword) || x.DatabaseName.Contains(searchword) || x.UserName.Contains(searchword)
+      :true)
       ).Count();
 
       // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1
@@ -147,7 +149,9 @@ namespace BackEnd.Service.Service
 
       // Returns List of Customer after applying Paging 
       var items = unitOfWork.WorkSpaceRepository.Get(filter: x => (x.UserId == userId) &&
-      (x.WorkSpaceName.Contains(searchword) || x.DatabaseName.Contains(searchword) || x.UserName.Contains(searchword))
+      (searchword != null ?
+      x.WorkSpaceName.Contains(searchword) || x.DatabaseName.Contains(searchword) || x.UserName.Contains(searchword)
+      : true)
       , page: pageNumber, Take: pageSize);
 
       // if CurrentPage is greater than 1 means it has previousPage
