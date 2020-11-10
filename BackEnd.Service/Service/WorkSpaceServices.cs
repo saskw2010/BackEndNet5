@@ -46,7 +46,7 @@ namespace BackEnd.Service.Service
     }
 
 
-    
+
 
     public static bool IsWebsiteExists(string strWebsitename)
     {
@@ -61,13 +61,13 @@ namespace BackEnd.Service.Service
     {
       WorkSpace workspacerequest = _mapper.Map<WorkSpace>(workSpaceVm);
       unitOfWork.WorkSpaceRepository.Insert(workspacerequest);
-      await  unitOfWork.SaveAsync();
+      await unitOfWork.SaveAsync();
       WorkSpaceVm workspaceresponse = _mapper.Map<WorkSpaceVm>(workspacerequest);
       return workspaceresponse;
     }
 
 
-    public Result pagginationFunction(string userId ,int pageNumber = 1, int pageSize = 2)
+    public Result pagginationFunction(string userId, int pageNumber = 1, int pageSize = 2)
     {
       // Get's No of Rows Count 
       int count = unitOfWork.WorkSpaceRepository.Get(filter: x => x.UserId == userId).Count();
@@ -86,7 +86,7 @@ namespace BackEnd.Service.Service
 
 
       // Returns List of Customer after applying Paging 
-      var items = unitOfWork.WorkSpaceRepository.Get(filter: x => x.UserId == userId,page:pageNumber,Take:pageSize);
+      var items = unitOfWork.WorkSpaceRepository.Get(filter: x => x.UserId == userId, page: pageNumber, Take: pageSize);
 
       // if CurrentPage is greater than 1 means it has previousPage
       var previousPage = CurrentPage > 1 ? "Yes" : "No";
@@ -94,7 +94,7 @@ namespace BackEnd.Service.Service
       // if TotalPages is greater than CurrentPage means it has nextPage
       var nextPage = CurrentPage < TotalPages ? "Yes" : "No";
       // map list of workspace to workspacevm
-      var workspacevmList=_mapper.Map<List<WorkSpaceVm>>(items);
+      var workspacevmList = _mapper.Map<List<WorkSpaceVm>>(items);
       // Object which we are going to send in header 
       paginationMetadata paginationMetadata = new paginationMetadata
       {
@@ -110,7 +110,7 @@ namespace BackEnd.Service.Service
       // HttpContext.Current.Response.Headers.Add("Paging-Headers", JsonConvert.SerializeObject(paginationMetadata));
 
       // Returing List of Customers Collections
-     
+
       var res = new Result
       {
         success = true,
@@ -122,37 +122,65 @@ namespace BackEnd.Service.Service
     }
 
     //----------------------------------Eng Mostafa-----------------------
-    public void r104Implementation(WorkSpaceVm workspace)
+
+    public Result pagginationFunctionWithFilter(string searchword, string userId, int pageNumber = 0, int pageSize = 0)
     {
-      // This is the placeholder for method implementation.
-      ServerManager serverManager = new ServerManager();
-      Configuration config = serverManager.GetApplicationHostConfiguration();
-      ConfigurationSection sitesSection = config.GetSection("system.applicationHost/sites");
-      ConfigurationElementCollection sitesCollection = sitesSection.GetCollection();
 
-      ConfigurationElement siteElement = sitesCollection.CreateElement("site");
-      siteElement["name"] = workspace.WorkSpaceName;
-      siteElement["id"] = 3;
-      siteElement["serverAutoStart"] = true;
+      // Get's No of Rows Count 
+      int count = unitOfWork.WorkSpaceRepository.Get(filter: x => (x.UserId == userId)
+      &&
+      (x.WorkSpaceName.Contains(searchword) || x.DatabaseName.Contains(searchword) || x.UserName.Contains(searchword))
+      ).Count();
 
-      ConfigurationElementCollection bindingsCollection = siteElement.GetCollection("bindings");
-      ConfigurationElement bindingElement = bindingsCollection.CreateElement("binding");
-      bindingElement["protocol"] = "http"; 
-      bindingElement["bindingInformation"] = "*:80:www.contoso.com";
-      bindingsCollection.Add(bindingElement);
+      // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1
+      int CurrentPage = pageNumber;
 
-      ConfigurationElementCollection siteCollection = siteElement.GetCollection();
-      ConfigurationElement applicationElement = siteCollection.CreateElement("application");
-      applicationElement["path"] = "/";
-      ConfigurationElementCollection applicationCollection = applicationElement.GetCollection();
-      ConfigurationElement virtualDirectoryElement = applicationCollection.CreateElement("virtualDirectory");
-      virtualDirectoryElement["path"] = "/";
-      virtualDirectoryElement["physicalPath"] = @"F:\work1";
-      applicationCollection.Add(virtualDirectoryElement);
-      siteCollection.Add(applicationElement);
-      sitesCollection.Add(siteElement);
+      // Parameter is passed from Query string if it is null then it default Value will be pageSize:20
+      int PageSize = pageSize;
 
-      serverManager.CommitChanges();
+      // Display TotalCount to Records to User
+      int TotalCount = count;
+
+      // Calculating Totalpage by Dividing (No of Records / Pagesize)
+      int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+
+
+      // Returns List of Customer after applying Paging 
+      var items = unitOfWork.WorkSpaceRepository.Get(filter: x => (x.UserId == userId) &&
+      (x.WorkSpaceName.Contains(searchword) || x.DatabaseName.Contains(searchword) || x.UserName.Contains(searchword))
+      , page: pageNumber, Take: pageSize);
+
+      // if CurrentPage is greater than 1 means it has previousPage
+      var previousPage = CurrentPage > 1 ? "Yes" : "No";
+
+      // if TotalPages is greater than CurrentPage means it has nextPage
+      var nextPage = CurrentPage < TotalPages ? "Yes" : "No";
+      // map list of workspace to workspacevm
+      var workspacevmList = _mapper.Map<List<WorkSpaceVm>>(items);
+      // Object which we are going to send in header 
+      paginationMetadata paginationMetadata = new paginationMetadata
+      {
+        totalCount = TotalCount,
+        pageSize = PageSize,
+        currentPage = CurrentPage,
+        nextPage = nextPage,
+        previousPage = previousPage,
+        data = workspacevmList
+      };
+
+      // Setting Header
+      // HttpContext.Current.Response.Headers.Add("Paging-Headers", JsonConvert.SerializeObject(paginationMetadata));
+
+      // Returing List of Customers Collections
+
+      var res = new Result
+      {
+        success = true,
+        data = paginationMetadata,
+        code = "200",
+        message = null
+      };
+      return res;
     }
 
 

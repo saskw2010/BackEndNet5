@@ -26,6 +26,7 @@ namespace BackEnd.BAL.ApiRoute
       public const string CreateWebsite = Base + "webSite/CreateWebsite";
       public const string CreateWebsiteV2 = Base + "webSite/CreateWebsiteV2";
       public const string Get = Base + "webSite/Get";
+     public const string Filter = Base + "webSite/filter";
     }
 
 

@@ -48,5 +48,14 @@ namespace BackEnd.Web.Controllers
      return res;
     }
 
+    //begin::search
+    [HttpGet(ApiRoute.WebSite.Filter)]
+    public Result Filter(string searchword,string userId, int pageNumber = 1, int pageSize = 2) {
+      var res = _websiteServices.pagginationFunctionWithFilter(searchword, userId, pageNumber, pageSize);
+      return res;
+    }
+    //end::search
+
+
   }
 }
