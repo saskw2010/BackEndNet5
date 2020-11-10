@@ -23,27 +23,29 @@ namespace BackEnd.Web.Controllers
       configuration = iConfig;
     }
     [HttpPost(ApiRoute.WebSite.CreateWebsite)]
-    public async Task<IActionResult> CreateWebsite([FromBody] WorkSpaceVm request)
+    public async Task<Result> CreateWebsite([FromBody] WorkSpaceVm request)
     {
       //var res=await _websiteServices.CreateWorkspace(request);
-        var   res = await _websiteServices.InsertWorkspace(request);
-      return Ok(res);
+        var   workspacevm = await _websiteServices.InsertWorkspace(request);
+        WorkspacelistBusinessRules wo = new WorkspacelistBusinessRules(configuration);
+        var res=wo.r100Implementation(workspacevm);
+        return res;
     }
 
     
     [HttpPost(ApiRoute.WebSite.CreateWebsiteV2)]
-    public IActionResult CreateWebsiteV2(WorkSpaceVm workspace)
+    public Boolean CreateWebsiteV2(WorkSpaceVm workspace)
     {
       WorkspacelistBusinessRules wo = new WorkspacelistBusinessRules(configuration);
       wo.r100Implementation(workspace);
       //_websiteServices.r104Implementation(workspace);
-      return Ok(true);
+      return true;
     }
 
     [HttpGet(ApiRoute.WebSite.Get)]
-    public IActionResult Get(int pageNumber = 1, int pageSize = 2) {
-    var res=_websiteServices.pagginationFunction(pageNumber, pageSize);
-     return Ok(res);
+    public Result Get(string userId,int pageNumber = 1, int pageSize = 2) {
+    var res=_websiteServices.pagginationFunction(userId, pageNumber, pageSize);
+     return res;
     }
 
   }

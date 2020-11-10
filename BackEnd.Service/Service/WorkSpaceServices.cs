@@ -57,24 +57,20 @@ namespace BackEnd.Service.Service
       return flagset;
     }
 
-    public async Task<Result> InsertWorkspace(WorkSpaceVm workSpaceVm)
+    public async Task<WorkSpaceVm> InsertWorkspace(WorkSpaceVm workSpaceVm)
     {
-      //WorkSpace workspace = new WorkSpace {
-      //  UserName = workSpaceVm.UserName,
-      //  WorkSpaceName= workSpaceVm.WorkSpaceName,
-      //  DatabaseName= workSpaceVm.DatabaseName
-      //};
-      WorkSpace workspace = _mapper.Map<WorkSpace>(workSpaceVm);
-      unitOfWork.WorkSpaceRepository.Insert(workspace);
+      WorkSpace workspacerequest = _mapper.Map<WorkSpace>(workSpaceVm);
+      unitOfWork.WorkSpaceRepository.Insert(workspacerequest);
       await  unitOfWork.SaveAsync();
-      return new Result { success = true };
+      WorkSpaceVm workspaceresponse = _mapper.Map<WorkSpaceVm>(workspacerequest);
+      return workspaceresponse;
     }
 
 
-    public Result pagginationFunction( int pageNumber = 1, int pageSize = 2)
+    public Result pagginationFunction(string userId ,int pageNumber = 1, int pageSize = 2)
     {
       // Get's No of Rows Count 
-      int count = unitOfWork.WorkSpaceRepository.Get().Count();
+      int count = unitOfWork.WorkSpaceRepository.Get(filter: x => x.UserId == userId).Count();
 
       // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1
       int CurrentPage = pageNumber;
@@ -90,14 +86,15 @@ namespace BackEnd.Service.Service
 
 
       // Returns List of Customer after applying Paging 
-      var items = unitOfWork.WorkSpaceRepository.Get(page:pageNumber,Take:pageSize);
+      var items = unitOfWork.WorkSpaceRepository.Get(filter: x => x.UserId == userId,page:pageNumber,Take:pageSize);
 
       // if CurrentPage is greater than 1 means it has previousPage
       var previousPage = CurrentPage > 1 ? "Yes" : "No";
 
       // if TotalPages is greater than CurrentPage means it has nextPage
       var nextPage = CurrentPage < TotalPages ? "Yes" : "No";
-
+      // map list of workspace to workspacevm
+      var workspacevmList=_mapper.Map<List<WorkSpaceVm>>(items);
       // Object which we are going to send in header 
       paginationMetadata paginationMetadata = new paginationMetadata
       {
@@ -106,7 +103,7 @@ namespace BackEnd.Service.Service
         currentPage = CurrentPage,
         nextPage = nextPage,
         previousPage = previousPage,
-        data = items
+        data = workspacevmList
       };
 
       // Setting Header

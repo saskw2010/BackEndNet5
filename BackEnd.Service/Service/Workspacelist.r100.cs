@@ -65,7 +65,7 @@ namespace BackEnd.Service.Service
     ///         ''' with a command name that matches "Insert".
     ///         ''' </summary>
 
-    public void r100Implementation(WorkSpaceVm workspace)
+    public Result r100Implementation(WorkSpaceVm workspace)
     {
       // This is the placeholder for method implementation.
 
@@ -207,6 +207,12 @@ namespace BackEnd.Service.Service
           doc.Save(reportFileNamemossopath + reportFileNamemosso);
         }
       }
+      return new Result {
+        success=true,
+        message="workspace added successfuly",
+        code="200",
+        data=null
+      };
     }
     public bool createKeys(string sqlFilepath, string SqlConnectionString)
     {
