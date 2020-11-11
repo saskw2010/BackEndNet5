@@ -15,6 +15,7 @@ namespace BackEnd.Service.ISercice
     Task<Boolean> sendVerficationToEMail(int verficationCode, string Email);
     Task<Result> updateVerficationCode(int num,string Email);
     Task<Result> getUserByEmail(string Email);
+    Task<Result> updateresetPasswordCodeCode(int num,string Email);
     Result getAllRoles();
   }
 }

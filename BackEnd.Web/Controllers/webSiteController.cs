@@ -3,6 +3,7 @@ using BackEnd.BAL.Models;
 using BackEnd.Service.ISercice;
 using BackEnd.Service.IService;
 using BackEnd.Service.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Web.Controllers
 {
+  [Authorize]
   public class webSiteController: Controller
   {
     private IworkSapceServices _websiteServices;

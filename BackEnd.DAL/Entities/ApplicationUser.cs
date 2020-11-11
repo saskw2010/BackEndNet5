@@ -10,6 +10,7 @@ namespace BackEnd.DAL.Entities
     {
       public int? verficationCode { get; set; }
       public Boolean? confirmed { get; set; }
-      public virtual ICollection<WorkSpace> WorkSpace { get; set; }
+    public int? resetPasswordCode { get; set; }
+    public virtual ICollection<WorkSpace> WorkSpace { get; set; }
   }
 }

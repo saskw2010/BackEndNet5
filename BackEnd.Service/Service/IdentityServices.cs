@@ -263,5 +263,19 @@ namespace BackEnd.Service.Service
       var res= _BakEndContext.Roles.ToList();
       return new Result {data=res};
     }
+
+
+
+    public async Task<Result> updateresetPasswordCodeCode(int num, string Email)
+    {
+      var User = await _userManager.FindByEmailAsync(Email);
+      User.resetPasswordCode = num;
+      await _userManager.UpdateAsync(User);
+      return new Result
+      {
+        success = true,
+        data = User
+      };
+    }
   }
 }
