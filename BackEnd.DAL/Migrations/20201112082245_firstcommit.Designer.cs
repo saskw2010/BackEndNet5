@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEnd.DAL.Migrations
 {
     [DbContext(typeof(BakEndContext))]
-    [Migration("20200828164716_firstcommit")]
+    [Migration("20201112082245_firstcommit")]
     partial class firstcommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,6 +73,18 @@ namespace BackEnd.DAL.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
+                    b.Property<bool?>("confirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("resetPasswordCode")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("userTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("verficationCode")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -83,7 +95,48 @@ namespace BackEnd.DAL.Migrations
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("userTypeId");
+
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("BackEnd.DAL.Entities.UserType", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NameAr")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserType");
+                });
+
+            modelBuilder.Entity("BackEnd.DAL.Entities.WorkSpace", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DatabaseName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkSpaceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("WorkSpaces");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -219,6 +272,20 @@ namespace BackEnd.DAL.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BackEnd.DAL.Entities.ApplicationUser", b =>
+                {
+                    b.HasOne("BackEnd.DAL.Entities.UserType", "UserType")
+                        .WithMany()
+                        .HasForeignKey("userTypeId");
+                });
+
+            modelBuilder.Entity("BackEnd.DAL.Entities.WorkSpace", b =>
+                {
+                    b.HasOne("BackEnd.DAL.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany("WorkSpace")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -77,6 +77,9 @@ namespace BackEnd.DAL.Migrations
                     b.Property<int?>("resetPasswordCode")
                         .HasColumnType("int");
 
+                    b.Property<int?>("userTypeId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("verficationCode")
                         .HasColumnType("int");
 
@@ -90,7 +93,22 @@ namespace BackEnd.DAL.Migrations
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("userTypeId");
+
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("BackEnd.DAL.Entities.UserType", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NameAr")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserType");
                 });
 
             modelBuilder.Entity("BackEnd.DAL.Entities.WorkSpace", b =>
@@ -252,6 +270,13 @@ namespace BackEnd.DAL.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BackEnd.DAL.Entities.ApplicationUser", b =>
+                {
+                    b.HasOne("BackEnd.DAL.Entities.UserType", "UserType")
+                        .WithMany()
+                        .HasForeignKey("userTypeId");
                 });
 
             modelBuilder.Entity("BackEnd.DAL.Entities.WorkSpace", b =>

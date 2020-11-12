@@ -9,5 +9,6 @@ namespace RealState.DAL.Context
   public interface IBackEndContext
   {
     DbSet<WorkSpace> WorkSpaces { get; set; }
+    DbSet<UserType> UserType { get; set; }
   }
 }

@@ -98,7 +98,8 @@ namespace BackEnd.Service.Service
         Email = Email,
         UserName = UserName,
         PhoneNumber= PhoneNumber,
-        verficationCode = num
+        verficationCode = num,
+        userTypeId=4
       };
 
       var createdUser = await _userManager.CreateAsync(newUser, Password);

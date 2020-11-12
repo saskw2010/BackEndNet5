@@ -17,5 +17,6 @@ namespace BackEnd.DAL.Context
       
     }
     public virtual DbSet<WorkSpace> WorkSpaces { get; set; }
+    public virtual DbSet<UserType> UserType { get; set; }
   }
 }
