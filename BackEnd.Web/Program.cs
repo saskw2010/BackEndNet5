@@ -19,16 +19,16 @@ namespace BackEnd.Web
       var host = CreateWebHostBuilder(args).Build();
       using (var serviceScope = host.Services.CreateScope())
       {
-        var dbContext = serviceScope.ServiceProvider.GetRequiredService<BakEndContext>();
-        await dbContext.Database.MigrateAsync();
+        //var dbContext = serviceScope.ServiceProvider.GetRequiredService<BakEndContext>();
+        //await dbContext.Database.MigrateAsync();
 
         //-------------------------add Rols in database when project start------------------
-        var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        if (!await roleManager.RoleExistsAsync("Admin"))
-        {
-          var adminRole = new IdentityRole("Admin");
-          await roleManager.CreateAsync(adminRole);
-        }
+        //var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        //if (!await roleManager.RoleExistsAsync("Admin"))
+        //{
+        //  var adminRole = new IdentityRole("Admin");
+        //  await roleManager.CreateAsync(adminRole);
+        //}
         //----------------------------------------------------------------------------------
       }
       await host.RunAsync();

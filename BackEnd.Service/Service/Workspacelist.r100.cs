@@ -49,16 +49,25 @@ using System.Configuration;
 using System.Web;
 using BackEnd.BAL.Models;
 using Microsoft.Extensions.Configuration;
+using BackEnd.DAL.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd.Service.Service
 {
   public partial class WorkspacelistBusinessRules 
   {
+
     public IConfiguration Configuration { get; }
-    public WorkspacelistBusinessRules(IConfiguration iConfig)
+
+    private readonly BakEndContext Context;
+
+
+    public WorkspacelistBusinessRules(IConfiguration iConfig, BakEndContext dbContext)
     {
       Configuration = iConfig;
+      Context = dbContext;
     }
+
     /// <summary>
     ///         ''' Rule "workspaceafterinsert" implementation:
     ///         ''' This method will execute in any view after an action
@@ -121,10 +130,11 @@ namespace BackEnd.Service.Service
          
           if (ServerConfiguration != null)
           {
+            masterservername = ServerConfiguration.masterserver;
           }
           else
            // masterservername = ConfigurationManager.AppSettings["masterserver"].ToString();
-            masterservername= ServerConfiguration.masterserver;
+            masterservername= ".";
           // ---------------------------------------------
           string path = CacheFolder;
           string ip = "*";
@@ -139,11 +149,16 @@ namespace BackEnd.Service.Service
           // Dim file1 As New FileInfo(server.MapPath(Url.Content("~/SqlScripts/CreateDB.sql"))
           // createDB(file)
 
-          string sqlConnectionString = "Data Source=" + masterservername + ";Initial Catalog=" + MyApplicationPoolstring + ";Persist Security Info=True;User ID=sa;Password=mos@2017;";
+          string sqlConnectionString = "Data Source=" + masterservername + ";Initial Catalog=" + MyApplicationPoolstring + ";Persist Security Info=True;User ID=sa;Password=mos@2017;"; 
+          //commit
           string sqlfilepathscrpt = @"c:\sourceDirectory\SqlScripts\installsqlmembership.sql";
           // 'Dim script As String = file.OpenText().ReadToEnd()
+          //createDataBase(workspace.WorkSpaceName);
+          //commit
           bool xpoli;
-          xpoli = createfromsqlscript(sqlfilepathscrpt, sqlConnectionString);
+          //xpoli = createfromsqlscript(sqlfilepathscrpt, sqlConnectionString);
+
+          
 
           // Dim conn As New SqlConnection(sqlConnectionString)
           // Dim server1 As New Server(New ServerConnection(conn))
@@ -214,6 +229,22 @@ namespace BackEnd.Service.Service
         data=null
       };
     }
+
+    private bool createDataBase(string dbname)
+    {
+      var checkname = new SqlParameter("@checkname", dbname);
+      Context.Database.ExecuteSqlCommand("EXEC ValidateRequestPost1 @checkname", checkname);
+
+      return true;
+      //try {
+      //}
+      //catch
+      //{
+      //  return false;
+      //}
+
+    }
+
     public bool createKeys(string sqlFilepath, string SqlConnectionString)
     {
       try
@@ -340,5 +371,7 @@ namespace BackEnd.Service.Service
       string strEncodedText = utfencoder.GetString(bytText);
       base.WriteString(strEncodedText);
     }
+
+  
   }
 }

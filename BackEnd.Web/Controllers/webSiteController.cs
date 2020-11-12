@@ -1,5 +1,6 @@
 using BackEnd.BAL.ApiRoute;
 using BackEnd.BAL.Models;
+using BackEnd.DAL.Context;
 using BackEnd.Service.ISercice;
 using BackEnd.Service.IService;
 using BackEnd.Service.Service;
@@ -13,23 +14,25 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Web.Controllers
 {
-  [Authorize]
+  //[Authorize]
   public class webSiteController: Controller
   {
     private IworkSapceServices _websiteServices;
     private IConfiguration configuration;
-    public webSiteController(IworkSapceServices websiteServices,
+    private readonly BakEndContext Context;
+    public webSiteController(IworkSapceServices websiteServices, BakEndContext dbContext,
       IConfiguration iConfig)
     {
       _websiteServices = websiteServices;
       configuration = iConfig;
+      Context = dbContext;
     }
     [HttpPost(ApiRoute.WebSite.CreateWebsite)]
     public async Task<Result> CreateWebsite([FromBody] WorkSpaceVm request)
     {
       //var res=await _websiteServices.CreateWorkspace(request);
         var   workspacevm = await _websiteServices.InsertWorkspace(request);
-        WorkspacelistBusinessRules wo = new WorkspacelistBusinessRules(configuration);
+        WorkspacelistBusinessRules wo = new WorkspacelistBusinessRules(configuration,Context);
         var res=wo.r100Implementation(workspacevm);
         return res;
     }
@@ -38,7 +41,7 @@ namespace BackEnd.Web.Controllers
     [HttpPost(ApiRoute.WebSite.CreateWebsiteV2)]
     public Boolean CreateWebsiteV2(WorkSpaceVm workspace)
     {
-      WorkspacelistBusinessRules wo = new WorkspacelistBusinessRules(configuration);
+      WorkspacelistBusinessRules wo = new WorkspacelistBusinessRules(configuration, Context);
       wo.r100Implementation(workspace);
       //_websiteServices.r104Implementation(workspace);
       return true;
