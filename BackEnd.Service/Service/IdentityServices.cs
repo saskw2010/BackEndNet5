@@ -186,7 +186,7 @@ namespace BackEnd.Service.Service
     public async Task<Result> verfayUser(UserVerfayRequest request)
     {
       var user = await _userManager.FindByEmailAsync(request.Email);
-      if (user != null)
+      if (user.verficationCode == request.verficationCode)
       {
         user.confirmed = true;
         await _userManager.UpdateAsync(user);
