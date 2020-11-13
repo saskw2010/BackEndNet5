@@ -156,7 +156,7 @@ namespace BackEnd.Service.Service
           //createDataBase(workspace.WorkSpaceName);
           //commit
           bool xpoli;
-          //xpoli = createfromsqlscript(sqlfilepathscrpt, sqlConnectionString);
+          xpoli = createfromsqlscript(sqlfilepathscrpt, sqlConnectionString);
 
           
 
