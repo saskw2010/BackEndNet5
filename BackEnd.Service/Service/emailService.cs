@@ -16,7 +16,7 @@ namespace BackEnd.Service.Service
     }
     public async Task<bool> sendVerfication(int verficationCode,string Email)
     {
-      string Url = "http://localhost:4200/verfication/" + verficationCode.ToString();
+      string Url = "http://localhost:4200/verfication/" + verficationCode.ToString()+"?Email="+ Email;
       Url = Url + "<p style='color:#0678F4'>" + "Verfication Code : "+verficationCode.ToString() + "</p>";
       var message = new Message(new string[] { Email }, "www.wytSky.com", Url);
       await _emailSender.SendEmailAsync(message);
