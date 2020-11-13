@@ -123,7 +123,7 @@ namespace Project.Controllers.V1
     [HttpPost(ApiRoute.Identity.verfayUser)]
     public async Task<Result> verfayUser([FromBody] UserVerfayRequest request)
     {
-     Result res=await _identityService.verfayUser(request.verficationCode);
+     Result res=await _identityService.verfayUser(request);
       return res;
     }
 

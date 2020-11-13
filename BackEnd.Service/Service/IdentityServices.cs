@@ -183,9 +183,9 @@ namespace BackEnd.Service.Service
       return await _emailService.sendVerfication(verficationCode, Email);
     }
 
-    public async Task<Result> verfayUser( int verficationCode)
+    public async Task<Result> verfayUser(UserVerfayRequest request)
     {
-      var user = _dataContext.Users.FirstOrDefault(x=>x.verficationCode == verficationCode);
+      var user = await _userManager.FindByEmailAsync(request.Email);
       if (user != null)
       {
         user.confirmed = true;
