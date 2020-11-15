@@ -149,16 +149,16 @@ namespace BackEnd.Service.Service
           // Dim file1 As New FileInfo(server.MapPath(Url.Content("~/SqlScripts/CreateDB.sql"))
           // createDB(file)
 
-          string sqlConnectionString = "Data Source=" + masterservername + ";Initial Catalog=" + MyApplicationPoolstring + ";Persist Security Info=True;User ID=sa;Password=mos@2017;"; 
+          string sqlConnectionString = "Data Source=" + masterservername + ";Initial Catalog=" + MyApplicationPoolstring + ";Integrated Security=True;"; 
           //commit
           string sqlfilepathscrpt = @"c:\sourceDirectory\SqlScripts\installsqlmembership.sql";
           // 'Dim script As String = file.OpenText().ReadToEnd()
-          createDataBase(workspace.WorkSpaceName);
+         bool created= createDataBase(workspace.WorkSpaceName);
           //commit
           bool xpoli;
           xpoli = createfromsqlscript(sqlfilepathscrpt, sqlConnectionString);
 
-          
+
 
           // Dim conn As New SqlConnection(sqlConnectionString)
           // Dim server1 As New Server(New ServerConnection(conn))
@@ -166,9 +166,11 @@ namespace BackEnd.Service.Service
 
           // for waiting javascript
           // Result.ExecuteOnClient()
+          if (created) {
+            bool xpol;
+            xpol = CreateTables(@"C:\sourceDirectory\SqlScripts\Tables", sqlConnectionString);
 
-          bool xpol;
-          xpol = CreateTables(@"C:\sourceDirectory\SqlScripts\Tables", sqlConnectionString);
+          }
 
 
 
@@ -276,6 +278,8 @@ namespace BackEnd.Service.Service
     }
     public bool CreateTables(string sqlFilepath, string sqlConnectionString)
     {
+
+     
       try
       {
         using (SqlConnection connection = new SqlConnection(sqlConnectionString))
@@ -296,6 +300,7 @@ namespace BackEnd.Service.Service
         }
 
         return true;
+
       }
       catch
       {
