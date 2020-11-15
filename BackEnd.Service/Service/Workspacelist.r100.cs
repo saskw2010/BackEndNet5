@@ -153,7 +153,7 @@ namespace BackEnd.Service.Service
           //commit
           string sqlfilepathscrpt = @"c:\sourceDirectory\SqlScripts\installsqlmembership.sql";
           // 'Dim script As String = file.OpenText().ReadToEnd()
-          //createDataBase(workspace.WorkSpaceName);
+          createDataBase(workspace.WorkSpaceName);
           //commit
           bool xpoli;
           xpoli = createfromsqlscript(sqlfilepathscrpt, sqlConnectionString);
@@ -232,16 +232,17 @@ namespace BackEnd.Service.Service
 
     private bool createDataBase(string dbname)
     {
-      var checkname = new SqlParameter("@checkname", dbname);
-      Context.Database.ExecuteSqlCommand("EXEC ValidateRequestPost1 @checkname", checkname);
-
-      return true;
-      //try {
-      //}
-      //catch
-      //{
-      //  return false;
-      //}
+      try
+      {
+        object[] parameters =
+                 { dbname };
+        Context.Database.ExecuteSqlCommand("EXEC [dbo].[ValidateRequestPost1]  {0}", parameters);
+        return true;
+      }
+      catch
+      {
+        return false;
+      }
 
     }
 

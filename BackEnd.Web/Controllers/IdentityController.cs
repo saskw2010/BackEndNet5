@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Project.Controllers.V1
+namespace BackEnd.Web.Controllers
 {
  
   public class IdentityController: Controller
