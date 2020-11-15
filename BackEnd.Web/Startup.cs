@@ -35,6 +35,7 @@ using BackEnd.Service.MappingProfiles;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using BackEnd.Web.Hubs;
 
 namespace BackEnd.Web
 {
@@ -66,6 +67,9 @@ namespace BackEnd.Web
         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
       });
       #endregion
+      //Begin::signal R
+      services.AddSignalR();
+      //End::sginal R
       // Add service and create Policy with options
       #region CorsPolicy
       services.AddCors(options =>
@@ -222,6 +226,12 @@ namespace BackEnd.Web
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
+      });
+
+      app.UseEndpoints(endpoints =>
+      {
+        endpoints.MapControllers();
+        endpoints.MapHub<ChatHub>("/chatsocket");     // path will look like this https://localhost:44379/chatsocket 
       });
     }
   }
