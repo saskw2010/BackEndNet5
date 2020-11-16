@@ -328,7 +328,7 @@ namespace BackEnd.Service.Service
 
 
       // Returns List of Customer after applying Paging 
-      var items = _dataContext.Users.Skip((CurrentPage - 1) * pageSize).Take(pageSize);
+      var items = _dataContext.Users.Skip((CurrentPage - 1) * pageSize).Take(pageSize).ToList();
 
       // if CurrentPage is greater than 1 means it has previousPage
       var previousPage = CurrentPage > 1 ? "Yes" : "No";
@@ -336,6 +336,7 @@ namespace BackEnd.Service.Service
       // if TotalPages is greater than CurrentPage means it has nextPage
       var nextPage = CurrentPage < TotalPages ? "Yes" : "No";
 
+      
       // Object which we are going to send in header 
       paginationMetadata paginationMetadata = new paginationMetadata
       {

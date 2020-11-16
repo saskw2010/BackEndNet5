@@ -12,6 +12,9 @@ namespace BackEnd.Service.MappingProfiles
     {
       CreateMap<WorkSpace,WorkSpaceVm>();
       CreateMap<WorkSpaceVm, WorkSpace>();
+
+      CreateMap<userVm, ApplicationUser>();
+      CreateMap<ApplicationUser, ApplicationUser>();
     }
   }
 }
