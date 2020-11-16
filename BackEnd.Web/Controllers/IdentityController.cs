@@ -2,6 +2,7 @@ using BackEnd.BAL.ApiRoute;
 using BackEnd.BAL.Models;
 using BackEnd.DAL.Context;
 using BackEnd.Service.ISercice;
+using BackEnd.Web.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace BackEnd.Web.Controllers
 {
  
-  public class IdentityController: Controller
+  public class IdentityController: ControllerBase
   {
     private readonly Random _random = new Random();
     private IidentityServices _identityService;
@@ -154,7 +155,20 @@ namespace BackEnd.Web.Controllers
       return res;
     }
 
+    [HttpGet(ApiRoute.Identity.GetUserById)]
+    public async Task<Result> GetUserById()
+    {
+      string UserId = HttpContext.getUserId();
+      var res = await _identityService.getUserById(UserId);
+      return res;
+    }
 
+    [HttpGet(ApiRoute.Identity.GetAll)]
+    public async Task<Result> GetAll(int pageNumber, int pageSize)
+    {
+      var res = await _identityService.pagginationUser(pageNumber, pageSize);
+      return res;
+    }
 
 
 

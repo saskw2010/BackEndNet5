@@ -17,5 +17,7 @@ namespace BackEnd.Service.ISercice
     Task<Result> getUserByEmail(string Email);
     Task<Result> updateresetPasswordCodeCode(int num,string Email);
     Result getAllRoles();
+    Task<Result> getUserById(string UserId);
+    Task<Result> pagginationUser(int pageNumber, int pageSize);
   }
 }
