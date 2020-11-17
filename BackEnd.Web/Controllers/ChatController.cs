@@ -16,9 +16,10 @@ namespace BackEnd.Web.Controllers
     [ApiController]
     public class ChatController : ControllerBase
     {
-        private readonly IHubContext<ChatHub> _hubContext;
+       // private readonly IHubContext<ChatHub> _hubContext;
+    private IHubContext<ChatHub> _hubContext { get; set; }
 
-        public ChatController(IHubContext<ChatHub> hubContext)
+    public ChatController(IHubContext<ChatHub> hubContext)
         {
             _hubContext = hubContext;
         }
@@ -28,7 +29,10 @@ namespace BackEnd.Web.Controllers
         public IActionResult SendRequest([FromBody] MessageDto msg)
         {
             _hubContext.Clients.All.SendAsync("ReceiveOne", msg.user, msg.msgText);
+
+            //_hubContext.Clients.Client(msg.userId).SendAsync("ReceiveOne", msg.user, msg.msgText);
             return Ok();
         }
-    }
+     
+  }
 }
