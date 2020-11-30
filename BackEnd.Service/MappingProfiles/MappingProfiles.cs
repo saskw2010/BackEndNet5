@@ -16,6 +16,14 @@ namespace BackEnd.Service.MappingProfiles
       CreateMap<userVm, ApplicationUser>();
       CreateMap<ApplicationUser, ApplicationUser>();
       CreateMap<AspNetUsersTypes, AspNetUsersTypesViewModel>().ReverseMap();
+      CreateMap<AspNetUsersTypes_roles, AspNetUsersTypes_rolesViewModel>()
+        .ForMember(dest =>
+            dest.AspNetUsersTypes,
+            opt => opt.MapFrom(src => src.AspNetUsersTypes.UsrTypNm))
+          .ForMember(dest =>
+            dest.IdentityRole,
+            opt => opt.MapFrom(src => src.IdentityRole.Name))
+        .ReverseMap();
     }
   }
 }

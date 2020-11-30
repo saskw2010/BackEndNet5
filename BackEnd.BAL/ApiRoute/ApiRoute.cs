@@ -34,6 +34,7 @@ namespace BackEnd.BAL.ApiRoute
     public static class Role
     {
       public const string GetAllAspNetUserType = Base + "Role/GetAllAspNetUserType";
+      public const string GetAllAspNetUsersTypes_roles = Base + "Role/GetAllAspNetUsersTypes_roles";
     }
 
 

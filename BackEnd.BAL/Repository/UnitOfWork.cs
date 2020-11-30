@@ -143,6 +143,14 @@ namespace BackEnd.BAL.Repository
       }
     }
 
+    public GenericRepository<AspNetUsersTypes_roles> AspNetUsersTypes_rolesRepository
+    {
+      get
+      {
+        return new GenericRepository<AspNetUsersTypes_roles>(Context);
+      }
+    }
+
     //end workspace
 
 

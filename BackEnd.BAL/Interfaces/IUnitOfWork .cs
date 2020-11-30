@@ -17,6 +17,7 @@ namespace BackEnd.BAL.Interfaces
         Task<int> SaveAsync();
        GenericRepository<WorkSpace> WorkSpaceRepository { get; }
        GenericRepository<AspNetUsersTypes> AspNetUsersTypesRepository { get; }
+       GenericRepository<AspNetUsersTypes_roles> AspNetUsersTypes_rolesRepository { get; }
 
   }
 }

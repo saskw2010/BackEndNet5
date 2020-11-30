@@ -9,5 +9,6 @@ namespace BackEnd.Service.IService
   public interface IRoleService
   {
     Result getAllAspNetUserType();
+    Result GetAllAspNetUsersTypes_roles(int pageNumber = 1, int pageSize = 2);
   }
 }
