@@ -175,6 +175,7 @@ namespace BackEnd.Web
       //-------------------------inject service-----------------------------------------
       services.AddScoped<IidentityServices, IdentityServices>();
       services.AddScoped<IworkSapceServices, WorkSpaceServices>();
+      services.AddScoped<IRoleService, RoleService>();
       //--------------------------end of inject service--------------------------------
 
       //begin::autmapper

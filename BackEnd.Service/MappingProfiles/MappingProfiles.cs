@@ -15,6 +15,7 @@ namespace BackEnd.Service.MappingProfiles
 
       CreateMap<userVm, ApplicationUser>();
       CreateMap<ApplicationUser, ApplicationUser>();
+      CreateMap<AspNetUsersTypes, AspNetUsersTypesViewModel>().ReverseMap();
     }
   }
 }

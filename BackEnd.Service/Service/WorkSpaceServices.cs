@@ -16,7 +16,7 @@ namespace BackEnd.Service.Service
 {
   public class WorkSpaceServices : IworkSapceServices
   {
-    private UnitOfWork unitOfWork;
+    private IUnitOfWork unitOfWork;
     private IMapper _mapper;
     public WorkSpaceServices(IUnitOfWork unitOfWork,
       BakEndContext context,

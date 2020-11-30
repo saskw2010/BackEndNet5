@@ -31,6 +31,11 @@ namespace BackEnd.BAL.ApiRoute
      public const string Filter = Base + "webSite/filter";
     }
 
+    public static class Role
+    {
+      public const string GetAllAspNetUserType = Base + "Role/GetAllAspNetUserType";
+    }
+
 
   }
 }

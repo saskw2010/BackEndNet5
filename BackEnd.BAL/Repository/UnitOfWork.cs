@@ -127,18 +127,27 @@ namespace BackEnd.BAL.Repository
         }
 
     //begin workspace
-      private GenericRepository<WorkSpace> workSpaceRepository;
-      public GenericRepository<WorkSpace> WorkSpaceRepository
+    public GenericRepository<WorkSpace> WorkSpaceRepository
     {
-        get
-        {
-          if (this.workSpaceRepository == null)
-          {
-            this.workSpaceRepository = new GenericRepository<WorkSpace>(Context);
-          }
-          return workSpaceRepository;
-        }
+      get
+      {
+        return new GenericRepository<WorkSpace>(Context);
       }
+    }
+
+    public GenericRepository<AspNetUsersTypes> AspNetUsersTypesRepository
+    {
+      get
+      {
+        return new GenericRepository<AspNetUsersTypes>(Context);
+      }
+    }
+
     //end workspace
+
+
+
+
+
   }
 }
