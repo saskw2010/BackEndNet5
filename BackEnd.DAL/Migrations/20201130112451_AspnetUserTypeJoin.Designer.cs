@@ -4,14 +4,16 @@ using BackEnd.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BackEnd.DAL.Migrations
 {
     [DbContext(typeof(BakEndContext))]
-    partial class BakEndContextModelSnapshot : ModelSnapshot
+    [Migration("20201130112451_AspnetUserTypeJoin")]
+    partial class AspnetUserTypeJoin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,33 +128,6 @@ namespace BackEnd.DAL.Migrations
                     b.HasKey("UsrTypID");
 
                     b.ToTable("AspNetUsersTypes");
-                });
-
-            modelBuilder.Entity("BackEnd.DAL.Entities.AspNetUsersTypes_roles", b =>
-                {
-                    b.Property<string>("IdAspNetRoles")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<long>("UsrTypID")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("IdAspNetRoles", "UsrTypID");
-
-                    b.HasIndex("UsrTypID");
-
-                    b.ToTable("AspNetUsersTypes_roles");
                 });
 
             modelBuilder.Entity("BackEnd.DAL.Entities.AspNetusertypjoin", b =>
@@ -361,21 +336,6 @@ namespace BackEnd.DAL.Migrations
                     b.HasOne("BackEnd.DAL.Entities.UserType", "UserType")
                         .WithMany()
                         .HasForeignKey("userTypeId");
-                });
-
-            modelBuilder.Entity("BackEnd.DAL.Entities.AspNetUsersTypes_roles", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "IdentityRole")
-                        .WithMany()
-                        .HasForeignKey("IdAspNetRoles")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd.DAL.Entities.AspNetUsersTypes", "AspNetUsersTypes")
-                        .WithMany("AspNetUsersTypes_roles")
-                        .HasForeignKey("UsrTypID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BackEnd.DAL.Entities.AspNetusertypjoin", b =>

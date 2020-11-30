@@ -20,6 +20,19 @@ namespace BackEnd.DAL.Context
     }
     public virtual DbSet<WorkSpace> WorkSpaces { get; set; }
     public virtual DbSet<UserType> UserType { get; set; }
+    public virtual DbSet<AspNetUsersTypes> AspNetUsersTypes { get; set; }
+    public virtual DbSet<AspNetusertypjoin> AspNetusertypjoin { get; set; }
+    public virtual DbSet<AspNetUsersTypes_roles> AspNetUsersTypes_roles { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+      base.OnModelCreating(modelBuilder);
+      modelBuilder.Entity<AspNetusertypjoin>()
+         .HasKey(c => new { c.IdAspNetUsers, c.UsrTypID });
+
+      modelBuilder.Entity<AspNetUsersTypes_roles>()
+         .HasKey(c => new { c.IdAspNetRoles, c.UsrTypID });
+    }
    
+
   }
 }

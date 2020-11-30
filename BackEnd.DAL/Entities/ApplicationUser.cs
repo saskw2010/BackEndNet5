@@ -16,5 +16,6 @@ namespace BackEnd.DAL.Entities
     public int? userTypeId { get; set; }
     public virtual UserType UserType { get; set; }
     public virtual ICollection<WorkSpace> WorkSpace { get; set; }
+    public virtual List<AspNetusertypjoin> AspNetusertypjoin { get; set; }
   }
 }

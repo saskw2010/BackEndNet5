@@ -10,5 +10,8 @@ namespace RealState.DAL.Context
   {
     DbSet<WorkSpace> WorkSpaces { get; set; }
     DbSet<UserType> UserType { get; set; }
+    DbSet<AspNetUsersTypes> AspNetUsersTypes { get; set; }
+    DbSet<AspNetusertypjoin> AspNetusertypjoin { get; set; }
+    DbSet<AspNetUsersTypes_roles> AspNetUsersTypes_roles { get; set; }
   }
 }

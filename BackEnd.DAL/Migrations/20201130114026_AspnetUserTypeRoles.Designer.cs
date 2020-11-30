@@ -4,14 +4,16 @@ using BackEnd.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BackEnd.DAL.Migrations
 {
     [DbContext(typeof(BakEndContext))]
-    partial class BakEndContextModelSnapshot : ModelSnapshot
+    [Migration("20201130114026_AspnetUserTypeRoles")]
+    partial class AspnetUserTypeRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,6 +144,9 @@ namespace BackEnd.DAL.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("IdentityRoleId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -149,6 +154,8 @@ namespace BackEnd.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("IdAspNetRoles", "UsrTypID");
+
+                    b.HasIndex("IdentityRoleId");
 
                     b.HasIndex("UsrTypID");
 
@@ -230,6 +237,10 @@ namespace BackEnd.DAL.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -246,6 +257,8 @@ namespace BackEnd.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -356,6 +369,13 @@ namespace BackEnd.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BackEnd.DAL.Entities.ApplicationRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.HasDiscriminator().HasValue("ApplicationRole");
+                });
+
             modelBuilder.Entity("BackEnd.DAL.Entities.ApplicationUser", b =>
                 {
                     b.HasOne("BackEnd.DAL.Entities.UserType", "UserType")
@@ -365,11 +385,9 @@ namespace BackEnd.DAL.Migrations
 
             modelBuilder.Entity("BackEnd.DAL.Entities.AspNetUsersTypes_roles", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "IdentityRole")
-                        .WithMany()
-                        .HasForeignKey("IdAspNetRoles")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("BackEnd.DAL.Entities.ApplicationRole", "IdentityRole")
+                        .WithMany("AspNetUsersTypes_roles")
+                        .HasForeignKey("IdentityRoleId");
 
                     b.HasOne("BackEnd.DAL.Entities.AspNetUsersTypes", "AspNetUsersTypes")
                         .WithMany("AspNetUsersTypes_roles")
