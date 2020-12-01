@@ -32,6 +32,14 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
+    #region FilterAspNetUsersTypes_roles
+    [HttpGet(ApiRoute.Role.FilterAspNetUsersTypes_roles)]
+    public async Task<Result> FilterAspNetUsersTypes_roles(string SerachWord,int pageNumber = 1, int pageSize = 2)
+    {
+      return await _roleService.FilterAspNetUsersTypes_roles(SerachWord, pageNumber, pageSize);
+    }
+    #endregion
+
     #region AddspNetUsersTypes_roles
     [HttpPost(ApiRoute.Role.AddspNetUsersTypes_roles)]
     public async Task<Result> AddspNetUsersTypes_roles(AspNetUsersTypes_rolesInsertViewModel aspNetUsersTypes_rolesViewModel)
@@ -58,5 +66,7 @@ namespace BackEnd.Web.Controllers
       return await _roleService.DeleteAspNetUsersTypesRoles(IdAspNetRoles, UsrTypID);
     }
     #endregion
+
+    
   }
 }

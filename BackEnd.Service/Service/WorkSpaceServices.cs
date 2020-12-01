@@ -19,11 +19,10 @@ namespace BackEnd.Service.Service
     private IUnitOfWork unitOfWork;
     private IMapper _mapper;
     public WorkSpaceServices(IUnitOfWork unitOfWork,
-      BakEndContext context,
       IMapper mapper
       )
     {
-      this.unitOfWork = new UnitOfWork(context);
+      this.unitOfWork = unitOfWork;
       _mapper = mapper;
     }
     public async Task<Result> CreateWorkspace(WorkSpaceVm workspace)

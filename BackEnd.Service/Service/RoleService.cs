@@ -5,6 +5,7 @@ using BackEnd.DAL.Entities;
 using BackEnd.Service.IService;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,7 +17,8 @@ namespace BackEnd.Service.Service
     private IMapper _mapper;
     public RoleService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-      _unitOfWork = unitOfWork;
+      this._unitOfWork = unitOfWork;
+
       _mapper = mapper;
     }
     #region AddspNetUsersTypes_roles
@@ -74,6 +76,57 @@ namespace BackEnd.Service.Service
           message = "row Deleted faild"
         };
       }
+    }
+
+    public async Task<Result> FilterAspNetUsersTypes_roles(string SerachWord, int pageNumber = 1, int pageSize = 2)
+    {
+      // Get's No of Rows Count 
+      var count = _unitOfWork.AspNetUsersTypes_rolesRepository.Get(filter:x=>(
+      SerachWord!=null?(x.AspNetUsersTypes.UsrTypNm==SerachWord)|| (x.IdentityRole.Name == SerachWord) : true))
+        .Count();
+
+     
+      // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1
+      int CurrentPage = pageNumber;
+
+      // Parameter is passed from Query string if it is null then it default Value will be pageSize:20
+      int PageSize = pageSize;
+
+      // Display TotalCount to Records to User
+      int TotalCount = count;
+
+      // Calculating Totalpage by Dividing (No of Records / Pagesize)
+      int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+
+
+      // Returns List of Customer after applying Paging 
+      var items = _unitOfWork.AspNetUsersTypes_rolesRepository.Get(filter: x => (
+       SerachWord != null ? (x.AspNetUsersTypes.UsrTypNm == SerachWord) || (x.IdentityRole.Name == SerachWord) : true),
+       page: pageNumber, Take: pageSize);
+
+      // if CurrentPage is greater than 1 means it has previousPage
+      var previousPage = CurrentPage > 1 ? "Yes" : "No";
+
+      // if TotalPages is greater than CurrentPage means it has nextPage
+      var nextPage = CurrentPage < TotalPages ? "Yes" : "No";
+      // map 
+      var aspNetUsersTypes_rolesViewModel = _mapper.Map<List<AspNetUsersTypes_rolesViewModel>>(items);
+      // Object which we are going to send in header 
+      paginationMetadata paginationMetadata = new paginationMetadata
+      {
+        totalCount = TotalCount,
+        pageSize = PageSize,
+        currentPage = CurrentPage,
+        nextPage = nextPage,
+        previousPage = previousPage,
+        data = aspNetUsersTypes_rolesViewModel
+      };
+      return new Result
+      {
+        success = true,
+        code = "200",
+        data = paginationMetadata
+      };
     }
     #endregion
 
