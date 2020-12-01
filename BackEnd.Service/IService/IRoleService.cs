@@ -10,5 +10,8 @@ namespace BackEnd.Service.IService
   {
     Result getAllAspNetUserType();
     Result GetAllAspNetUsersTypes_roles(int pageNumber = 1, int pageSize = 2);
+   Task<Result> AddspNetUsersTypes_roles(AspNetUsersTypes_rolesInsertViewModel aspNetUsersTypes_rolesViewModel);
+   Task<Result> UpdatespNetUsersTypes_roles(AspNetUsersTypes_rolesInsertViewModel aspNetUsersTypes_rolesViewModel);
+   Task<Result> DeleteAspNetUsersTypesRoles(string IdAspNetRoles, long UsrTypID);
   }
 }

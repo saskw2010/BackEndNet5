@@ -20,4 +20,14 @@ namespace BackEnd.BAL.Models
 
 
   }
+
+  public class AspNetUsersTypes_rolesInsertViewModel {
+    public string IdAspNetRoles { get; set; }
+    public long UsrTypID { get; set; }
+    public string ModifiedBy { get; set; }
+    public DateTime? ModifiedOn { get; set; }
+    public string CreatedBy { get; set; }
+    public DateTime? CreatedOn { get; set; }
+
+  }
 }

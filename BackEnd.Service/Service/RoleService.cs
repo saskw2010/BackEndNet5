@@ -19,6 +19,64 @@ namespace BackEnd.Service.Service
       _unitOfWork = unitOfWork;
       _mapper = mapper;
     }
+    #region AddspNetUsersTypes_roles
+    public async Task<Result> AddspNetUsersTypes_roles(AspNetUsersTypes_rolesInsertViewModel aspNetUsersTypes_rolesInsertViewModel)
+    {
+      aspNetUsersTypes_rolesInsertViewModel.CreatedOn = DateTime.Now;
+      AspNetUsersTypes_roles aspNetUsersTypes_roles = new AspNetUsersTypes_roles();
+     var obje= _mapper.Map(aspNetUsersTypes_rolesInsertViewModel, aspNetUsersTypes_roles);
+      _unitOfWork.AspNetUsersTypes_rolesRepository.Insert(obje);
+      var result1 = await _unitOfWork.SaveAsync();
+      if (result1 == 200)
+      {
+        return new Result
+        {
+
+          success = true,
+          code = "200",
+          message = "row added successfuly"
+        };
+      }
+      else {
+        return new Result
+        {
+
+          success = true,
+          code = "400",
+          message = "row added faild"
+        };
+      }
+    }
+
+    public async Task<Result> DeleteAspNetUsersTypesRoles(string idAspNetRoles, long usrTypID)
+    {
+      var Entity=_unitOfWork.AspNetUsersTypes_rolesRepository.GetEntity(filter: (x =>
+      (x.IdAspNetRoles == idAspNetRoles) && (x.UsrTypID == usrTypID)));
+      _unitOfWork.AspNetUsersTypes_rolesRepository.Delete(Entity);
+      var result1 = await _unitOfWork.SaveAsync();
+      if (result1 == 200)
+      {
+        return new Result
+        {
+
+          success = true,
+          code = "200",
+          message = "row Deleted successfuly"
+        };
+      }
+      else
+      {
+        return new Result
+        {
+
+          success = true,
+          code = "400",
+          message = "row Deleted faild"
+        };
+      }
+    }
+    #endregion
+
     #region GetAllAspNetUsersTypes_roles
     public Result GetAllAspNetUsersTypes_roles(int pageNumber = 1, int pageSize = 2)
     {
@@ -77,7 +135,44 @@ namespace BackEnd.Service.Service
         data= aspNetTypeViewModel
       };
     }
+
+    public Task<Result> UpdatespNetUsersTypes_roles(AspNetUsersTypes_rolesInsertViewModel aspNetUsersTypes_rolesViewModel)
+    {
+      throw new NotImplementedException();
+    }
+
     #endregion
 
+    //#region UpdatespNetUsersTypes_roles
+    //public async Task<Result> UpdatespNetUsersTypes_roles(AspNetUsersTypes_rolesInsertViewModel aspNetUsersTypes_rolesViewModel)
+    //{
+    //  AspNetUsersTypes_roles aspNetUsersTypes_roles = new AspNetUsersTypes_roles();
+    //  aspNetUsersTypes_rolesViewModel.ModifiedOn = DateTime.Now;
+    //  var Dto=_mapper.Map(aspNetUsersTypes_rolesViewModel, aspNetUsersTypes_roles);
+    //  _unitOfWork.AspNetUsersTypes_rolesRepository.Update(Dto);
+    //  var result1 =await _unitOfWork.SaveAsync();
+    //  if (result1 == 200)
+    //  {
+    //    return new Result
+    //    {
+
+    //      success = true,
+    //      code = "200",
+    //      message = "row added successfuly"
+    //    };
+    //  }
+    //  else
+    //  {
+    //    return new Result
+    //    {
+
+    //      success = true,
+    //      code = "400",
+    //      message = "row added faild"
+    //    };
+    //  }
+
+    //}
+    //#endregion
   }
 }

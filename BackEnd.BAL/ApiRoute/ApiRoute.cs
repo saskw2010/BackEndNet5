@@ -35,6 +35,9 @@ namespace BackEnd.BAL.ApiRoute
     {
       public const string GetAllAspNetUserType = Base + "Role/GetAllAspNetUserType";
       public const string GetAllAspNetUsersTypes_roles = Base + "Role/GetAllAspNetUsersTypes_roles";
+      public const string AddspNetUsersTypes_roles = Base + "Role/AddspNetUsersTypes_roles";
+      public const string UpdatespNetUsersTypes_roles = Base + "Role/UpdatespNetUsersTypes_roles";
+      public const string DeletespNetUsersTypes_roles = Base + "Role/DeletespNetUsersTypes_roles";
     }
 
 
