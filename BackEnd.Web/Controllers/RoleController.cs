@@ -46,7 +46,8 @@ namespace BackEnd.Web.Controllers
     {
       string UserId = HttpContext.getUserId();
       aspNetUsersTypes_rolesViewModel.CreatedBy = UserId;
-      return await _roleService.AddspNetUsersTypes_roles(aspNetUsersTypes_rolesViewModel);
+      var result= await _roleService.AddspNetUsersTypes_roles(aspNetUsersTypes_rolesViewModel);
+      return result;
     }
     #endregion
 

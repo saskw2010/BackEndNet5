@@ -17,7 +17,7 @@ namespace BackEnd.Web.Hubs
       DbContext = dbContext;
     }
 
-    public Task SendMessage1(string toconnectionId,string currentConnectionId, string user, string message)               // Two parameters accepted
+    public Task SendMessage1(string user, string message)               // Two parameters accepted
         {
             //return Clients.Clients(new List<string>() { toconnectionId, currentConnectionId }).SendAsync("ReceiveOne", user, message);    // Note this 'ReceiveOne' 
             return Clients.All.SendAsync("ReceiveOne", user, message);    // Note this 'ReceiveOne' 

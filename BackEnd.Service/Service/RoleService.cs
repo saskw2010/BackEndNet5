@@ -24,65 +24,91 @@ namespace BackEnd.Service.Service
     #region AddspNetUsersTypes_roles
     public async Task<Result> AddspNetUsersTypes_roles(AspNetUsersTypes_rolesInsertViewModel aspNetUsersTypes_rolesInsertViewModel)
     {
-      aspNetUsersTypes_rolesInsertViewModel.CreatedOn = DateTime.Now;
-      AspNetUsersTypes_roles aspNetUsersTypes_roles = new AspNetUsersTypes_roles();
-     var obje= _mapper.Map(aspNetUsersTypes_rolesInsertViewModel, aspNetUsersTypes_roles);
-      _unitOfWork.AspNetUsersTypes_rolesRepository.Insert(obje);
-      var result1 = await _unitOfWork.SaveAsync();
-      if (result1 == 200)
-      {
+      try {
+        aspNetUsersTypes_rolesInsertViewModel.CreatedOn = DateTime.Now;
+        AspNetUsersTypes_roles aspNetUsersTypes_roles = new AspNetUsersTypes_roles();
+        var obje = _mapper.Map(aspNetUsersTypes_rolesInsertViewModel, aspNetUsersTypes_roles);
+        _unitOfWork.AspNetUsersTypes_rolesRepository.Insert(obje);
+        var result1 = await _unitOfWork.SaveAsync();
+
+        if (result1 == 200)
+        {
+          return new Result
+          {
+            success = false,
+            code = "200",
+            message = "Row Added Success",
+            data = null
+          };
+        }
+        else
+        {
+          return new Result
+          {
+            success = false,
+            code = "403",
+            message = "Row Added Faild",
+            data = null
+          };
+        }
+      } catch (Exception ex) {
         return new Result
         {
-
-          success = true,
-          code = "200",
-          message = "row added successfuly"
+          success = false,
+          code = "403",
+          message = "Row Added Faild",
+          data = null
         };
-      }
-      else {
-        return new Result
-        {
 
-          success = true,
-          code = "400",
-          message = "row added faild"
-        };
       }
+
+    
     }
 
     public async Task<Result> DeleteAspNetUsersTypesRoles(string idAspNetRoles, long usrTypID)
     {
-      var Entity=_unitOfWork.AspNetUsersTypes_rolesRepository.GetEntity(filter: (x =>
-      (x.IdAspNetRoles == idAspNetRoles) && (x.UsrTypID == usrTypID)));
-      _unitOfWork.AspNetUsersTypes_rolesRepository.Delete(Entity);
-      var result1 = await _unitOfWork.SaveAsync();
-      if (result1 == 200)
-      {
+      try {
+        var Entity = _unitOfWork.AspNetUsersTypes_rolesRepository.GetEntity(filter: (x =>
+        (x.IdAspNetRoles == idAspNetRoles) && (x.UsrTypID == usrTypID)));
+        _unitOfWork.AspNetUsersTypes_rolesRepository.Delete(Entity);
+        var result1 = await _unitOfWork.SaveAsync();
+        if (result1 == 200)
+        {
+          return new Result
+          {
+
+            success = true,
+            code = "200",
+            message = "row Deleted successfuly"
+          };
+        }
+        else
+        {
+          return new Result
+          {
+
+            success = true,
+            code = "403",
+            message = "row Deleted faild"
+          };
+        }
+      } catch (Exception ex) {
         return new Result
         {
 
           success = true,
-          code = "200",
-          message = "row Deleted successfuly"
-        };
-      }
-      else
-      {
-        return new Result
-        {
-
-          success = true,
-          code = "400",
+          code = "403",
           message = "row Deleted faild"
         };
       }
+      
     }
 
     public async Task<Result> FilterAspNetUsersTypes_roles(string SerachWord, int pageNumber = 1, int pageSize = 2)
     {
       // Get's No of Rows Count 
       var count = _unitOfWork.AspNetUsersTypes_rolesRepository.Get(filter:x=>(
-      SerachWord!=null?(x.AspNetUsersTypes.UsrTypNm==SerachWord)|| (x.IdentityRole.Name == SerachWord) : true))
+      SerachWord!=null?(x.AspNetUsersTypes.UsrTypNm.Contains(SerachWord))|| (x.IdentityRole.Name.Contains(SerachWord)) : true))
         .Count();
 
      
@@ -101,7 +127,7 @@ namespace BackEnd.Service.Service
 
       // Returns List of Customer after applying Paging 
       var items = _unitOfWork.AspNetUsersTypes_rolesRepository.Get(filter: x => (
-       SerachWord != null ? (x.AspNetUsersTypes.UsrTypNm == SerachWord) || (x.IdentityRole.Name == SerachWord) : true),
+       SerachWord != null ? (x.AspNetUsersTypes.UsrTypNm.Contains(SerachWord)) || (x.IdentityRole.Name.Contains(SerachWord)) : true),
        page: pageNumber, Take: pageSize);
 
       // if CurrentPage is greater than 1 means it has previousPage
