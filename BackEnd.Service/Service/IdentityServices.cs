@@ -40,7 +40,7 @@ namespace BackEnd.Service.Service
       _emailService = emailService;
       _BakEndContext = dataContext;
     }
-
+    #region LoginAsync
     public async Task<AuthenticationResult> LoginAsync(string Email, string Password)
     {
       var user = await _userManager.FindByEmailAsync(Email);
@@ -62,8 +62,9 @@ namespace BackEnd.Service.Service
       }
       return await GenerateAutheticationForResultForUser(user);
     }
+    #endregion
 
-  
+    #region GetPrincipalFromToken
     private ClaimsPrincipal GetPrincipalFromToken(string Token) {
       var tokenHandler = new JwtSecurityTokenHandler();
       try {
@@ -77,7 +78,7 @@ namespace BackEnd.Service.Service
         return null;
       }
     }
-
+    #endregion
     private bool IsJwtWithValidationSecurityAlgorithm(SecurityToken validatedToken) {
       return (validatedToken is JwtSecurityToken jwtSecurityToken)&&
         jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
@@ -309,10 +310,12 @@ namespace BackEnd.Service.Service
 
     }
 
-    public async Task<Result> pagginationUser(int pageNumber, int pageSize)
+    public async Task<Result> pagginationUser(string searchWord, int pageNumber, int pageSize)
     {
       // Get's No of Rows Count 
-      int count = _dataContext.Users.Count();
+      int count = _dataContext.Users.Where(x=>
+      ((searchWord != null ?  x.Email.Contains(searchWord):true)&&(searchWord != null ? x.UserName.Contains(searchWord) : true))
+      ).Count();
 
       // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1
       int CurrentPage = pageNumber;
@@ -328,7 +331,9 @@ namespace BackEnd.Service.Service
 
 
       // Returns List of Customer after applying Paging 
-      var items = _dataContext.Users.Skip((CurrentPage - 1) * pageSize).Take(pageSize).ToList();
+      var items = _dataContext.Users.Where(x =>
+      ((searchWord != null ? x.Email.Contains(searchWord) : true) && (searchWord != null ? x.UserName.Contains(searchWord) : true))
+      ).Skip((CurrentPage - 1) * pageSize).Take(pageSize).ToList();
 
       // if CurrentPage is greater than 1 means it has previousPage
       var previousPage = CurrentPage > 1 ? "Yes" : "No";
@@ -362,6 +367,57 @@ namespace BackEnd.Service.Service
       };
       return res;
     }
+
+
+    #region AddUserAsync
+    public async Task<AddUserResult> AddUserAsync(string UserName, string Email, string PhoneNumber, string Password)
+    {
+      var existingUser = await _userManager.FindByEmailAsync(Email);
+      if (existingUser != null)
+      {
+        return new AddUserResult
+        {
+          Errors = new[] { "User with this email adress already Exist" }
+        };
+      }
+      int num = _random.Next();
+      var newUser = new ApplicationUser
+      {
+        Email = Email,
+        UserName = UserName,
+        PhoneNumber = PhoneNumber,
+        verficationCode = num,
+        userTypeId = 4
+      };
+
+      var createdUser = await _userManager.CreateAsync(newUser, Password);
+
+      if (!createdUser.Succeeded)
+      {
+        return new AddUserResult
+        {
+          Errors = createdUser.Errors.Select(x => x.Description)
+        };
+      }
+
+      var res = await sendVerficationToEMail(newUser.verficationCode.Value, newUser.Email);
+      if (res != true)
+      {
+        return new AddUserResult
+        {
+          Errors = createdUser.Errors.Select(x => "email not send")
+        };
+      }
+      else
+      {
+        return new AddUserResult
+        {
+          Success = true,
+          UserId= newUser.Id
+        };
+      }
+    }
+    #endregion
 
   }
 }

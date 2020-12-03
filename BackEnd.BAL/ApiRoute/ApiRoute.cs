@@ -21,6 +21,7 @@ namespace BackEnd.BAL.ApiRoute
       public const string GetUser = Base + "Identity/GetUser";
       public const string GetUserById = Base + "Identity/GetUserById";
       public const string GetAll = Base + "Identity/GetAll";
+      public const string AddUser = Base + "Identity/AddUser";
     }
 
     public static class WebSite

@@ -18,6 +18,7 @@ namespace BackEnd.BAL.Interfaces
        GenericRepository<WorkSpace> WorkSpaceRepository { get; }
        GenericRepository<AspNetUsersTypes> AspNetUsersTypesRepository { get; }
        GenericRepository<AspNetUsersTypes_roles> AspNetUsersTypes_rolesRepository { get; }
+       GenericRepository<AspNetusertypjoin> AspNetusertypjoinRepository { get; }
 
   }
 }

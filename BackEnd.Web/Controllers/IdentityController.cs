@@ -2,6 +2,7 @@ using BackEnd.BAL.ApiRoute;
 using BackEnd.BAL.Models;
 using BackEnd.DAL.Context;
 using BackEnd.Service.ISercice;
+using BackEnd.Service.IService;
 using BackEnd.Web.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,15 @@ namespace BackEnd.Web.Controllers
   {
     private readonly Random _random = new Random();
     private IidentityServices _identityService;
-    
-    public IdentityController(IidentityServices identityServices,
-      BakEndContext Context)
+    private IRoleService _roleService;
+    public IdentityController(
+      IidentityServices identityServices,
+      IRoleService roleService)
     {
       _identityService = identityServices;
-      
+      _roleService = roleService;
     }
+    #region Register
     [HttpPost(ApiRoute.Identity.Register)]
     public async Task<Result> Register([FromBody] UserRegisterationRequest request) {
       if (!ModelState.IsValid) {
@@ -61,7 +64,9 @@ namespace BackEnd.Web.Controllers
       };
 
     }
+    #endregion
 
+    #region Login
     [HttpPost(ApiRoute.Identity.Login)]
     public async Task<Result> Login([FromBody] UserLoginRequest request)
     {
@@ -114,20 +119,25 @@ namespace BackEnd.Web.Controllers
       }
 
     }
+    #endregion
 
+    #region Role
     [HttpGet(ApiRoute.Identity.Roles)]
     public Result GetAllROles() {
       return _identityService.getAllRoles();
     }
+    #endregion
 
-
+    #region verfayUser
     [HttpPost(ApiRoute.Identity.verfayUser)]
     public async Task<Result> verfayUser([FromBody] UserVerfayRequest request)
     {
      Result res=await _identityService.verfayUser(request);
       return res;
     }
+    #endregion
 
+    #region ResendVerficationCode
     [HttpPost(ApiRoute.Identity.ResendVerficationCode)]
     public async Task<Result> ResendVerficationCode([FromBody] UserVerfayRequest request)
     {
@@ -148,13 +158,17 @@ namespace BackEnd.Web.Controllers
       }
       return res;
     }
+    #endregion
 
+    #region GetUser
     [HttpGet(ApiRoute.Identity.GetUser)]
     public async Task<Result> GetUser(string Email) {
       var res=await _identityService.getUserByEmail(Email);
       return res;
     }
+    #endregion
 
+    #region GetUserById
     [HttpGet(ApiRoute.Identity.GetUserById)]
     public async Task<Result> GetUserById()
     {
@@ -162,14 +176,70 @@ namespace BackEnd.Web.Controllers
       var res = await _identityService.getUserById(UserId);
       return res;
     }
+    #endregion
 
+    #region GetAll
     [HttpGet(ApiRoute.Identity.GetAll)]
-    public async Task<Result> GetAll(int pageNumber, int pageSize)
+    public async Task<Result> GetAll(string searchWord,int pageNumber=1, int pageSize=5)
     {
-      var res = await _identityService.pagginationUser(pageNumber, pageSize);
+      var res = await _identityService.pagginationUser(searchWord,pageNumber, pageSize);
       return res;
     }
+    #endregion
 
+    #region AddUser
+    [HttpPost(ApiRoute.Identity.AddUser)]
+    public async Task<Result> AddUser([FromBody] UserAddViewModel userAddViewModel)
+    {
+      //add User
+      if (!ModelState.IsValid)
+      {
+        ModelState.Values.SelectMany(x => x.Errors.Select(xx => xx.ErrorMessage));
+        return new Result
+        {
+          success = false,
+          data = ModelState.Values
+        };
+
+
+      }
+      AddUserResult addedResult = await _identityService.AddUserAsync(userAddViewModel.UserName, userAddViewModel.Email, userAddViewModel.PhoneNumber, userAddViewModel.Password);
+      if (!addedResult.Success)
+      {
+        var res = new AuthFaildResponse
+        {
+          success = false,
+          Errors = addedResult.Errors
+        };
+        return new Result
+        {
+          success = true,
+          data = res
+        };
+
+      }
+      //end add User
+      var res2 = await _roleService.AddAspNetUserTypeJoin(userAddViewModel.aspNetUsersTypesViewModel, addedResult.UserId);
+      if (res2.success == true)
+      {
+        return new Result
+        {
+          success = true,
+          code = "200",
+          message = "Verfication Code Sent To Email Successfuly"
+        };
+      }
+      else {
+        return new Result
+        {
+          success = true,
+          code = "403",
+          message = "Add User Faild"
+        };
+      }
+    }
+    
+    #endregion
 
 
   }

@@ -3,6 +3,7 @@ using BackEnd.BAL.Interfaces;
 using BackEnd.BAL.Models;
 using BackEnd.DAL.Entities;
 using BackEnd.Service.IService;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,60 @@ namespace BackEnd.Service.Service
   {
     private IUnitOfWork _unitOfWork;
     private IMapper _mapper;
-    public RoleService(IUnitOfWork unitOfWork, IMapper mapper)
+    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    public RoleService(IUnitOfWork unitOfWork, IMapper mapper,
+      UserManager<ApplicationUser> userManager,
+      RoleManager<IdentityRole> roleManager)
     {
+      _userManager = userManager;
       this._unitOfWork = unitOfWork;
-
       _mapper = mapper;
+      _roleManager = roleManager;
     }
+
+    #region AddAspNetUserTypeJoin
+    public async Task<Result> AddAspNetUserTypeJoin(List<AspNetUsersTypesViewModel> aspNetUsersTypesViewModel, string idAspNetUser)
+    {
+      //try {
+        foreach (var item in aspNetUsersTypesViewModel)
+        {
+          AspNetusertypjoin aspNetUsertypeJoin = new AspNetusertypjoin
+          {
+            IdAspNetUsers = idAspNetUser,
+            UsrTypID = item.UsrTypID,
+            CreatedBy = idAspNetUser,
+            CreatedOn = DateTime.Now
+          };
+          _unitOfWork.AspNetusertypjoinRepository.Insert(aspNetUsertypeJoin);
+          await _unitOfWork.SaveAsync();
+          //--add Role To User
+          ApplicationUser user=await _userManager.FindByIdAsync(idAspNetUser);
+          var aspNetUserTypesRoleList = _unitOfWork.AspNetUsersTypes_rolesRepository.Get(filter:(x=>x.UsrTypID == item.UsrTypID));
+        foreach (var item2 in aspNetUserTypesRoleList) {
+          //var RoleName = item2.IdentityRole.Name;
+          var Role = await _roleManager.FindByIdAsync(item2.IdAspNetRoles);
+          await _userManager.AddToRoleAsync(user, Role.Name);
+        }
+        
+          //--end add Role 
+          
+        }
+        return new Result
+        {
+          success = true,
+          code = "200"
+        };
+      //} catch (Exception ex) {
+      //  return new Result
+      //  {
+      //    success = true,
+      //    code = "403"
+      //  };
+      //}
+
+    }
+    #endregion
     #region AddspNetUsersTypes_roles
     public async Task<Result> AddspNetUsersTypes_roles(AspNetUsersTypes_rolesInsertViewModel aspNetUsersTypes_rolesInsertViewModel)
     {

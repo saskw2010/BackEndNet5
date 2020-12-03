@@ -9,6 +9,7 @@ namespace BackEnd.Service.ISercice
   public interface IidentityServices
   {
     Task<AuthenticationResult> RegisterAsync(string UserName,string Email, string PhoneNumber,string Password, string Roles);
+    Task<AddUserResult> AddUserAsync(string UserName,string Email, string PhoneNumber,string Password);
     Task<AuthenticationResult> LoginAsync(string Email, string Password);
     Task<Result> verfayUser(UserVerfayRequest request);
     Task<Result> CheckverfayUserByEmail(string Email);
@@ -18,6 +19,6 @@ namespace BackEnd.Service.ISercice
     Task<Result> updateresetPasswordCodeCode(int num,string Email);
     Result getAllRoles();
     Task<Result> getUserById(string UserId);
-    Task<Result> pagginationUser(int pageNumber, int pageSize);
+    Task<Result> pagginationUser(string searchWord,int pageNumber, int pageSize);
   }
 }

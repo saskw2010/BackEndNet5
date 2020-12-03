@@ -151,6 +151,14 @@ namespace BackEnd.BAL.Repository
       }
     }
 
+    public GenericRepository<AspNetusertypjoin> AspNetusertypjoinRepository
+    {
+      get
+      {
+        return new GenericRepository<AspNetusertypjoin>(Context);
+      }
+    }
+
     //end workspace
 
 
