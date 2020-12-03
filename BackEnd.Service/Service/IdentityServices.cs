@@ -65,59 +65,69 @@ namespace BackEnd.Service.Service
     #endregion
 
     #region GetPrincipalFromToken
-    private ClaimsPrincipal GetPrincipalFromToken(string Token) {
+    private ClaimsPrincipal GetPrincipalFromToken(string Token)
+    {
       var tokenHandler = new JwtSecurityTokenHandler();
-      try {
+      try
+      {
         var principal = tokenHandler.ValidateToken(Token, _TokenValidationParameters, out var validtionToken);
-        if (!IsJwtWithValidationSecurityAlgorithm(validtionToken)) {
+        if (!IsJwtWithValidationSecurityAlgorithm(validtionToken))
+        {
           return null;
         }
         return principal;
       }
-      catch {
+      catch
+      {
         return null;
       }
     }
     #endregion
-    private bool IsJwtWithValidationSecurityAlgorithm(SecurityToken validatedToken) {
-      return (validatedToken is JwtSecurityToken jwtSecurityToken)&&
+    private bool IsJwtWithValidationSecurityAlgorithm(SecurityToken validatedToken)
+    {
+      return (validatedToken is JwtSecurityToken jwtSecurityToken) &&
         jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
         StringComparison.InvariantCultureIgnoreCase);
     }
 
-    public async Task<AuthenticationResult> RegisterAsync(string UserName,string Email,string PhoneNumber, string Password,string Roles)
+    public async Task<AuthenticationResult> RegisterAsync(string UserName, string Email, string PhoneNumber, string Password, string Roles)
     {
       var existingUser = await _userManager.FindByEmailAsync(Email);
-      if (existingUser != null) {
-        return new AuthenticationResult{
-          Errors=new[] {"User with this email adress already Exist"}
+      if (existingUser != null)
+      {
+        return new AuthenticationResult
+        {
+          Errors = new[] { "User with this email adress already Exist" }
         };
       }
-      int num = _random.Next(); 
+      int num = _random.Next();
       var newUser = new ApplicationUser
       {
         Email = Email,
         UserName = UserName,
-        PhoneNumber= PhoneNumber,
+        PhoneNumber = PhoneNumber,
         verficationCode = num,
-        userTypeId=4
+        userTypeId = 4
       };
 
       var createdUser = await _userManager.CreateAsync(newUser, Password);
 
-      if (!createdUser.Succeeded) {
-        return new AuthenticationResult {
-          Errors = createdUser.Errors.Select(x=>x.Description)
+      if (!createdUser.Succeeded)
+      {
+        return new AuthenticationResult
+        {
+          Errors = createdUser.Errors.Select(x => x.Description)
         };
       }
 
       //-----------------------------add Role to token------------------
-      if (!string.IsNullOrEmpty(Roles)) { 
-      await _userManager.AddToRoleAsync(newUser,Roles);
+      if (!string.IsNullOrEmpty(Roles))
+      {
+        await _userManager.AddToRoleAsync(newUser, Roles);
       }
       //-----------------------------------------------------------------
 
-      var res= await sendVerficationToEMail(newUser.verficationCode.Value,newUser.Email);
+      var res = await sendVerficationToEMail(newUser.verficationCode.Value, newUser.Email);
       if (res != true)
       {
         return new AuthenticationResult
@@ -125,7 +135,8 @@ namespace BackEnd.Service.Service
           Errors = createdUser.Errors.Select(x => "email not send")
         };
       }
-      else {
+      else
+      {
         return new AuthenticationResult
         {
           Success = true
@@ -135,7 +146,8 @@ namespace BackEnd.Service.Service
 
     }
 
-    private async Task<AuthenticationResult> GenerateAutheticationForResultForUser(ApplicationUser user) {
+    private async Task<AuthenticationResult> GenerateAutheticationForResultForUser(ApplicationUser user)
+    {
       var TokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(_jwtSettings.JWT_Secret);
       var claims = new List<Claim> {
@@ -180,7 +192,8 @@ namespace BackEnd.Service.Service
       };
     }
 
-    public async Task<Boolean> sendVerficationToEMail(int verficationCode,string Email) {
+    public async Task<Boolean> sendVerficationToEMail(int verficationCode, string Email)
+    {
       return await _emailService.sendVerfication(verficationCode, Email);
     }
 
@@ -191,9 +204,10 @@ namespace BackEnd.Service.Service
       {
         user.confirmed = true;
         await _userManager.UpdateAsync(user);
-        return new Result { success = true};
+        return new Result { success = true };
       }
-      else {
+      else
+      {
         return new Result { success = false };
       }
 
@@ -221,20 +235,22 @@ namespace BackEnd.Service.Service
       }
     }
 
-    public async Task<Result> updateVerficationCode(int num,string Email)
+    public async Task<Result> updateVerficationCode(int num, string Email)
     {
-      var User= await _userManager.FindByEmailAsync(Email);
+      var User = await _userManager.FindByEmailAsync(Email);
       User.verficationCode = num;
       await _userManager.UpdateAsync(User);
-      return new Result {
+      return new Result
+      {
         success = true,
-        data= User
+        data = User
       };
     }
 
     public async Task<Result> getUserByEmail(string Email)
     {
-      if (!string.IsNullOrEmpty(Email)) {
+      if (!string.IsNullOrEmpty(Email))
+      {
         var user = await _userManager.FindByEmailAsync(Email);
         if (user != null)
         {
@@ -244,26 +260,27 @@ namespace BackEnd.Service.Service
             data = user
           };
         }
-        else {
+        else
+        {
           return new Result
           {
             success = false,
-            message="user does not exist"
+            message = "user does not exist"
           };
         }
-      
+
       }
       return new Result
       {
-        success=false
+        success = false
       };
 
     }
 
     public Result getAllRoles()
     {
-      var res= _BakEndContext.Roles.ToList();
-      return new Result {data=res};
+      var res = _BakEndContext.Roles.ToList();
+      return new Result { data = res };
     }
 
 
@@ -313,8 +330,8 @@ namespace BackEnd.Service.Service
     public async Task<Result> pagginationUser(string searchWord, int pageNumber, int pageSize)
     {
       // Get's No of Rows Count 
-      int count = _dataContext.Users.Where(x=>
-      ((searchWord != null ?  x.Email.Contains(searchWord):true)&&(searchWord != null ? x.UserName.Contains(searchWord) : true))
+      int count = _dataContext.Users.Where(x =>
+      ((searchWord != null ? x.Email.Contains(searchWord) : true) && (searchWord != null ? x.UserName.Contains(searchWord) : true))
       ).Count();
 
       // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1
@@ -341,7 +358,7 @@ namespace BackEnd.Service.Service
       // if TotalPages is greater than CurrentPage means it has nextPage
       var nextPage = CurrentPage < TotalPages ? "Yes" : "No";
 
-      
+
       // Object which we are going to send in header 
       paginationMetadata paginationMetadata = new paginationMetadata
       {
@@ -413,11 +430,40 @@ namespace BackEnd.Service.Service
         return new AddUserResult
         {
           Success = true,
-          UserId= newUser.Id
+          UserId = newUser.Id
         };
       }
     }
+
     #endregion
+
+    #region DeleteUser
+    public async Task<Result> DeleteUser(string UserId)
+    {
+      try
+      {
+        var deletedUser = await _userManager.FindByIdAsync(UserId);
+        await _userManager.DeleteAsync(deletedUser);
+        return new Result
+        {
+          success = true,
+          code = "200",
+          message = "User Deleted Successfully"
+        };
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = true,
+          code = "403",
+          message = "User Deleted Faild"
+        };
+      }
+
+    }
+    #endregion
+
 
   }
 }

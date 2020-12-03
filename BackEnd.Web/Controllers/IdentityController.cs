@@ -238,9 +238,13 @@ namespace BackEnd.Web.Controllers
         };
       }
     }
-    
+
     #endregion
 
+    [HttpDelete(ApiRoute.Identity.DeleteUser)]
+    public async Task<Result> DeleteUser(string UserId) {
+      return await _identityService.DeleteUser(UserId);
+    }
 
   }
 }

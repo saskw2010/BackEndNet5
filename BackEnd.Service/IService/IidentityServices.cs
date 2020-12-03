@@ -20,5 +20,6 @@ namespace BackEnd.Service.ISercice
     Result getAllRoles();
     Task<Result> getUserById(string UserId);
     Task<Result> pagginationUser(string searchWord,int pageNumber, int pageSize);
+    Task<Result> DeleteUser(string UserId);
   }
 }
