@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using BackEnd.BAL.Models;
 using BackEnd.DAL.Context;
 using BackEnd.DAL.Entities;
@@ -25,12 +26,14 @@ namespace BackEnd.Service.Service
     private readonly IemailService _emailService;
     private readonly BakEndContext _BakEndContext;
     private readonly Random _random = new Random();
+    private IMapper _mapper;
     public IdentityServices(UserManager<ApplicationUser> userManager,
       ApplicationSettings jwtSettings,
       TokenValidationParameters TokenValidationParameters,
       RoleManager<IdentityRole> roleManager,
       BakEndContext dataContext,
-      IemailService emailService)
+      IemailService emailService,
+      IMapper mapper)
     {
       _userManager = userManager;
       _roleManager = roleManager;
@@ -39,6 +42,7 @@ namespace BackEnd.Service.Service
       _dataContext = dataContext;
       _emailService = emailService;
       _BakEndContext = dataContext;
+      _mapper = mapper;
     }
     #region LoginAsync
     public async Task<AuthenticationResult> LoginAsync(string Email, string Password)

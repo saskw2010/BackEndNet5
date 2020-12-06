@@ -189,7 +189,7 @@ namespace BackEnd.Web.Controllers
 
     #region AddUser
     [HttpPost(ApiRoute.Identity.AddUser)]
-    public async Task<Result> AddUser([FromBody] UserAddViewModel userAddViewModel)
+    public async Task<Result> AddUser([FromBody] UserViewModel userAddViewModel)
     {
       //add User
       if (!ModelState.IsValid)
@@ -255,7 +255,7 @@ namespace BackEnd.Web.Controllers
 
     #region UpdateUser
     [HttpPut(ApiRoute.Identity.UpdateUser)]
-    public async Task<Result> UpdateUser([FromBody] UserUpdateViewModel userUpdateViewModel)
+    public async Task<Result> UpdateUser([FromBody] UserViewModel userUpdateViewModel)
     {
       if (!ModelState.IsValid)
       {
@@ -321,5 +321,12 @@ namespace BackEnd.Web.Controllers
 
     #endregion
 
+    #region GetByUserId
+    [HttpGet(ApiRoute.Identity.GetByUserId)]
+    public async Task<Result> GetByUserId(string UserId) {
+      var res = await _identityService.getUserById(UserId);
+      return res;
+    }
+    #endregion
   }
 }

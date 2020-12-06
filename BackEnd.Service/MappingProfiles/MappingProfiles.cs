@@ -3,6 +3,7 @@ using BackEnd.BAL.Models;
 using BackEnd.DAL.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BackEnd.Service.MappingProfiles
@@ -14,7 +15,7 @@ namespace BackEnd.Service.MappingProfiles
       CreateMap<WorkSpaceVm, WorkSpace>();
 
       CreateMap<userVm, ApplicationUser>();
-      CreateMap<ApplicationUser, ApplicationUser>();
+    
       CreateMap<AspNetUsersTypes, AspNetUsersTypesViewModel>().ReverseMap();
       CreateMap<AspNetUsersTypes_roles, AspNetUsersTypes_rolesViewModel>()
         .ForMember(dest =>
@@ -25,7 +26,9 @@ namespace BackEnd.Service.MappingProfiles
             opt => opt.MapFrom(src => src.IdentityRole.Name))
         .ReverseMap();
 
-      CreateMap<AspNetUsersTypes_roles, AspNetUsersTypes_rolesInsertViewModel>().ReverseMap();
+      CreateMap<AspNetUsersTypes_roles, AspNetUsersTypes_rolesViewModel>().ReverseMap();
+
+     
     }
   }
 }
