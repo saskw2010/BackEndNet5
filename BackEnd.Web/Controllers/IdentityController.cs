@@ -241,10 +241,80 @@ namespace BackEnd.Web.Controllers
 
     #endregion
 
+    #region deleteUser
     [HttpDelete(ApiRoute.Identity.DeleteUser)]
     public async Task<Result> DeleteUser(string UserId) {
       return await _identityService.DeleteUser(UserId);
     }
+    #endregion
+
+    #region AddUser
+    [HttpPut(ApiRoute.Identity.UpdateUser)]
+    public async Task<Result> UpdateUser([FromBody] UserUpdateViewModel userUpdateViewModel)
+    {
+      if (!ModelState.IsValid)
+      {
+        ModelState.Values.SelectMany(x => x.Errors.Select(xx => xx.ErrorMessage));
+        return new Result
+        {
+          success = false,
+          data = ModelState.Values
+        };
+
+
+      }
+      UpdateUserResult UpdateResult = await _identityService.UpdateUser(userUpdateViewModel.Id,userUpdateViewModel.UserName,userUpdateViewModel.Email,userUpdateViewModel.PhoneNumber,userUpdateViewModel.Password);
+      if (!UpdateResult.Success)
+      {
+        var res = new AuthFaildResponse
+        {
+          success = false,
+          Errors = UpdateResult.Errors
+        };
+        return new Result
+        {
+          success = true,
+          data = res
+        };
+
+      }
+      //end add User
+      //--Beign::Remove old AspNetUsetTypeJoin
+     var res11=await _roleService.RemoveAspNetUserTypeJoin(UpdateResult.UserId);
+      //-----
+      if (res11.success == true)
+      {
+        var res2 = await _roleService.AddAspNetUserTypeJoin(userUpdateViewModel.aspNetUsersTypesViewModel, UpdateResult.UserId);
+        if (res2.success == true)
+        {
+          return new Result
+          {
+            success = true,
+            code = "200",
+          };
+        }
+        else
+        {
+          return new Result
+          {
+            success = true,
+            code = "403",
+            message = "update User Faild"
+          };
+        }
+
+      }
+      else {
+        return new Result
+        {
+          success = false,
+          code = "403",
+          message = "uodate User Faild"
+        };
+      }
+    }
+
+    #endregion
 
   }
 }

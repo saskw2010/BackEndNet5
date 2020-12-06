@@ -31,7 +31,8 @@ namespace BackEnd.Service.Service
     #region AddAspNetUserTypeJoin
     public async Task<Result> AddAspNetUserTypeJoin(List<AspNetUsersTypesViewModel> aspNetUsersTypesViewModel, string idAspNetUser)
     {
-      //try {
+      try
+      {
         foreach (var item in aspNetUsersTypesViewModel)
         {
           AspNetusertypjoin aspNetUsertypeJoin = new AspNetusertypjoin
@@ -60,13 +61,13 @@ namespace BackEnd.Service.Service
           success = true,
           code = "200"
         };
-      //} catch (Exception ex) {
-      //  return new Result
-      //  {
-      //    success = true,
-      //    code = "403"
-      //  };
-      //}
+    } catch (Exception ex) {
+        return new Result
+        {
+          success = true,
+          code = "403"
+        };
+}
 
     }
     #endregion
@@ -263,12 +264,48 @@ namespace BackEnd.Service.Service
         data= aspNetTypeViewModel
       };
     }
+    #endregion
 
-    public Task<Result> UpdatespNetUsersTypes_roles(AspNetUsersTypes_rolesInsertViewModel aspNetUsersTypes_rolesViewModel)
+
+    #region RemoveAspNetUserTypeJoin
+    public async Task<Result> RemoveAspNetUserTypeJoin(string idAspNetUser)
     {
-      throw new NotImplementedException();
-    }
+      try {
+        List<AspNetusertypjoin> aspNetusertypjoinList = new List<AspNetusertypjoin>();
+        aspNetusertypjoinList = _unitOfWork.AspNetusertypjoinRepository.Get(filter: (x => x.IdAspNetUsers == idAspNetUser)).ToList();
+        _unitOfWork.AspNetusertypjoinRepository.RemovRange(aspNetusertypjoinList);
+        var res = await _unitOfWork.SaveAsync();
+        if (res == 200)
+        {
+          var user = await _userManager.FindByIdAsync(idAspNetUser);
+          if (user != null)
+          {
+            var UserRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRoleAsync(user, UserRoles.FirstOrDefault());
+          }
+          return new Result
+          {
+            success = true,
+            code = "200",
+          };
+        }
+        else {
+          return new Result
+          {
+            success = true,
+            code = "403",
+          };
+        }
+      } catch (Exception ex) {
+        return new Result
+        {
+          success = true,
+          code = "403",
+        };
+      }
 
+
+    }
     #endregion
 
     //#region UpdatespNetUsersTypes_roles

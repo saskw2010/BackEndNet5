@@ -460,9 +460,70 @@ namespace BackEnd.Service.Service
           message = "User Deleted Faild"
         };
       }
-
     }
     #endregion
+
+    #region UpdateUser
+    public async Task<UpdateUserResult> UpdateUser(string userId, string UserName, string Email, string PhoneNumber, string Password)
+    {
+      UpdateUserResult updateUserResult = new UpdateUserResult();
+      var user = await _userManager.FindByIdAsync(userId);
+      if (user != null)
+      {
+        var passwordHasher = new PasswordHasher<ApplicationUser>();
+        if (!string.IsNullOrEmpty(UserName))
+        { user.UserName = UserName; }
+        else
+        {
+          updateUserResult.Errors.Add("User Name cannot be empty");
+          return updateUserResult;
+        }
+
+        if (!string.IsNullOrEmpty(Password))
+        { user.PasswordHash = passwordHasher.HashPassword(user, Password); }
+        else {
+          updateUserResult.Errors.Add("Password cannot be empty");
+          return updateUserResult;
+        }
+        int num = _random.Next();
+        user.verficationCode = num;
+        IdentityResult result = await _userManager.UpdateAsync(user);
+
+        var res = await sendVerficationToEMail(user.verficationCode.Value, user.Email);
+        if (res != true)
+        {
+          updateUserResult.Errors.Add("email not send");
+        }
+
+        if (result.Succeeded)
+        {
+          return new UpdateUserResult
+          {
+            Success = true,
+            Errors = null,
+            UserId = user.Id
+          };
+        }
+        else {
+          return new UpdateUserResult
+          {
+            Success = false,
+            Errors = new List<string>() { "internal server Error" },
+            UserId = null
+          };
+        }
+      }
+      else {
+        return new UpdateUserResult {
+          Success = false,
+          Errors = new List<string>() {"user is not Exist"},
+          UserId=null
+        };
+      }
+   
+    }
+    #endregion
+
 
 
   }

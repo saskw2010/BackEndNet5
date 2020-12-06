@@ -16,4 +16,17 @@ namespace BackEnd.BAL.Models
     public string PhoneNumber { get; set; }
     public List<AspNetUsersTypesViewModel> aspNetUsersTypesViewModel { get; set; }
   }
+
+  public class UserUpdateViewModel
+  {
+  public string Id { get; set; }
+  public string UserName { get; set; }
+  [EmailAddress]
+  public string Email { get; set; }
+  public string Password { get; set; }
+  [Compare(nameof(Password), ErrorMessage = "Passwords don't match.")]
+  public string ConfirmPassword { get; set; }
+  public string PhoneNumber { get; set; }
+  public List<AspNetUsersTypesViewModel> aspNetUsersTypesViewModel { get; set; }
+}
 }
