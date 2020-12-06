@@ -244,11 +244,16 @@ namespace BackEnd.Web.Controllers
     #region deleteUser
     [HttpDelete(ApiRoute.Identity.DeleteUser)]
     public async Task<Result> DeleteUser(string UserId) {
-      return await _identityService.DeleteUser(UserId);
+        await _identityService.DeleteUser(UserId);
+        var res2 = await _roleService.RemoveAspNetUserTypeJoin(UserId);
+        return res2;
+     
+      
+       
     }
     #endregion
 
-    #region AddUser
+    #region UpdateUser
     [HttpPut(ApiRoute.Identity.UpdateUser)]
     public async Task<Result> UpdateUser([FromBody] UserUpdateViewModel userUpdateViewModel)
     {
@@ -276,7 +281,6 @@ namespace BackEnd.Web.Controllers
           success = true,
           data = res
         };
-
       }
       //end add User
       //--Beign::Remove old AspNetUsetTypeJoin
@@ -291,6 +295,7 @@ namespace BackEnd.Web.Controllers
           {
             success = true,
             code = "200",
+            message= "Verfication Code Sent To Email Successfuly"
           };
         }
         else

@@ -447,8 +447,7 @@ namespace BackEnd.Service.Service
         return new Result
         {
           success = true,
-          code = "200",
-          message = "User Deleted Successfully"
+          code = "200"
         };
       }
       catch (Exception ex)
@@ -487,6 +486,7 @@ namespace BackEnd.Service.Service
         }
         int num = _random.Next();
         user.verficationCode = num;
+        user.confirmed = false;
         IdentityResult result = await _userManager.UpdateAsync(user);
 
         var res = await sendVerficationToEMail(user.verficationCode.Value, user.Email);
