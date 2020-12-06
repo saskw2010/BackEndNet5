@@ -528,7 +528,53 @@ namespace BackEnd.Service.Service
     }
     #endregion
 
+    #region getUserAndUserUserTypeByUserId
+    public async Task<Result> getUserAndUserUserTypeByUserId(string UserId)
+    {
+      
+      if (!string.IsNullOrEmpty(UserId))
+      {
+        var user = await _userManager.FindByIdAsync(UserId);
+        List<AspNetUsersTypesViewModel> aspNetUsersTypesList = new List<AspNetUsersTypesViewModel>();
+        foreach (var item in user.AspNetusertypjoin){
+          var aspNetUsersTypesViewModel = new AspNetUsersTypesViewModel();
+          aspNetUsersTypesViewModel.UsrTypID = item.AspNetUsersTypes.UsrTypID;
+          aspNetUsersTypesViewModel.UsrTypNm = item.AspNetUsersTypes.UsrTypNm;
+          aspNetUsersTypesList.Add(aspNetUsersTypesViewModel);
+        }
+        UserViewModel userViewModel = new UserViewModel {
+         Id=user.Id, 
+         UserName=user.UserName,
+         Email =user.Email,
+         PhoneNumber=user.PhoneNumber,
+        aspNetUsersTypesViewModel = aspNetUsersTypesList
+        };
+        
+        if (user != null)
+        {
+          return new Result
+          {
+            success = true,
+            data = userViewModel
+          };
+        }
+        else
+        {
+          return new Result
+          {
+            success = false,
+            message = "user does not exist"
+          };
+        }
 
+      }
+      return new Result
+      {
+        success = false
+      };
+
+    }
+    #endregion
 
   }
 }

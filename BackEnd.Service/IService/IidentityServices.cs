@@ -19,6 +19,8 @@ namespace BackEnd.Service.ISercice
     Task<Result> updateresetPasswordCodeCode(int num,string Email);
     Result getAllRoles();
     Task<Result> getUserById(string UserId);
+    Task<Result> getUserAndUserUserTypeByUserId(string UserId);
+
     Task<Result> pagginationUser(string searchWord,int pageNumber, int pageSize);
     Task<Result> DeleteUser(string UserId);
     Task<UpdateUserResult> UpdateUser(string userId, string UserName, string Email, string PhoneNumber, string Password);

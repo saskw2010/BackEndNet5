@@ -324,7 +324,7 @@ namespace BackEnd.Web.Controllers
     #region GetByUserId
     [HttpGet(ApiRoute.Identity.GetByUserId)]
     public async Task<Result> GetByUserId(string UserId) {
-      var res = await _identityService.getUserById(UserId);
+      var res = await _identityService.getUserAndUserUserTypeByUserId(UserId);
       return res;
     }
     #endregion
