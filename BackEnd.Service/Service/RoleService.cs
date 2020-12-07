@@ -287,6 +287,7 @@ namespace BackEnd.Service.Service
           {
             success = true,
             code = "200",
+            message="User Is Deleted Successfully"
           };
         }
         else {
@@ -294,6 +295,7 @@ namespace BackEnd.Service.Service
           {
             success = true,
             code = "403",
+            message = "User Deleted Faild"
           };
         }
       } catch (Exception ex) {
@@ -301,6 +303,7 @@ namespace BackEnd.Service.Service
         {
           success = true,
           code = "403",
+          message = "User Deleted Faild"
         };
       }
 

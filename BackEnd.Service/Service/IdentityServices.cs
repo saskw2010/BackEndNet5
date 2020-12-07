@@ -335,7 +335,7 @@ namespace BackEnd.Service.Service
     {
       // Get's No of Rows Count 
       int count = _dataContext.Users.Where(x =>
-      ((searchWord != null ? x.Email.Contains(searchWord) : true) && (searchWord != null ? x.UserName.Contains(searchWord) : true))
+      ((searchWord != null ? x.Email.Contains(searchWord) : true) || (searchWord != null ? x.UserName.Contains(searchWord) : true))
       ).Count();
 
       // Parameter is passed from Query string if it is null then it default Value will be pageNumber:1
@@ -353,7 +353,7 @@ namespace BackEnd.Service.Service
 
       // Returns List of Customer after applying Paging 
       var items = _dataContext.Users.Where(x =>
-      ((searchWord != null ? x.Email.Contains(searchWord) : true) && (searchWord != null ? x.UserName.Contains(searchWord) : true))
+      ((searchWord != null ? x.Email.Contains(searchWord) : true) || (searchWord != null ? x.UserName.Contains(searchWord) : true))
       ).Skip((CurrentPage - 1) * pageSize).Take(pageSize).ToList();
 
       // if CurrentPage is greater than 1 means it has previousPage
