@@ -26,7 +26,7 @@ namespace BackEnd.Service.MappingProfiles
             opt => opt.MapFrom(src => src.IdentityRole.Name))
         .ReverseMap();
 
-      CreateMap<AspNetUsersTypes_roles, AspNetUsersTypes_rolesViewModel>().ReverseMap();
+      CreateMap<AspNetUsersTypes_roles, AspNetUsersTypes_rolesInsertViewModel>().ReverseMap();
 
      
     }
