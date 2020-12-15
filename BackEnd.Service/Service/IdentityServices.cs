@@ -127,7 +127,15 @@ namespace BackEnd.Service.Service
         //PasswordHash= Encrypt(Password,"xxx"),
         PasswordHash= EncodePasswordmosso(Password),
         userTypeId = 4,
-        confirmed=false
+        confirmed=false,
+        EmailConfirmed = true,
+        IsApproved = true,
+        PhoneNumberConfirmed = true,
+        creationDate= DateTime.Now,
+        lastLoginDate = DateTime.Now,
+        lastActivityDate = DateTime.Now,
+        lastPasswordChangedDate = DateTime.Now,
+        lastLockedOutDate = DateTime.Now
       };
 
       var createdUser = await _userManager.CreateAsync(newUser);
@@ -438,8 +446,16 @@ namespace BackEnd.Service.Service
         //PasswordHash = Encrypt(Password, "xxx"),
         PasswordHash = EncodePasswordmosso(Password),
         userTypeId = 4,
-        confirmed=false
-      };
+        confirmed=false,
+        EmailConfirmed=true,
+        IsApproved =true,
+        PhoneNumberConfirmed=true,
+        creationDate=DateTime.Now,
+       lastLoginDate =DateTime.Now,
+        lastActivityDate =DateTime.Now,
+       lastPasswordChangedDate =DateTime.Now,
+       lastLockedOutDate =DateTime.Now
+  };
 
       //var createdUser = await _userManager.CreateAsync(newUser, Password);
       var createdUser = await _userManager.CreateAsync(newUser);
