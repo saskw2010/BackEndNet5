@@ -15,7 +15,7 @@ using BackEnd.Service.ISercice;
 using BackEnd.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-
+using Microsoft.Extensions.Configuration;
 namespace BackEnd.Service.Service
 {
   public class IdentityServices : IidentityServices
@@ -29,13 +29,15 @@ namespace BackEnd.Service.Service
     private readonly BakEndContext _BakEndContext;
     private readonly Random _random = new Random();
     private IMapper _mapper;
+    public IConfiguration Configuration { get; }
     public IdentityServices(UserManager<ApplicationUser> userManager,
       ApplicationSettings jwtSettings,
       TokenValidationParameters TokenValidationParameters,
       RoleManager<IdentityRole> roleManager,
       BakEndContext dataContext,
       IemailService emailService,
-      IMapper mapper)
+      IMapper mapper,
+      IConfiguration iConfig)
     {
       _userManager = userManager;
       _roleManager = roleManager;
@@ -45,11 +47,14 @@ namespace BackEnd.Service.Service
       _emailService = emailService;
       _BakEndContext = dataContext;
       _mapper = mapper;
+      Configuration = iConfig;
     }
     #region LoginAsync
-    public async Task<AuthenticationResult> LoginAsync(string Email, string Password)
+    public async Task<AuthenticationResult> LoginAsync(string Email,string UserName, string Password)
     {
-      var user = await _userManager.FindByEmailAsync(Email);
+      //var user = await _userManager.FindByEmailAsync(Email);
+      //var user =  FindByEmailCustome(Email);
+      var user = FindByUserNameCustom(UserName);
       if (user == null)
       {
         return new AuthenticationResult
@@ -59,8 +64,9 @@ namespace BackEnd.Service.Service
       }
 
       // var userHasValidPassword = await _userManager.CheckPasswordAsync(user, Password);
-      var userHasValidPassword = Decrypt(user.PasswordHash,"xxx");
-      if (!(userHasValidPassword == Password))
+      //var userHasValidPassword = Decrypt(user.PasswordHash,"xxx");
+      var encodedPassword = EncodePasswordmosso(Password);
+      if (!(encodedPassword == user.PasswordHash))
       {
         return new AuthenticationResult
         {
@@ -99,12 +105,16 @@ namespace BackEnd.Service.Service
 
     public async Task<AuthenticationResult> RegisterAsync(string UserName, string Email, string PhoneNumber, string Password, string Roles)
     {
-      var existingUser = await _userManager.FindByEmailAsync(Email);
+      //var existingUser = await _userManager.FindByEmailAsync(Email);
+      var existingUser = FindByEmailCustome(Email);
+      if (existingUser == null) {
+        existingUser = FindByUserNameCustom(UserName);
+      }
       if (existingUser != null)
       {
         return new AuthenticationResult
         {
-          Errors = new[] { "User with this email adress already Exist" }
+          Errors = new[] { "User already Exist" }
         };
       }
       int num = _random.Next();
@@ -114,8 +124,10 @@ namespace BackEnd.Service.Service
         UserName = UserName,
         PhoneNumber = PhoneNumber,
         verficationCode = num,
-        PasswordHash= Encrypt(Password,"xxx"),
-        userTypeId = 4
+        //PasswordHash= Encrypt(Password,"xxx"),
+        PasswordHash= EncodePasswordmosso(Password),
+        userTypeId = 4,
+        confirmed=false
       };
 
       var createdUser = await _userManager.CreateAsync(newUser);
@@ -207,7 +219,8 @@ namespace BackEnd.Service.Service
 
     public async Task<Result> verfayUser(UserVerfayRequest request)
     {
-      var user = await _userManager.FindByEmailAsync(request.Email);
+      //var user = await _userManager.FindByEmailAsync(request.Email);
+      var user = FindByEmailCustome(request.Email);
       if (user.verficationCode == request.verficationCode)
       {
         user.confirmed = true;
@@ -221,9 +234,10 @@ namespace BackEnd.Service.Service
 
     }
 
-    public async Task<Result> CheckverfayUserByEmail(string Email)
+    public async Task<Result> CheckverfayUserByEmail(string username)
     {
-      var user = await _userManager.FindByEmailAsync(Email);
+      //var user = await _userManager.FindByEmailAsync(Email);
+      var user = FindByUserNameCustom(username);
       if (user.confirmed == true)
       {
         return new Result
@@ -245,7 +259,8 @@ namespace BackEnd.Service.Service
 
     public async Task<Result> updateVerficationCode(int num, string Email)
     {
-      var User = await _userManager.FindByEmailAsync(Email);
+     // var User = await _userManager.FindByEmailAsync(Email);
+      var User = FindByEmailCustome(Email);
       User.verficationCode = num;
       await _userManager.UpdateAsync(User);
       return new Result
@@ -259,7 +274,8 @@ namespace BackEnd.Service.Service
     {
       if (!string.IsNullOrEmpty(Email))
       {
-        var user = await _userManager.FindByEmailAsync(Email);
+        //var user = await _userManager.FindByEmailAsync(Email);
+        var user = FindByEmailCustome(Email);
         if (user != null)
         {
           return new Result
@@ -295,7 +311,8 @@ namespace BackEnd.Service.Service
 
     public async Task<Result> updateresetPasswordCodeCode(int num, string Email)
     {
-      var User = await _userManager.FindByEmailAsync(Email);
+      //var User = await _userManager.FindByEmailAsync(Email);
+      var User = FindByEmailCustome(Email);
       User.resetPasswordCode = num;
       await _userManager.UpdateAsync(User);
       return new Result
@@ -397,7 +414,13 @@ namespace BackEnd.Service.Service
     #region AddUserAsync
     public async Task<AddUserResult> AddUserAsync(string UserName, string Email, string PhoneNumber, string Password)
     {
-      var existingUser = await _userManager.FindByEmailAsync(Email);
+      //var existingUser = await _userManager.FindByEmailAsync(Email);
+      //var existingUser = FindByEmailCustome(Email);
+      var existingUser = FindByEmailCustome(Email);
+      if (existingUser == null)
+      {
+        existingUser = FindByUserNameCustom(UserName);
+      }
       if (existingUser != null)
       {
         return new AddUserResult
@@ -412,8 +435,10 @@ namespace BackEnd.Service.Service
         UserName = UserName,
         PhoneNumber = PhoneNumber,
         verficationCode = num,
-         PasswordHash = Encrypt(Password, "xxx"),
-        userTypeId = 4
+        //PasswordHash = Encrypt(Password, "xxx"),
+        PasswordHash = EncodePasswordmosso(Password),
+        userTypeId = 4,
+        confirmed=false
       };
 
       //var createdUser = await _userManager.CreateAsync(newUser, Password);
@@ -489,7 +514,10 @@ namespace BackEnd.Service.Service
         }
 
         if (!string.IsNullOrEmpty(Password))
-        { user.PasswordHash = passwordHasher.HashPassword(user, Password); }
+        {
+          //user.PasswordHash = passwordHasher.HashPassword(user, Password);
+          user.PasswordHash  = EncodePasswordmosso(Password);
+        }
         else {
           updateUserResult.Errors.Add("Password cannot be empty");
           return updateUserResult;
@@ -633,5 +661,65 @@ namespace BackEnd.Service.Service
       cryptoStream.Close();
       return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
     }
+
+
+    public virtual string EncodePasswordmosso(string password)
+    {
+      string encodedPassword = password;
+      // Dim pwdFormat As String = Config("passwordFormat")
+      // If (pwdFormat = System.Web.Security.MembershipPasswordFormat.Encrypted) Then
+      // encodedPassword = Convert.ToBase64String(EncryptPassword(Encoding.Unicode.GetBytes(password)))
+      // Else
+      // If (passwordformat = System.Web.Security.MembershipPasswordFormat.Hashed) Then
+      HMACSHA1 hash = new HMACSHA1();
+      var passwordConfiguration = Configuration
+          .GetSection("PasswordConfiguration")
+          .Get<PasswordConfiguration>();
+      string m_ValidationKey = passwordConfiguration.MembershipProviderValidationKey;
+      if ((string.IsNullOrEmpty(m_ValidationKey) || m_ValidationKey.Contains("AutoGenerate")))
+        m_ValidationKey = "FE876E90EF985641A24F77B05190FADD2EE660336C233E4707D8F08457318D6333FFF117A764D57A8" + "29E9549DCEA9883FBCD4979841CD53BC810C7538507A191";
+      hash.Key = HexToByte(m_ValidationKey);
+      encodedPassword = Convert.ToBase64String(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
+      // End If
+      // End If
+      return encodedPassword;
+    }
+
+    public static byte[] HexToByte(string hexString)
+    {
+      byte[] returnBytes = new byte[(int)((hexString.Length / (double)2) - 1 + 1)];
+      int i = 0;
+      while ((i < returnBytes.Length))
+      {
+        returnBytes[i] = Convert.ToByte(hexString.Substring((i * 2), 2), 16);
+        i = (i + 1);
+      }
+      return returnBytes;
+    }
+
+    #region FindByEmailCustome
+    public ApplicationUser FindByEmailCustome(string email) {
+     return _BakEndContext.Users.FirstOrDefault(x => x.Email == email);
+    }
+    #endregion
+
+    #region FindByUserNameCustom
+    public ApplicationUser FindByUserNameCustom(string userName)
+    {
+      return _BakEndContext.Users.FirstOrDefault(x => x.UserName == userName);
+    }
+    #endregion
+
+    #region GetUserByUserName
+    public  Result GetUserByUserName(string userName)
+    {
+      var res= _BakEndContext.Users.FirstOrDefault(x => x.UserName == userName);
+      return new Result {
+        success = true,
+        data= res
+      };
+    }
+    #endregion
   }
+
 }

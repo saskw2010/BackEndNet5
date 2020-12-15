@@ -70,7 +70,7 @@ namespace BackEnd.Web.Controllers
     [HttpPost(ApiRoute.Identity.Login)]
     public async Task<Result> Login([FromBody] UserLoginRequest request)
     {
-        var authResponse = await _identityService.LoginAsync(request.Email, request.Password);
+        var authResponse = await _identityService.LoginAsync(request.Email,request.UserName, request.Password);
         if (!authResponse.Success)
         {
         var res =
@@ -87,7 +87,7 @@ namespace BackEnd.Web.Controllers
            
         }
         else {
-        var res = await _identityService.CheckverfayUserByEmail(request.Email);
+        var res = await _identityService.CheckverfayUserByEmail(request.UserName);
         if (res.success == true)
         {
           var res2=new AuthSuccessResponse
@@ -213,7 +213,7 @@ namespace BackEnd.Web.Controllers
         };
         return new Result
         {
-          success = true,
+          success = false,
           data = res
         };
 
@@ -232,7 +232,7 @@ namespace BackEnd.Web.Controllers
       else {
         return new Result
         {
-          success = true,
+          success = false,
           code = "403",
           message = "Add User Faild"
         };
@@ -325,6 +325,16 @@ namespace BackEnd.Web.Controllers
     [HttpGet(ApiRoute.Identity.GetByUserId)]
     public async Task<Result> GetByUserId(string UserId) {
       var res = await _identityService.getUserAndUserUserTypeByUserId(UserId);
+      return res;
+    }
+    #endregion
+
+
+    #region GetUserByUserName
+    [HttpGet(ApiRoute.Identity.GetUserByUserName)]
+    public Result GetUserByUserName(string userName)
+    {
+      var res =  _identityService.GetUserByUserName(userName);
       return res;
     }
     #endregion

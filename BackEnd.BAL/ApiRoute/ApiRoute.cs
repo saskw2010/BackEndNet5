@@ -24,6 +24,7 @@ namespace BackEnd.BAL.ApiRoute
       public const string AddUser = Base + "Identity/AddUser";
       public const string DeleteUser = Base + "Identity/DeleteUser";
       public const string UpdateUser = Base + "Identity/UpdateUser";
+      public const string GetUserByUserName = Base + "Identity/GetUserByUserName";
       public const string GetByUserId = Base + "Identity/GetByUserId";
     }
 
