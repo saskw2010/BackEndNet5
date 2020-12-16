@@ -23,6 +23,9 @@ namespace BackEnd.DAL.Context
     public virtual DbSet<AspNetUsersTypes> AspNetUsersTypes { get; set; }
     public virtual DbSet<AspNetusertypjoin> AspNetusertypjoin { get; set; }
     public virtual DbSet<AspNetUsersTypes_roles> AspNetUsersTypes_roles { get; set; }
+    public virtual DbSet<EsSrClient> EsSrClient { get; set; }
+    public virtual DbSet<EsSrTechnical> EsSrTechnical { get; set; }
+   
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);

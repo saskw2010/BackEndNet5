@@ -338,5 +338,51 @@ namespace BackEnd.Web.Controllers
       return res;
     }
     #endregion
+
+    #region Register
+    [HttpPost(ApiRoute.Identity.RegisterMobile)]
+    public async Task<Result> RegisterMobile([FromBody] UserRegisterationRequest request)
+    {
+      if (!ModelState.IsValid)
+      {
+        ModelState.Values.SelectMany(x => x.Errors.Select(xx => xx.ErrorMessage));
+        return new Result
+        {
+          success = false,
+          data = ModelState.Values
+        };
+
+
+      }
+      AuthenticationResult authResponse = await _identityService.RegisterMobileAsync(request.UserName, request.Email, request.PhoneNumber, request.Password, request.Roles);
+      if (!authResponse.Success)
+      {
+        var res = new AuthFaildResponse
+        {
+          success = false,
+          Errors = authResponse.Errors
+        };
+        return new Result
+        {
+          success = true,
+          data = res
+        };
+
+      }
+
+      var res2 = new AuthSuccessResponse
+      {
+        success = true,
+        Token = authResponse.Token
+      };
+      return new Result
+      {
+        success = true,
+        data = res2
+      };
+
+    }
+    #endregion
+
   }
 }

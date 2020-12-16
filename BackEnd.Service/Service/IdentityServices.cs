@@ -102,7 +102,7 @@ namespace BackEnd.Service.Service
         jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
         StringComparison.InvariantCultureIgnoreCase);
     }
-
+    #region RegisterAsync
     public async Task<AuthenticationResult> RegisterAsync(string UserName, string Email, string PhoneNumber, string Password, string Roles)
     {
       //var existingUser = await _userManager.FindByEmailAsync(Email);
@@ -173,7 +173,7 @@ namespace BackEnd.Service.Service
 
 
     }
-
+    #endregion
     private async Task<AuthenticationResult> GenerateAutheticationForResultForUser(ApplicationUser user)
     {
       var TokenHandler = new JwtSecurityTokenHandler();
@@ -736,6 +736,13 @@ namespace BackEnd.Service.Service
       };
     }
     #endregion
+
+
+
+    public Task<AuthenticationResult> RegisterMobileAsync(string UserName, string Email, string PhoneNumber, string Password, string Roles)
+    {
+      throw new NotImplementedException();
+    }
   }
 
 }

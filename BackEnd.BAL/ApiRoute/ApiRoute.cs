@@ -15,6 +15,7 @@ namespace BackEnd.BAL.ApiRoute
     {
       public const string Login = Base + "Identity/Login";
       public const string Register = Base + "/Identity/Register";
+      public const string RegisterMobile = Base + "/Identity/RegisterMobile";
       public const string Roles = Base + "/Identity/Roles";
       public const string verfayUser = Base + "Identity/verfayUser";
       public const string ResendVerficationCode = Base + "Identity/ResendVerficationCode";
@@ -45,7 +46,11 @@ namespace BackEnd.BAL.ApiRoute
       public const string DeletespNetUsersTypes_roles = Base + "Role/DeletespNetUsersTypes_roles";
       public const string FilterAspNetUsersTypes_roles = Base + "Role/FilterAspNetUsersTypes_roles";
     }
-
+    //EsSrClient
+    public static class Client
+    {
+      public const string CreateCLient = Base + "EsSrClient/CreateCLient";
+    }
 
   }
 }

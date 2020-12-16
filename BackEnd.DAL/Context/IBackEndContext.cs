@@ -13,5 +13,7 @@ namespace RealState.DAL.Context
     DbSet<AspNetUsersTypes> AspNetUsersTypes { get; set; }
     DbSet<AspNetusertypjoin> AspNetusertypjoin { get; set; }
     DbSet<AspNetUsersTypes_roles> AspNetUsersTypes_roles { get; set; }
+    DbSet<EsSrClient> EsSrClient { get; set; }
+    DbSet<EsSrTechnical> EsSrTechnical { get; set; }
   }
 }

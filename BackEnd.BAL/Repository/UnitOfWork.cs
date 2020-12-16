@@ -159,6 +159,21 @@ namespace BackEnd.BAL.Repository
       }
     }
 
+    public GenericRepository<EsSrClient> EsSrClientRepository
+    { get
+      {
+        return new GenericRepository<EsSrClient>(Context);
+      }
+    }
+
+    public GenericRepository<EsSrTechnical> EsSrTechnicalRepository
+        {
+          get
+          {
+            return new GenericRepository<EsSrTechnical>(Context);
+          }
+        }
+
     //end workspace
 
 

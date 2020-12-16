@@ -27,6 +27,8 @@ namespace BackEnd.Service.MappingProfiles
         .ReverseMap();
 
       CreateMap<AspNetUsersTypes_roles, AspNetUsersTypes_rolesInsertViewModel>().ReverseMap();
+      CreateMap<EsSrClient, EsSrClientViewModel>().ReverseMap();
+      CreateMap<EsSrTechnical, EsSrTechnicalViewModel>().ReverseMap();
 
      
     }

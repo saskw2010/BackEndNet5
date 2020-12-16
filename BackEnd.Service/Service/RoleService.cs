@@ -85,7 +85,7 @@ namespace BackEnd.Service.Service
         {
           return new Result
           {
-            success = false,
+            success = true,
             code = "200",
             message = "Row Added Success",
             data = null
