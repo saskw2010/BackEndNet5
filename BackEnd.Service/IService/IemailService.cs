@@ -9,5 +9,6 @@ namespace BackEnd.Service.IService
   public interface IemailService
   {
     Task<Boolean> sendVerfication(int verficationCode,string Email);
+    Task<Boolean> sendVerficationMobile(int verficationCode,string Email);
   }
 }

@@ -50,7 +50,7 @@ namespace BackEnd.Service.Service
       Configuration = iConfig;
     }
     #region LoginAsync
-    public async Task<AuthenticationResult> LoginAsync(string Email,string UserName, string Password)
+    public async Task<AuthenticationResult> LoginAsync(string Email, string UserName, string Password)
     {
       //var user = await _userManager.FindByEmailAsync(Email);
       //var user =  FindByEmailCustome(Email);
@@ -125,13 +125,13 @@ namespace BackEnd.Service.Service
         PhoneNumber = PhoneNumber,
         verficationCode = num,
         //PasswordHash= Encrypt(Password,"xxx"),
-        PasswordHash= EncodePasswordmosso(Password),
+        PasswordHash = EncodePasswordmosso(Password),
         userTypeId = 4,
-        confirmed=false,
+        confirmed = false,
         EmailConfirmed = true,
         IsApproved = true,
         PhoneNumberConfirmed = true,
-        creationDate= DateTime.Now,
+        creationDate = DateTime.Now,
         lastLoginDate = DateTime.Now,
         lastActivityDate = DateTime.Now,
         lastPasswordChangedDate = DateTime.Now,
@@ -267,7 +267,7 @@ namespace BackEnd.Service.Service
 
     public async Task<Result> updateVerficationCode(int num, string Email)
     {
-     // var User = await _userManager.FindByEmailAsync(Email);
+      // var User = await _userManager.FindByEmailAsync(Email);
       var User = FindByEmailCustome(Email);
       User.verficationCode = num;
       await _userManager.UpdateAsync(User);
@@ -446,16 +446,16 @@ namespace BackEnd.Service.Service
         //PasswordHash = Encrypt(Password, "xxx"),
         PasswordHash = EncodePasswordmosso(Password),
         userTypeId = 4,
-        confirmed=false,
-        EmailConfirmed=true,
-        IsApproved =true,
-        PhoneNumberConfirmed=true,
-        creationDate=DateTime.Now,
-       lastLoginDate =DateTime.Now,
-        lastActivityDate =DateTime.Now,
-       lastPasswordChangedDate =DateTime.Now,
-       lastLockedOutDate =DateTime.Now
-  };
+        confirmed = false,
+        EmailConfirmed = true,
+        IsApproved = true,
+        PhoneNumberConfirmed = true,
+        creationDate = DateTime.Now,
+        lastLoginDate = DateTime.Now,
+        lastActivityDate = DateTime.Now,
+        lastPasswordChangedDate = DateTime.Now,
+        lastLockedOutDate = DateTime.Now
+      };
 
       //var createdUser = await _userManager.CreateAsync(newUser, Password);
       var createdUser = await _userManager.CreateAsync(newUser);
@@ -532,7 +532,7 @@ namespace BackEnd.Service.Service
         if (!string.IsNullOrEmpty(Password))
         {
           //user.PasswordHash = passwordHasher.HashPassword(user, Password);
-          user.PasswordHash  = EncodePasswordmosso(Password);
+          user.PasswordHash = EncodePasswordmosso(Password);
         }
         else {
           updateUserResult.Errors.Add("Password cannot be empty");
@@ -570,36 +570,36 @@ namespace BackEnd.Service.Service
       else {
         return new UpdateUserResult {
           Success = false,
-          Errors = new List<string>() {"user is not Exist"},
-          UserId=null
+          Errors = new List<string>() { "user is not Exist" },
+          UserId = null
         };
       }
-   
+
     }
     #endregion
 
     #region getUserAndUserUserTypeByUserId
     public async Task<Result> getUserAndUserUserTypeByUserId(string UserId)
     {
-      
+
       if (!string.IsNullOrEmpty(UserId))
       {
         var user = await _userManager.FindByIdAsync(UserId);
         List<AspNetUsersTypesViewModel> aspNetUsersTypesList = new List<AspNetUsersTypesViewModel>();
-        foreach (var item in user.AspNetusertypjoin){
+        foreach (var item in user.AspNetusertypjoin) {
           var aspNetUsersTypesViewModel = new AspNetUsersTypesViewModel();
           aspNetUsersTypesViewModel.UsrTypID = item.AspNetUsersTypes.UsrTypID;
           aspNetUsersTypesViewModel.UsrTypNm = item.AspNetUsersTypes.UsrTypNm;
           aspNetUsersTypesList.Add(aspNetUsersTypesViewModel);
         }
         UserViewModel userViewModel = new UserViewModel {
-         Id=user.Id, 
-         UserName=user.UserName,
-         Email =user.Email,
-         PhoneNumber=user.PhoneNumber,
-        aspNetUsersTypesViewModel = aspNetUsersTypesList
+          Id = user.Id,
+          UserName = user.UserName,
+          Email = user.Email,
+          PhoneNumber = user.PhoneNumber,
+          aspNetUsersTypesViewModel = aspNetUsersTypesList
         };
-        
+
         if (user != null)
         {
           return new Result
@@ -715,7 +715,7 @@ namespace BackEnd.Service.Service
 
     #region FindByEmailCustome
     public ApplicationUser FindByEmailCustome(string email) {
-     return _BakEndContext.Users.FirstOrDefault(x => x.Email == email);
+      return _BakEndContext.Users.FirstOrDefault(x => x.Email == email);
     }
     #endregion
 
@@ -727,22 +727,89 @@ namespace BackEnd.Service.Service
     #endregion
 
     #region GetUserByUserName
-    public  Result GetUserByUserName(string userName)
+    public Result GetUserByUserName(string userName)
     {
-      var res= _BakEndContext.Users.FirstOrDefault(x => x.UserName == userName);
+      var res = _BakEndContext.Users.FirstOrDefault(x => x.UserName == userName);
       return new Result {
         success = true,
-        data= res
+        data = res
       };
     }
     #endregion
 
 
 
-    public Task<AuthenticationResult> RegisterMobileAsync(string UserName, string Email, string PhoneNumber, string Password, string Roles)
+    public async Task<AuthenticationResult> RegisterMobileAsync(string UserName, string Email, string PhoneNumber, string Password)
     {
-      throw new NotImplementedException();
+      int num = _random.Next(1000, 9999);
+      var res = await _emailService.sendVerficationMobile(num, Email);
+      if (res != true)
+      {
+        return new AuthenticationResult
+        {
+          Errors = new List<string> { "email not send" }
+        };
+      }
+      var existingUser = FindByEmailCustome(Email);
+      if (existingUser == null)
+      {
+        existingUser = FindByUserNameCustom(UserName);
+      }
+      if (existingUser != null)
+      {
+        return new AuthenticationResult
+        {
+          Errors = new[] { "User already Exist" }
+        };
+      }
+     
+      var newUser = new ApplicationUser
+      {
+        Email = Email,
+        UserName = UserName,
+        PhoneNumber = PhoneNumber,
+        verficationCode = num,
+        //PasswordHash= Encrypt(Password,"xxx"),
+        PasswordHash = EncodePasswordmosso(Password),
+        userTypeId = 4,
+        confirmed = false,
+        EmailConfirmed = true,
+        IsApproved = true,
+        PhoneNumberConfirmed = true,
+        creationDate = DateTime.Now,
+        lastLoginDate = DateTime.Now,
+        lastActivityDate = DateTime.Now,
+        lastPasswordChangedDate = DateTime.Now,
+        lastLockedOutDate = DateTime.Now
+      };
+
+      var createdUser = await _userManager.CreateAsync(newUser);
+
+      if (!createdUser.Succeeded)
+      {
+        return new AuthenticationResult
+        {
+          Errors = createdUser.Errors.Select(x => x.Description)
+        };
+      }
+
+      //-----------------------------add Role to token------------------
+      
+      await _userManager.AddToRoleAsync(newUser, "Client");
+
+      //-----------------------------------------------------------------
+
+     
+        return new AuthenticationResult
+        {
+          Success = true
+        };
+      
     }
-  }
+
+  
+    
+  
+}
 
 }

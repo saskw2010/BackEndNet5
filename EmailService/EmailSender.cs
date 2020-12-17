@@ -49,7 +49,14 @@ namespace EmailService
             await SendAsync(mailMessage);
         }
 
-        private MimeMessage CreateEmailMessage(Message message)
+
+        public async Task SendEmailMobileAsync(Message message)
+        {
+            var mailMessage = CreateMobileEmailMessage(message);
+            await SendAsync(mailMessage);
+        }
+
+    private MimeMessage CreateEmailMessage(Message message)
         {
             var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress(_emailConfig.From));
@@ -79,7 +86,39 @@ namespace EmailService
             return emailMessage;
         }
 
-        private void Send(MimeMessage mailMessage)
+    private MimeMessage CreateMobileEmailMessage(Message message)
+    {
+      var emailMessage = new MimeMessage();
+      emailMessage.From.Add(new MailboxAddress(_emailConfig.From));
+      emailMessage.To.AddRange(message.To);
+      emailMessage.Subject = message.Subject;
+
+      var bodyBuilder = new BodyBuilder
+      {
+        HtmlBody = string.Format("<div><h1 style='color:#0678F4'>Hello from www.WytSky.com </h1>" +
+        "<p>{0}</p></div>", message.Content)
+      };
+
+      if (message.Attachments != null && message.Attachments.Any())
+      {
+        byte[] fileBytes;
+        foreach (var attachment in message.Attachments)
+        {
+          using (var ms = new MemoryStream())
+          {
+            attachment.CopyTo(ms);
+            fileBytes = ms.ToArray();
+          }
+
+          bodyBuilder.Attachments.Add(attachment.FileName, fileBytes, ContentType.Parse(attachment.ContentType));
+        }
+      }
+
+      emailMessage.Body = bodyBuilder.ToMessageBody();
+      return emailMessage;
+    }
+
+    private void Send(MimeMessage mailMessage)
         {
             using (var client = new SmtpClient())
             {
@@ -227,8 +266,7 @@ namespace EmailService
             return emailMessage;
         }
 
-
-    }
+  }
 
     
 

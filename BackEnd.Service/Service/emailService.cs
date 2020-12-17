@@ -23,5 +23,14 @@ namespace BackEnd.Service.Service
 
       return true;
     }
+
+    public async Task<bool> sendVerficationMobile(int verficationCode, string Email)
+    {
+      string Url = "<h3 style='color:#0678F4'>" + "Verfication Code : " + verficationCode.ToString() + "</h3>";
+      var message = new Message(new string[] { Email }, "www.wytSky.com", Url);
+      await _emailSender.SendEmailMobileAsync(message);
+
+      return true;
+    }
   }
 }

@@ -342,5 +342,17 @@ namespace BackEnd.Service.Service
 
     //}
     //#endregion
+
+# region createRoleOfNotExist
+    public async Task createRoleOfNotExist(string RoleName)
+    {
+      var role = await _roleManager.RoleExistsAsync(RoleName);
+      if (!role)
+      {
+        var adminRole = new IdentityRole(RoleName);
+        await _roleManager.CreateAsync(adminRole);
+      }
+    }
+    #endregion
   }
 }

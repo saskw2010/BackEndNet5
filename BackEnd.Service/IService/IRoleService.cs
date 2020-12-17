@@ -16,5 +16,6 @@ namespace BackEnd.Service.IService
    Task<Result> FilterAspNetUsersTypes_roles(string SerachWord, int pageNumber = 1, int pageSize = 2);
     Task<Result> AddAspNetUserTypeJoin(List<AspNetUsersTypesViewModel> aspNetUsersTypesViewModel,string idAspNetUser);
     Task<Result> RemoveAspNetUserTypeJoin(string idAspNetUser);
+    Task createRoleOfNotExist(string RoleName);
   }
 }
