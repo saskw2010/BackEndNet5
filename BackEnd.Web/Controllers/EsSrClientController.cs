@@ -25,6 +25,7 @@ namespace BackEnd.Web.Controllers
       _roleService = roleService;
     }
 
+    #region CreateCLient
     [HttpPost(ApiRoute.Client.CreateCLient)]
     public async Task<Result> CreateCLient([FromBody] EsSrClientViewModel request)
     {
@@ -49,7 +50,7 @@ namespace BackEnd.Web.Controllers
       }
       return res1;
     }
-
+    #endregion
 
     #region RegisterMobile
     private async Task<Result> RegisterMobile(string Email,string PhoneNumber,string Password)
@@ -93,6 +94,14 @@ namespace BackEnd.Web.Controllers
         data = res2
       };
 
+    }
+    #endregion
+
+    #region createUserForClients
+    [HttpPost(ApiRoute.Client.createUserForClients)]
+    public async Task<Result> createUserForClients() {
+      await _roleService.createRoleOfNotExist("Client");
+      return await _EsSrClientService.createUserForClientsAsync();
     }
     #endregion
   }

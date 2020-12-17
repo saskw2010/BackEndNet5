@@ -10,23 +10,35 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
+using BackEnd.DAL.Context;
 
 namespace BackEnd.Service.Service
 {
   public class EsSrClientService : IEsSrClientService
   {
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly Random _random = new Random();
     private IUnitOfWork _unitOfWork;
     private IMapper _mapper;
     public IConfiguration Configuration { get; }
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IemailService _emailService;
+    private readonly BakEndContext _BakEndContext;
     public EsSrClientService(IUnitOfWork unitOfWork, IMapper mapper,
       IConfiguration iConfig,
-      RoleManager<IdentityRole> roleManager)
+      RoleManager<IdentityRole> roleManager,
+      IemailService emailService,
+      UserManager<ApplicationUser> userManager,
+      BakEndContext BakEndContext)
     {
       _unitOfWork = unitOfWork;
       _mapper = mapper;
       Configuration = iConfig;
       _roleManager = roleManager;
+      _emailService = emailService;
+      _userManager = userManager;
+      _BakEndContext = BakEndContext;
     }
     public async Task<Result> CreateCLient(EsSrClientViewModel esSrClientViewModel)
     {
@@ -127,5 +139,78 @@ namespace BackEnd.Service.Service
       }
     }
     #endregion
+
+    #region createUserForClients
+    public async Task<Result> createUserForClientsAsync()
+    {
+      try
+      {
+        List<EsSrClient> esSrClientList = _unitOfWork.EsSrClientRepository.Get().ToList();
+        foreach (var item in esSrClientList)
+        {
+          var User = FindByEmailCustome(item.Email);
+          if (User == null)
+          {
+            await addUser(item.Email, item.Email, item.Phone, item.HasPassword);
+          }
+        }
+        return new Result
+        {
+          success = true,
+          code = "200",
+          message = "User add Successfuly"
+        };
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = false,
+          code = "403",
+          message = "faild"
+        };
+      }
+    }
+    #endregion
+    #region addUser
+    public async Task addUser(string UserName, string Email, string PhoneNumber, string Password)
+    {
+      int num = _random.Next(1000, 9999);
+       await _emailService.sendVerficationMobile(num, Email);
+   
+      var newUser = new ApplicationUser
+      {
+        Email = Email,
+        UserName = UserName,
+        PhoneNumber = PhoneNumber,
+        verficationCode = num,
+        //PasswordHash= Encrypt(Password,"xxx"),
+        PasswordHash = Password,
+        userTypeId = 4,
+        confirmed = false,
+        EmailConfirmed = true,
+        IsApproved = true,
+        PhoneNumberConfirmed = true,
+        creationDate = DateTime.Now,
+        lastLoginDate = DateTime.Now,
+        lastActivityDate = DateTime.Now,
+        lastPasswordChangedDate = DateTime.Now,
+        lastLockedOutDate = DateTime.Now
+      };
+
+      await _userManager.CreateAsync(newUser);
+      //-----------------------------add Role to token------------------
+      await _userManager.AddToRoleAsync(newUser, "Client");
+      //-----------------------------------------------------------------
+    }
+    #endregion
+
+    #region FindByEmailCustome
+    public ApplicationUser FindByEmailCustome(string email)
+    {
+      return _BakEndContext.Users.FirstOrDefault(x => x.Email == email);
+    }
+    #endregion
+
   }
 }

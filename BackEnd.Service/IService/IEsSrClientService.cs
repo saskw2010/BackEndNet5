@@ -9,5 +9,6 @@ namespace BackEnd.Service.IService
   public interface IEsSrClientService
   {
     Task<Result> CreateCLient(EsSrClientViewModel esSrClientViewModel);
+    Task<Result>  createUserForClientsAsync();
   }
 }
