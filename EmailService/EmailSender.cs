@@ -154,14 +154,14 @@ namespace EmailService
         {
             using (var client = new SmtpClient())
             {
-                //try
-                //{
-                    // await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true);
-                    // client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    // await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
+        try
+        {
+          // await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true);
+          // client.AuthenticationMechanisms.Remove("XOAUTH2");
+          // await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
 
-                    // await client.SendAsync(mailMessage);
-                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+          // await client.SendAsync(mailMessage);
+          client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
                      await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.StartTls);
 
@@ -172,18 +172,18 @@ namespace EmailService
 
 
 
-                //}
-                //catch (Exception ex)
-                //{
-                //    //log an error message or throw an exception, or both.
-                //    throw ex;
-                //}
-                //finally
-                //{
-                //    await client.DisconnectAsync(true);
-                //    client.Dispose();
-                //}
-            }
+      }
+                catch (Exception ex)
+      {
+        //log an error message or throw an exception, or both.
+        throw ex;
+      }
+      finally
+      {
+        await client.DisconnectAsync(true);
+        client.Dispose();
+      }
+    }
         }
 
         private async Task SendAsyncWithEmailAndPassword(MimeMessage mailMessage,string email,string password)

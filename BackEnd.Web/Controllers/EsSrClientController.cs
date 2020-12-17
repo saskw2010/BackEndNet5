@@ -34,6 +34,7 @@ namespace BackEnd.Web.Controllers
         return new Result
         {
           success = false,
+          code="401",
           data = ModelState.Values.SelectMany(x => x.Errors.Select(xx => xx.ErrorMessage))
       };
 
@@ -58,6 +59,7 @@ namespace BackEnd.Web.Controllers
         return new Result
         {
           success = false,
+          code="403",
           data = ModelState.Values.SelectMany(x => x.Errors.Select(xx => xx.ErrorMessage))
         };
 
@@ -74,6 +76,7 @@ namespace BackEnd.Web.Controllers
         return new Result
         {
           success = true,
+          code="403",
           data = res
         };
 

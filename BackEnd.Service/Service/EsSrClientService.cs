@@ -36,8 +36,7 @@ namespace BackEnd.Service.Service
           return new Result
           {
             success = false,
-            code = "403",
-            message = "Email already Exist",
+            code = "402",
             data = null
           };
         }
