@@ -172,22 +172,55 @@ namespace BackEnd.Service.Service
       }
     }
     #endregion
+
+    #region createUserForTechnicalAsync
+    public async Task<Result> createUserForTechnicalAsync()
+    {
+      try
+      {
+        List<EsSrTechnical> esSrClientList = _unitOfWork.EsSrTechnicalRepository.Get().ToList();
+        foreach (var item in esSrClientList)
+        {
+          var User = FindByEmailCustome(item.Email);
+          if (User == null)
+          {
+            await addUser(item.Email, item.Email, item.Phone, item.HashPassword);
+          }
+        }
+        return new Result
+        {
+          success = true,
+          code = "200",
+          message = "User add Successfuly"
+        };
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = false,
+          code = "403",
+          message = "faild"
+        };
+      }
+    }
+    #endregion
+
     #region addUser
     public async Task addUser(string UserName, string Email, string PhoneNumber, string Password)
     {
-      int num = _random.Next(1000, 9999);
-       await _emailService.sendVerficationMobile(num, Email);
+      //int num = _random.Next(1000, 9999);
+      // await _emailService.sendVerficationMobile(num, Email);
    
       var newUser = new ApplicationUser
       {
         Email = Email,
         UserName = UserName,
         PhoneNumber = PhoneNumber,
-        verficationCode = num,
         //PasswordHash= Encrypt(Password,"xxx"),
         PasswordHash = Password,
         userTypeId = 4,
-        confirmed = false,
+        confirmed = true,
         EmailConfirmed = true,
         IsApproved = true,
         PhoneNumberConfirmed = true,
@@ -212,5 +245,6 @@ namespace BackEnd.Service.Service
     }
     #endregion
 
+   
   }
 }

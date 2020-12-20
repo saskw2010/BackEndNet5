@@ -1,3 +1,6 @@
+using BackEnd.BAL.ApiRoute;
+using BackEnd.BAL.Models;
+using BackEnd.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,9 +11,24 @@ namespace BackEnd.Web.Controllers
 {
   public class EsSrTechnicalController: ControllerBase
   {
-    public EsSrTechnicalController()
+    private IRoleService _roleService;
+    private IEsSrTechnicalService _EsSrTechnicalService;
+    public EsSrTechnicalController(
+      IRoleService roleService,
+      IEsSrTechnicalService EsSrTechnicalService
+      )
     {
-
+      _roleService = roleService;
+      _EsSrTechnicalService = EsSrTechnicalService;
     }
+
+    #region createUserForClients
+    [HttpPost(ApiRoute.Technical.createUserForTechnicals)]
+    public async Task<Result> createUserForClients()
+    {
+      await _roleService.createRoleOfNotExist("Technical");
+      return await _EsSrTechnicalService.createUserForTechnicalAsync();
+    }
+    #endregion
   }
 }
