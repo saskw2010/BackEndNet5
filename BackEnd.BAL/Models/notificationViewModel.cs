@@ -8,10 +8,11 @@ namespace BackEnd.BAL.Models
   {
     public string FirebaseApplicationID { get; set; }
     public string FirebaseSenderId { get; set; }
-    public string englishMessage { get; set; }
-    public string title { get; set; }
-    public List<string> player_Id { get; set; }
+    public string Message { get; set; }
+    public string Title { get; set; }
+    public List<string> PlayerId { get; set; }
     public Dictionary<string, object> AdditionalData { get; set; }
-    public int second { get; set; }
+    public string Second { get; set; } = "default";
+	public int Badge { get; set; } = 1;
   }
 }

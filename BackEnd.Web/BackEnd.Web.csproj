@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>d6ad1ea2-08bc-4fc2-89bc-fbea7fab35d5</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,10 +16,17 @@
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.5.1" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="18.1.0.59" />
+    <PackageReference Include="Syncfusion.Licensing" Version="18.1.0.59" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BackEnd.Service\BackEnd.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ModelFileManager\" />
+    <Folder Include="wwwroot\Files\" />
   </ItemGroup>
 
 
