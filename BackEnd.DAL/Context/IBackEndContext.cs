@@ -15,5 +15,7 @@ namespace RealState.DAL.Context
     DbSet<AspNetUsersTypes_roles> AspNetUsersTypes_roles { get; set; }
     DbSet<EsSrClient> EsSrClient { get; set; }
     DbSet<EsSrTechnical> EsSrTechnical { get; set; }
+    DbSet<FileManager> FileManager { get; set; }
+    DbSet<FileManagerRole> FileManagerRole { get; set; }
   }
 }

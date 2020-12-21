@@ -8,19 +8,26 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using Syncfusion.EJ2.FileManager.Base;
+using BackEnd.BAL.Models;
+using System.Threading.Tasks;
+using BackEnd.Service.IService;
 
 namespace EJ2APIServices.Controllers
 {
   public class FileManagerController : Controller
   {
+    private IFileManagerServices _fileManagerServices;
     public PhysicalFileProvider operation;
     public string basePath;
-    string root = "wwwroot\\Files";
-    public FileManagerController(IHostingEnvironment hostingEnvironment)
+    static string root = "F:\\asd";
+    public FileManagerController(
+      IHostingEnvironment hostingEnvironment,
+      IFileManagerServices fileManagerServices)
     {
       this.basePath = hostingEnvironment.ContentRootPath;
       this.operation = new PhysicalFileProvider();
-      this.operation.RootFolder(this.basePath + "\\" + this.root);
+      this.operation.RootFolder(FileManagerController.root);
+      _fileManagerServices = fileManagerServices;
     }
     [HttpPost("api/FileManager/FileOperations")]
     public object FileOperations([FromBody] FileManagerDirectoryContent args)
@@ -94,6 +101,37 @@ namespace EJ2APIServices.Controllers
     {
       return this.operation.GetImage(args.Path, args.Id, false, null, null);
     }
+
+    #region GetAllFileManagersByRoleId
+    [HttpPost("api/FileManager/GetAllFileManagersByRolesName")]
+    public async Task<Result> GetAllFileManagersByRolesName([FromBody]List<string>RoleName) {
+     return await _fileManagerServices.GetAllFileManagersByRolesName(RoleName);
+    }
+    #endregion
+
+    #region changePathDirectory
+    [HttpPost("api/FileManager/changePathDirectory")]
+    public async Task<Result> changePathDirectory([FromBody] PathFileManager pathFileManager)
+    {
+      try
+      {
+        FileManagerController.root = pathFileManager.PathFile;
+        return new Result {
+          success = true,
+          code="200"
+        };
+      }
+      catch (Exception ex) {
+        return new Result
+        {
+          success = true,
+          code = "403"
+        };
+      }
+      
+    }
+    #endregion
+
 
   }
 

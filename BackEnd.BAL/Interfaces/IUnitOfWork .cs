@@ -21,6 +21,8 @@ namespace BackEnd.BAL.Interfaces
        GenericRepository<AspNetusertypjoin> AspNetusertypjoinRepository { get; }
        GenericRepository<EsSrClient> EsSrClientRepository { get; }
        GenericRepository<EsSrTechnical> EsSrTechnicalRepository { get; }
+       GenericRepository<FileManager> FileManagerRepository { get; }
+       GenericRepository<FileManagerRole> FileManagerRoleRepository { get; }
 
   }
 }

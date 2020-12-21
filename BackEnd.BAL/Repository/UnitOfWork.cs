@@ -174,6 +174,23 @@ namespace BackEnd.BAL.Repository
           }
         }
 
+    public GenericRepository<FileManager> FileManagerRepository
+    {
+      get
+      {
+        return new GenericRepository<FileManager>(Context);
+      }
+    }
+
+    public GenericRepository<FileManagerRole> FileManagerRoleRepository
+    {
+      get
+      {
+        return new GenericRepository<FileManagerRole>(Context);
+      }
+    }
+
+
     //end workspace
 
 
