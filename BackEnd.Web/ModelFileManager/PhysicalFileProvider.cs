@@ -1062,14 +1062,55 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
                        + "$";
         }
 
-        public virtual FileStreamResult GetImage(string path, string id, bool allowCompress, ImageSize size, params FileManagerDirectoryContent[] data)
-        {
-            try
-            {
-                AccessPermission PathPermission = GetFilePermission(path);
-                if (PathPermission != null && !PathPermission.Read)
-                    return null;
-                String fullPath = (contentRootPath + path);
+    //        public virtual FileStreamResult GetImage(string path, string id, bool allowCompress, ImageSize size, params FileManagerDirectoryContent[] data)
+    //        {
+    //            try
+    //            {
+    //                AccessPermission PathPermission = GetFilePermission(path);
+    //                if (PathPermission != null && !PathPermission.Read)
+    //                    return null;
+    //                String fullPath = (contentRootPath + path);
+    //#if EJ2_DNX
+    //                if (allowCompress)
+    //                {
+    //                    size = new ImageSize { Height = 14, Width = 16 };
+    //                    CompressImage(fullPath, size);
+    //                }
+    //#endif
+
+    //                FileStream fileStreamInput = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+    //                FileStreamResult fileStreamResult = new FileStreamResult(fileStreamInput, "APPLICATION/octet-stream");
+    //                return fileStreamResult;
+    //            }
+    //            catch (Exception)
+    //            {
+    //                return null;
+    //            }
+    //        }
+
+
+    public virtual FileStreamResult GetImage(string path, string id, bool allowCompress, ImageSize size, params FileManagerDirectoryContent[] data)
+    {
+      //try
+      //{
+        AccessPermission PathPermission = GetFilePermission(path);
+        if (PathPermission != null && !PathPermission.Read)
+          return null;
+        // String fullPath = (contentRootPath + path);
+        string[] arr1 = path.Split('/');
+        string imgName = "/" + arr1[arr1.Length - 1];
+        string[] arr2 = arr1[0].Split('?');
+        string pathBase = arr2[0];
+        for (int i = 1; i < arr1.Length -1; i++) {
+        if (i == arr1.Length ) {
+          pathBase = pathBase + "/" + arr1[i];
+        }
+          pathBase = pathBase + "\\"+arr1[i];
+        }
+        string fullPath = pathBase+ "/" + imgName;
+
+        //String fullPath =  path;
+
 #if EJ2_DNX
                 if (allowCompress)
                 {
@@ -1078,15 +1119,17 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
                 }
 #endif
 
-                FileStream fileStreamInput = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
-                FileStreamResult fileStreamResult = new FileStreamResult(fileStreamInput, "APPLICATION/octet-stream");
-                return fileStreamResult;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
+        FileStream fileStreamInput = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+        FileStreamResult fileStreamResult = new FileStreamResult(fileStreamInput, "APPLICATION/octet-stream");
+        return fileStreamResult;
+      //}
+      //catch (Exception)
+      //{
+      //  return null;
+      //}
+    }
+
+
 
 #if EJ2_DNX
         protected virtual void CompressImage(string path, ImageSize targetSize)
@@ -1155,7 +1198,7 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
 #if EJ2_DNX
         public virtual FileManagerResponse Upload(string path, IList<System.Web.HttpPostedFileBase> uploadFiles, string action, params FileManagerDirectoryContent[] data)
 #else
-        public virtual FileManagerResponse Upload(string path, IList<IFormFile> uploadFiles, string action, params FileManagerDirectoryContent[] data)
+    public virtual FileManagerResponse Upload(string path, IList<IFormFile> uploadFiles, string action, params FileManagerDirectoryContent[] data)
 #endif
         {
             FileManagerResponse uploadResponse = new FileManagerResponse();

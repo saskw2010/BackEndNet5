@@ -19,19 +19,20 @@ namespace EJ2APIServices.Controllers
     private IFileManagerServices _fileManagerServices;
     public PhysicalFileProvider operation;
     public string basePath;
-    static string root = "F:\\asd";
+    string root = "F:\\asd";
     public FileManagerController(
       IHostingEnvironment hostingEnvironment,
       IFileManagerServices fileManagerServices)
     {
       this.basePath = hostingEnvironment.ContentRootPath;
       this.operation = new PhysicalFileProvider();
-      this.operation.RootFolder(FileManagerController.root);
+      this.operation.RootFolder(this.root);
       _fileManagerServices = fileManagerServices;
     }
     [HttpPost("api/FileManager/FileOperations")]
-    public object FileOperations([FromBody] FileManagerDirectoryContent args)
+    public object FileOperations([FromBody] FileManagerDirectoryContent args, string pathFile)
     {
+      this.operation.RootFolder(pathFile);
       if (args.Action == "delete" || args.Action == "rename")
       {
         if ((args.TargetPath == null) && (args.Path == ""))
@@ -71,10 +72,11 @@ namespace EJ2APIServices.Controllers
       return null;
     }
 
-   // uploads the file(s) into a specified path
-     [HttpPost("api/FileManager/Upload")]
-    public IActionResult Upload(string path, IList<IFormFile> uploadFiles, string action)
+    // uploads the file(s) into a specified path
+    [HttpPost("api/FileManager/Upload")]
+    public IActionResult Upload(string path, IList<IFormFile> uploadFiles, string action, string pathFile)
     {
+      this.operation.RootFolder(pathFile);
       FileManagerResponse uploadResponse;
       uploadResponse = operation.Upload(path, uploadFiles, action, null);
       if (uploadResponse.Error != null)
@@ -89,23 +91,31 @@ namespace EJ2APIServices.Controllers
 
     // downloads the selected file(s) and folder(s)
     [HttpPost("api/FileManager/Download")]
-    public IActionResult Download(string downloadInput)
+    public IActionResult Download(string downloadInput, string pathFile)
     {
+      this.operation.RootFolder(pathFile);
       FileManagerDirectoryContent args = JsonConvert.DeserializeObject<FileManagerDirectoryContent>(downloadInput);
       return operation.Download(args.Path, args.Names, args.Data);
     }
 
     // gets the image(s) from the given path
     [HttpGet("api/FileManager/GetImage")]
-    public IActionResult GetImage(FileManagerDirectoryContent args)
+    public IActionResult GetImage(FileManagerDirectoryContent args, string pathFile)
     {
-      return this.operation.GetImage(args.Path, args.Id, false, null, null);
+      return this.operation.GetImage(pathFile, args.Id, false, null, null);
     }
+
+    //[HttpGet("api/FileManager/GetImage")]
+    //public IActionResult GetImage(FileManagerDirectoryContent args)
+    //{
+    //  return this.operation.GetImage(args.Path, args.Id, false, null, null);
+    //}
 
     #region GetAllFileManagersByRoleId
     [HttpPost("api/FileManager/GetAllFileManagersByRolesName")]
-    public async Task<Result> GetAllFileManagersByRolesName([FromBody]List<string>RoleName) {
-     return await _fileManagerServices.GetAllFileManagersByRolesName(RoleName);
+    public async Task<Result> GetAllFileManagersByRolesName([FromBody] List<string> RoleName)
+    {
+      return await _fileManagerServices.GetAllFileManagersByRolesName(RoleName);
     }
     #endregion
 
@@ -115,20 +125,22 @@ namespace EJ2APIServices.Controllers
     {
       try
       {
-        FileManagerController.root = pathFileManager.PathFile;
-        return new Result {
+        this.root = pathFileManager.PathFile;
+        return new Result
+        {
           success = true,
-          code="200"
+          code = "200"
         };
       }
-      catch (Exception ex) {
+      catch (Exception ex)
+      {
         return new Result
         {
           success = true,
           code = "403"
         };
       }
-      
+
     }
     #endregion
 
