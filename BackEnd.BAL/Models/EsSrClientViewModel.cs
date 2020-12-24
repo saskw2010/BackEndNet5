@@ -20,5 +20,6 @@ namespace BackEnd.BAL.Models
     public string HasPassword { get; set; }
     public Nullable<bool> IsActive { get; set; }
     public string Notes { get; set; }
+    public string SocialId { get; set; }
   }
 }

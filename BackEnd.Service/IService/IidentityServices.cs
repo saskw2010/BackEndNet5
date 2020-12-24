@@ -10,6 +10,7 @@ namespace BackEnd.Service.ISercice
   {
     Task<AuthenticationResult> RegisterAsync(string UserName,string Email, string PhoneNumber,string Password, string Roles);
     Task<AuthenticationResult> RegisterMobileAsync(string UserName,string Email, string PhoneNumber,string Password);
+    Task<Result> socialRegister(string socialCode, string UserName, string Email, string PhoneNumber, string Password);
     Task<AddUserResult> AddUserAsync(string UserName,string Email, string PhoneNumber,string Password);
     Task<AuthenticationResult> LoginAsync(string Email,string UserName, string Password);
     Task<Result> verfayUser(UserVerfayRequest request);

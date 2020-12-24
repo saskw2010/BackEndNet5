@@ -738,7 +738,7 @@ namespace BackEnd.Service.Service
     #endregion
 
 
-
+    #region RegisterMobileAsync
     public async Task<AuthenticationResult> RegisterMobileAsync(string UserName, string Email, string PhoneNumber, string Password)
     {
       int num = _random.Next(1000, 9999);
@@ -806,10 +806,84 @@ namespace BackEnd.Service.Service
         };
       
     }
+    #endregion
 
-  
-    
-  
-}
+
+    #region RegisterMobileAsync
+    public async Task<Result> socialRegister(string socialCode,string UserName, string Email, string PhoneNumber, string Password)
+    {
+      try {
+        if (!string.IsNullOrEmpty(Email))
+        {
+          var existingUser = FindByEmailCustome(Email);
+          if (existingUser == null)
+          {
+            existingUser = FindByUserNameCustom(UserName);
+          }
+          if (existingUser != null)
+          {
+            return new Result
+            {
+              success = false,
+              code = "402"
+            };
+          }
+        }
+
+        var newUser = new ApplicationUser
+        {
+          Email = Email != null ?Email : socialCode,
+          UserName = socialCode,
+          PhoneNumber = PhoneNumber,
+          //PasswordHash= Encrypt(Password,"xxx"),
+          PasswordHash = EncodePasswordmosso(socialCode),
+          userTypeId = 4,
+          confirmed = true,
+          EmailConfirmed = true,
+          IsApproved = true,
+          PhoneNumberConfirmed = true,
+          creationDate = DateTime.Now,
+          lastLoginDate = DateTime.Now,
+          lastActivityDate = DateTime.Now,
+          lastPasswordChangedDate = DateTime.Now,
+          lastLockedOutDate = DateTime.Now
+        };
+
+        var createdUser = await _userManager.CreateAsync(newUser);
+
+        if (!createdUser.Succeeded)
+        {
+          return new Result
+          {
+            success = false,
+            code = "403"
+          };
+
+        }
+
+        //-----------------------------add Role to token------------------
+
+        await _userManager.AddToRoleAsync(newUser, "Client");
+
+        //-----------------------------------------------------------------
+        return new Result
+        {
+          success = true,
+          code = "200"
+        };
+      }
+      catch (Exception ex) {
+        return new Result
+        {
+          success = false,
+          code = "403"
+        };
+      }
+     
+    }
+    #endregion
+
+
+  }
 
 }

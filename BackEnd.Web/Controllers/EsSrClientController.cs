@@ -107,5 +107,21 @@ namespace BackEnd.Web.Controllers
 
 
 
+    #region socialRegister
+    [HttpPost(ApiRoute.Client.socialRegister)]
+    public async Task<Result> socialRegister([FromBody] EsSrClientViewModel request)
+    {
+      await _roleService.createRoleOfNotExist("Client");
+      var res1 = await _EsSrClientService.CreateCLientWithSocialId(request);
+      if (res1.success == true)
+      {
+        var res2 = await _identityService.socialRegister(request.SocialId, request.Email, request.Email, request.Phone, request.HasPassword);
+        return res2;
+      }
+      return res1;
+    }
+    #endregion
+
+
   }
 }

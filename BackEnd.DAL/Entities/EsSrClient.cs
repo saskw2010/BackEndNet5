@@ -26,5 +26,6 @@ namespace BackEnd.DAL.Entities
     public string ModifiedBy { get; set; }
     public Nullable<System.DateTime> ModifiedOn { get; set; }
     public Nullable<bool> IsDelete { get; set; }
+    public string SocialId { get; set; }
   }
 }

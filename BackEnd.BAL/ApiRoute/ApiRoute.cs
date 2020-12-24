@@ -51,6 +51,7 @@ namespace BackEnd.BAL.ApiRoute
     {
       public const string CreateCLient = Base + "EsSrClient/CreateCLient";
       public const string createUserForClients = Base + "EsSrClient/createUserForClients";
+      public const string socialRegister = Base + "EsSrClient/socialRegister";
     }
 
     public static class Technical

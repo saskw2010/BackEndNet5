@@ -245,6 +245,86 @@ namespace BackEnd.Service.Service
     }
     #endregion
 
-   
+    #region CreateCLientWithSocialId
+    public async Task<Result> CreateCLientWithSocialId(EsSrClientViewModel esSrClientViewModel)
+    {
+     
+      try
+      {
+        if (!FindCustomerBySocailId(esSrClientViewModel.SocialId)) {
+          return new Result
+          {
+            success = false,
+            code = "401",
+            data = null
+          };
+        }
+
+
+        if (!string.IsNullOrEmpty(esSrClientViewModel.Email)) {
+          if (checEmailALreadyExist(esSrClientViewModel.Email))
+          {
+            return new Result
+            {
+              success = false,
+              code = "402",
+              data = null
+            };
+          }
+        }
+     
+        EsSrClient esSrClient = new EsSrClient();
+        var obje = _mapper.Map(esSrClientViewModel, esSrClient);
+        obje.IsDelete = false;
+        obje.HasPassword = EncodePasswordmosso(obje.HasPassword);
+        _unitOfWork.EsSrClientRepository.Insert(obje);
+        var result1 = await _unitOfWork.SaveAsync();
+        if (result1 == 200)
+        {
+          return new Result
+          {
+            success = true,
+            code = "200",
+            message = "Resgisteration Success",
+            data = null
+          };
+        }
+        else
+        {
+          return new Result
+          {
+            success = false,
+            code = "403",
+            message = "Resgisteration Faild",
+            data = null
+          };
+        }
+      }
+      catch (Exception ex)
+      {
+
+        return new Result
+        {
+          success = false,
+          code = "403",
+          message = "Row Added Faild",
+          data = null
+        };
+      }
+    }
+    #endregion
+
+
+    public Boolean FindCustomerBySocailId(string socialId)
+    {
+      var res= _unitOfWork.EsSrClientRepository.Get(filter: (x => x.SocialId == socialId));
+      if (res != null)
+      {
+        return true;
+      }
+      else {
+        return false;
+          }
+    }
   }
 }
