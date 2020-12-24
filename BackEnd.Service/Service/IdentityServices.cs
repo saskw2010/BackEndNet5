@@ -523,21 +523,13 @@ namespace BackEnd.Service.Service
         var passwordHasher = new PasswordHasher<ApplicationUser>();
         if (!string.IsNullOrEmpty(UserName))
         { user.UserName = UserName; }
-        else
-        {
-          updateUserResult.Errors.Add("User Name cannot be empty");
-          return updateUserResult;
-        }
-
+       
         if (!string.IsNullOrEmpty(Password))
         {
           //user.PasswordHash = passwordHasher.HashPassword(user, Password);
           user.PasswordHash = EncodePasswordmosso(Password);
         }
-        else {
-          updateUserResult.Errors.Add("Password cannot be empty");
-          return updateUserResult;
-        }
+       
         int num = _random.Next();
         user.verficationCode = num;
         user.confirmed = false;

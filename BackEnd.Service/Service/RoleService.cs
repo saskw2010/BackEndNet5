@@ -61,13 +61,15 @@ namespace BackEnd.Service.Service
           success = true,
           code = "200"
         };
-    } catch (Exception ex) {
+      }
+      catch (Exception ex)
+      {
         return new Result
         {
           success = true,
           code = "403"
         };
-}
+      }
 
     }
     #endregion
