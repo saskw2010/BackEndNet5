@@ -186,9 +186,29 @@ namespace BackEnd.Service.Service
       return res;
     }
 
-
-
-    //----------------------------------End of Eng Mostafa----------------
+    #region CheckAvailability
+    public Result CheckAvailability(string workSpaceName)
+    {
+      var res=unitOfWork.WorkSpaceRepository.GetEntity(filter:(x=>x.WorkSpaceName == workSpaceName));
+      if (res != null)
+      {
+        return new Result
+        {
+          success = false,
+          code = "403",
+          message = "workspace not Avaiabel"
+        };
+      }
+      else {
+        return new Result
+        {
+          success = true,
+          code = "200",
+          message = "workspace Is Availabel"
+        };
+      }
+    }
+    #endregion
 
   }
 }

@@ -14,11 +14,12 @@ namespace BackEnd.DAL.Entities
       public Boolean? EmailConfirmed { get; set; }
       public Boolean? IsApproved { get; set; }
       public Boolean? PhoneNumberConfirmed { get; set; }
-     public DateTime? creationDate { get; set; }
-     public DateTime? lastLoginDate { get; set; }
-     public DateTime? lastActivityDate { get; set; }
-     public DateTime? lastPasswordChangedDate { get; set; }
-     public DateTime? lastLockedOutDate { get; set; }
+     public DateTime? CreationDate { get; set; }
+     public DateTime? LastLoginDate { get; set; }
+     public DateTime? LastActivityDate { get; set; }
+     public DateTime? LastPasswordChangedDate { get; set; }
+     public DateTime? LastLockedOutDate { get; set; }
+     public DateTime? LastLockoutDate { get; set; }
     public int? resetPasswordCode { get; set; }
       [ForeignKey("UserType")]
     public int? userTypeId { get; set; }

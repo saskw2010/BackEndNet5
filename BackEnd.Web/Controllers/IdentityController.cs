@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BackEnd.Web.Controllers
@@ -35,9 +36,14 @@ namespace BackEnd.Web.Controllers
           success=false,
           data= ModelState.Values
         };
-        
-        
       }
+      //if (!_identityService.RegexIsMatch(request.Password)) {
+      //  return new Result
+      //  {
+      //    success = false,
+      //    code="403"
+      //  };
+      //}
       AuthenticationResult authResponse = await _identityService.RegisterAsync(request.UserName, request.Email, request.PhoneNumber, request.Password, request.Roles);
       if (!authResponse.Success) {
         var res = new AuthFaildResponse
@@ -339,7 +345,7 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
-   
+    
 
   }
 }

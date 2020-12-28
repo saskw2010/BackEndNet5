@@ -16,6 +16,8 @@ using BackEnd.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
+using System.Text.RegularExpressions;
+
 namespace BackEnd.Service.Service
 {
   public class IdentityServices : IidentityServices
@@ -131,11 +133,12 @@ namespace BackEnd.Service.Service
         EmailConfirmed = true,
         IsApproved = true,
         PhoneNumberConfirmed = true,
-        creationDate = DateTime.Now,
-        lastLoginDate = DateTime.Now,
-        lastActivityDate = DateTime.Now,
-        lastPasswordChangedDate = DateTime.Now,
-        lastLockedOutDate = DateTime.Now
+        CreationDate = DateTime.Now,
+        LastLoginDate = DateTime.Now,
+        LastActivityDate = DateTime.Now,
+        LastPasswordChangedDate = DateTime.Now,
+        LastLockedOutDate = DateTime.Now,
+        LastLockoutDate = DateTime.Now
       };
 
       var createdUser = await _userManager.CreateAsync(newUser);
@@ -450,11 +453,12 @@ namespace BackEnd.Service.Service
         EmailConfirmed = true,
         IsApproved = true,
         PhoneNumberConfirmed = true,
-        creationDate = DateTime.Now,
-        lastLoginDate = DateTime.Now,
-        lastActivityDate = DateTime.Now,
-        lastPasswordChangedDate = DateTime.Now,
-        lastLockedOutDate = DateTime.Now
+        CreationDate = DateTime.Now,
+        LastLoginDate = DateTime.Now,
+        LastActivityDate = DateTime.Now,
+        LastPasswordChangedDate = DateTime.Now,
+        LastLockedOutDate = DateTime.Now,
+        LastLockoutDate = DateTime.Now
       };
 
       //var createdUser = await _userManager.CreateAsync(newUser, Password);
@@ -768,11 +772,12 @@ namespace BackEnd.Service.Service
         EmailConfirmed = true,
         IsApproved = true,
         PhoneNumberConfirmed = true,
-        creationDate = DateTime.Now,
-        lastLoginDate = DateTime.Now,
-        lastActivityDate = DateTime.Now,
-        lastPasswordChangedDate = DateTime.Now,
-        lastLockedOutDate = DateTime.Now
+        CreationDate = DateTime.Now,
+        LastLoginDate = DateTime.Now,
+        LastActivityDate = DateTime.Now,
+        LastPasswordChangedDate = DateTime.Now,
+        LastLockedOutDate = DateTime.Now,
+        LastLockoutDate = DateTime.Now
       };
 
       var createdUser = await _userManager.CreateAsync(newUser);
@@ -834,11 +839,13 @@ namespace BackEnd.Service.Service
           EmailConfirmed = true,
           IsApproved = true,
           PhoneNumberConfirmed = true,
-          creationDate = DateTime.Now,
-          lastLoginDate = DateTime.Now,
-          lastActivityDate = DateTime.Now,
-          lastPasswordChangedDate = DateTime.Now,
-          lastLockedOutDate = DateTime.Now
+          CreationDate = DateTime.Now,
+          LastLoginDate = DateTime.Now,
+          LastActivityDate = DateTime.Now,
+          LastPasswordChangedDate = DateTime.Now,
+          LastLockedOutDate = DateTime.Now,
+          LastLockoutDate = DateTime.Now
+
         };
 
         var createdUser = await _userManager.CreateAsync(newUser);
@@ -875,7 +882,23 @@ namespace BackEnd.Service.Service
     }
     #endregion
 
-
+    #region RegexIsMatch
+    public  bool RegexIsMatch(string password)
+    {
+      try
+      {
+        var passwordPattern = "^(?=(.\\d))(?=(.[@]))(?=.[a-zA-Z])(?=.[^a-zA-Z\\d]).{8,}$";
+        if (Regex.IsMatch(password, passwordPattern))
+        {
+          return true;
+        }
+      }
+      catch (System.Exception ex)
+      {
+      }
+      return false;
+    }
+    #endregion
   }
 
 }

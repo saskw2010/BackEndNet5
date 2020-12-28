@@ -61,6 +61,15 @@ namespace BackEnd.Web.Controllers
     }
     //end::search
 
+    #region CheckAvailability
+    [HttpGet(ApiRoute.WebSite.CheckAvailability)]
+    public Result CheckAvailability(string workSpaceName)
+    {
+      var res = _websiteServices.CheckAvailability(workSpaceName);
+      return res;
+    }
+    #endregion
+
 
   }
 }

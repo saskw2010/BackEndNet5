@@ -12,5 +12,6 @@ namespace BackEnd.Service.IService
     Task<WorkSpaceVm> InsertWorkspace(WorkSpaceVm workSpace);
     Result pagginationFunction(string userId ,int pageNumber = 0, int pageSize = 0);
     Result pagginationFunctionWithFilter(string searchword, string userId, int pageNumber = 0, int pageSize = 0);
+    Result CheckAvailability(string workSpaceName);
   }
 }

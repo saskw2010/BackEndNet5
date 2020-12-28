@@ -224,11 +224,12 @@ namespace BackEnd.Service.Service
         EmailConfirmed = true,
         IsApproved = true,
         PhoneNumberConfirmed = true,
-        creationDate = DateTime.Now,
-        lastLoginDate = DateTime.Now,
-        lastActivityDate = DateTime.Now,
-        lastPasswordChangedDate = DateTime.Now,
-        lastLockedOutDate = DateTime.Now
+        CreationDate = DateTime.Now,
+        LastLoginDate = DateTime.Now,
+        LastActivityDate = DateTime.Now,
+        LastPasswordChangedDate = DateTime.Now,
+        LastLockedOutDate = DateTime.Now,
+        LastLockoutDate = DateTime.Now
       };
 
       await _userManager.CreateAsync(newUser);
