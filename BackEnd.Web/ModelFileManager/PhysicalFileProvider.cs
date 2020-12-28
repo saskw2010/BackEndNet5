@@ -1091,8 +1091,8 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
 
     public virtual FileStreamResult GetImage(string path, string id, bool allowCompress, ImageSize size, params FileManagerDirectoryContent[] data)
     {
-      //try
-      //{
+      try
+      {
         AccessPermission PathPermission = GetFilePermission(path);
         if (PathPermission != null && !PathPermission.Read)
           return null;
@@ -1122,11 +1122,11 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
         FileStream fileStreamInput = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
         FileStreamResult fileStreamResult = new FileStreamResult(fileStreamInput, "APPLICATION/octet-stream");
         return fileStreamResult;
-      //}
-      //catch (Exception)
-      //{
-      //  return null;
-      //}
+      }
+      catch (Exception)
+      {
+        return null;
+      }
     }
 
 

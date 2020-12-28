@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="ModelFileManager\" />
+    <Folder Include="Test\" />
     <Folder Include="wwwroot\Files\" />
   </ItemGroup>
 

@@ -11,6 +11,7 @@ using Syncfusion.EJ2.FileManager.Base;
 using BackEnd.BAL.Models;
 using System.Threading.Tasks;
 using BackEnd.Service.IService;
+using Microsoft.Extensions.Configuration;
 
 namespace EJ2APIServices.Controllers
 {
@@ -19,20 +20,35 @@ namespace EJ2APIServices.Controllers
     private IFileManagerServices _fileManagerServices;
     public PhysicalFileProvider operation;
     public string basePath;
-    string root = "F:\\asd";
+    //string root = "F:\\asd";
+    public IConfiguration Configuration { get; }
     public FileManagerController(
       IHostingEnvironment hostingEnvironment,
-      IFileManagerServices fileManagerServices)
+      IFileManagerServices fileManagerServices,
+      IConfiguration iConfig)
     {
       this.basePath = hostingEnvironment.ContentRootPath;
       this.operation = new PhysicalFileProvider();
-      this.operation.RootFolder(this.root);
       _fileManagerServices = fileManagerServices;
+      Configuration = iConfig;
     }
     [HttpPost("api/FileManager/FileOperations")]
     public object FileOperations([FromBody] FileManagerDirectoryContent args, string pathFile)
     {
-      this.operation.RootFolder(pathFile);
+      string BasePath = "";
+      var FileManagerConfiguration = Configuration
+           .GetSection("FileManagerConfiguration")
+           .Get<FileManagerConfiguration>();
+      if (FileManagerConfiguration.staticPath != "")
+      {
+        BasePath = FileManagerConfiguration.staticPath;
+      }
+      else {
+        BasePath = System.IO.Directory.GetCurrentDirectory();
+      }
+       
+      BasePath = BasePath +"\\"+ pathFile;
+      this.operation.RootFolder(BasePath);
       if (args.Action == "delete" || args.Action == "rename")
       {
         if ((args.TargetPath == null) && (args.Path == ""))
@@ -76,7 +92,20 @@ namespace EJ2APIServices.Controllers
     [HttpPost("api/FileManager/Upload")]
     public IActionResult Upload(string path, IList<IFormFile> uploadFiles, string action, string pathFile)
     {
-      this.operation.RootFolder(pathFile);
+      string BasePath = "";
+      var FileManagerConfiguration = Configuration
+           .GetSection("FileManagerConfiguration")
+           .Get<FileManagerConfiguration>();
+      if (FileManagerConfiguration.staticPath != "")
+      {
+        BasePath = FileManagerConfiguration.staticPath;
+      }
+      else
+      {
+        BasePath = System.IO.Directory.GetCurrentDirectory();
+      }
+      BasePath = BasePath + "\\" + pathFile;
+      this.operation.RootFolder(BasePath);
       FileManagerResponse uploadResponse;
       uploadResponse = operation.Upload(path, uploadFiles, action, null);
       if (uploadResponse.Error != null)
@@ -93,7 +122,20 @@ namespace EJ2APIServices.Controllers
     [HttpPost("api/FileManager/Download")]
     public IActionResult Download(string downloadInput, string pathFile)
     {
-      this.operation.RootFolder(pathFile);
+      string BasePath = "";
+      var FileManagerConfiguration = Configuration
+           .GetSection("FileManagerConfiguration")
+           .Get<FileManagerConfiguration>();
+      if (FileManagerConfiguration.staticPath != "")
+      {
+        BasePath = FileManagerConfiguration.staticPath;
+      }
+      else
+      {
+        BasePath = System.IO.Directory.GetCurrentDirectory();
+      }
+      BasePath = BasePath + "\\" + pathFile;
+      this.operation.RootFolder(BasePath);
       FileManagerDirectoryContent args = JsonConvert.DeserializeObject<FileManagerDirectoryContent>(downloadInput);
       return operation.Download(args.Path, args.Names, args.Data);
     }
@@ -102,7 +144,20 @@ namespace EJ2APIServices.Controllers
     [HttpGet("api/FileManager/GetImage")]
     public IActionResult GetImage(FileManagerDirectoryContent args, string pathFile)
     {
-      return this.operation.GetImage(pathFile, args.Id, false, null, null);
+      string BasePath = "";
+      var FileManagerConfiguration = Configuration
+           .GetSection("FileManagerConfiguration")
+           .Get<FileManagerConfiguration>();
+      if (FileManagerConfiguration.staticPath != "")
+      {
+        BasePath = FileManagerConfiguration.staticPath;
+      }
+      else
+      {
+        BasePath = System.IO.Directory.GetCurrentDirectory();
+      }
+      BasePath = BasePath + "\\" + pathFile;
+      return this.operation.GetImage(BasePath, args.Id, false, null, null);
     }
 
     //[HttpGet("api/FileManager/GetImage")]
@@ -118,32 +173,6 @@ namespace EJ2APIServices.Controllers
       return await _fileManagerServices.GetAllFileManagersByRolesName(RoleName);
     }
     #endregion
-
-    #region changePathDirectory
-    [HttpPost("api/FileManager/changePathDirectory")]
-    public async Task<Result> changePathDirectory([FromBody] PathFileManager pathFileManager)
-    {
-      try
-      {
-        this.root = pathFileManager.PathFile;
-        return new Result
-        {
-          success = true,
-          code = "200"
-        };
-      }
-      catch (Exception ex)
-      {
-        return new Result
-        {
-          success = true,
-          code = "403"
-        };
-      }
-
-    }
-    #endregion
-
 
   }
 
