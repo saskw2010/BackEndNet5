@@ -377,10 +377,10 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
         public virtual FileManagerResponse Delete(string path, string[] names, params FileManagerDirectoryContent[] data)
         {
             FileManagerResponse DeleteResponse = new FileManagerResponse();
-            List<FileManagerDirectoryContent> removedFiles = new List<FileManagerDirectoryContent>();
-            try
-            {
-                string physicalPath = GetPath(path);
+      List<FileManagerDirectoryContent> removedFiles = new List<FileManagerDirectoryContent>();
+      try
+      {
+        string physicalPath = GetPath(path);
                 string result = String.Empty;
                 for (int i = 0; i < names.Length; i++)
                 {
@@ -408,22 +408,22 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
                         }
                         else
                         {
-                            try
-                            {
-                                File.Delete(fullPath);
-                            }
-                            catch (Exception e)
-                            {
-                                if (e.GetType().Name == "UnauthorizedAccessException")
-                                {
-                                    result = fullPath;
-                                }
-                                else
-                                {
-                                    throw e;
-                                }
-                            }
-                        }
+                  try
+                  {
+                    File.Delete(fullPath);
+                }
+                                        catch (Exception e)
+                  {
+                    if (e.GetType().Name == "UnauthorizedAccessException")
+                    {
+                      result = fullPath;
+                    }
+                    else
+                    {
+                      throw e;
+                    }
+                  }
+                   }
                         if (result != String.Empty)
                         {
                             break;
@@ -451,17 +451,17 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
                 {
                     return DeleteResponse;
                 }
-            }
-            catch (Exception e)
-            {
-                ErrorDetails er = new ErrorDetails();
-                er.Message = e.Message.ToString();
-                er.Code = er.Message.Contains("is not accessible. You need permission") ? "401" : "417";
-                if ((er.Code == "401") && !string.IsNullOrEmpty(accessMessage)) { er.Message = accessMessage; }
-                DeleteResponse.Error = er;
-                return DeleteResponse;
-            }
-        }
+      }
+      catch (Exception e)
+      {
+        ErrorDetails er = new ErrorDetails();
+        er.Message = e.Message.ToString();
+        er.Code = er.Message.Contains("is not accessible. You need permission") ? "401" : "417";
+        if ((er.Code == "401") && !string.IsNullOrEmpty(accessMessage)) { er.Message = accessMessage; }
+        DeleteResponse.Error = er;
+        return DeleteResponse;
+      }
+    }
 
         public virtual FileManagerResponse Rename(string path, string name, string newName, bool replace = false, params FileManagerDirectoryContent[] data)
         {
@@ -1226,8 +1226,9 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
 #else
                         var name = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim().ToString();
                         var fullName = Path.Combine((this.contentRootPath + path), name);
+                        var PathOfDirectory = this.contentRootPath + path;
 #endif
-                        if (action == "save")
+            if (action == "save")
                         {
                             if (!System.IO.File.Exists(fullName))
                             {
@@ -1264,6 +1265,9 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
                         {
                             if (System.IO.File.Exists(fullName))
                             {
+                            //----------------take backUp of files--------------------
+                            createBackUp(PathOfDirectory, name);
+                            //----------------end of take backup of files-------------
                                 System.IO.File.Delete(fullName);
                             }
 #if !EJ2_DNX
@@ -2142,5 +2146,20 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
             return path.Substring(index + 1);
         }
 
+    #region createBackUp
+    public void createBackUp(string path,string fileName) {
+      string sourceDirectory = path;
+      string destinationDirectory = System.IO.Path.Combine(sourceDirectory, "BackUp");
+      if (!System.IO.Directory.Exists(destinationDirectory))
+      System.IO.Directory.CreateDirectory(destinationDirectory);
+      string extension = Path.GetExtension(fileName);
+      string Name = Path.GetFileNameWithoutExtension(fileName);
+      var fileNameWithDate = Name + DateTime.Now.Ticks;
+      var fileVersionName = fileNameWithDate + extension;
+      File.Copy(Path.Combine(sourceDirectory, fileName), Path.Combine(destinationDirectory, fileVersionName));
     }
+    #endregion
+
+    
+  }
 }
