@@ -9,5 +9,6 @@ namespace BackEnd.Service.IService
   public interface IEsSrTechnicalService
   {
     Task<Result> createUserForTechnicalAsync();
+    Task<Result> createUserForTechnicalsWithhashing();
   }
 }

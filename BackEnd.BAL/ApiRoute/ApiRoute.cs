@@ -58,6 +58,7 @@ namespace BackEnd.BAL.ApiRoute
     public static class Technical
     {
       public const string createUserForTechnicals = Base + "EsSrTchnical/createUserForTechnicals";
+      public const string createUserForTechnicalsWithhashing = Base + "EsSrTchnical/createUserForTechnicalsWithhashing";
     }
 
   }

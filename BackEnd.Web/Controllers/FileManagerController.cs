@@ -115,7 +115,9 @@ namespace EJ2APIServices.Controllers
         Response.StatusCode = Convert.ToInt32(uploadResponse.Error.Code);
         Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = uploadResponse.Error.Message;
       }
+   
       return Content("");
+
     }
 
     // downloads the selected file(s) and folder(s)

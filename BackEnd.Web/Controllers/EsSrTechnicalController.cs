@@ -22,12 +22,21 @@ namespace BackEnd.Web.Controllers
       _EsSrTechnicalService = EsSrTechnicalService;
     }
 
-    #region createUserForClients
+    #region createUserForTechnicals
     [HttpPost(ApiRoute.Technical.createUserForTechnicals)]
     public async Task<Result> createUserForClients()
     {
       await _roleService.createRoleOfNotExist("Technical");
       return await _EsSrTechnicalService.createUserForTechnicalAsync();
+    }
+    #endregion
+
+    #region createUserForClients
+    [HttpPost(ApiRoute.Technical.createUserForTechnicalsWithhashing)]
+    public async Task<Result> createUserForTechnicalsWithhashing()
+    {
+      await _roleService.createRoleOfNotExist("Technical");
+      return await _EsSrTechnicalService.createUserForTechnicalsWithhashing();
     }
     #endregion
   }
