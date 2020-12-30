@@ -105,10 +105,14 @@ namespace BackEnd.Service.Service
         List<EsSrTechnical> esSrTechnical = _unitOfWork.EsSrTechnicalRepository.Get().ToList();
         foreach (var item in esSrTechnical)
         {
+          var password = item.HashPassword;
+          item.HashPassword = EncodePasswordmosso(password);
+          _unitOfWork.EsSrTechnicalRepository.Update(item);
+          await _unitOfWork.SaveAsync();
           var User = FindByEmailCustome(item.Email);
           if (User == null)
           {
-            await addUser(item.Email, item.Email, item.Phone,EncodePasswordmosso(item.HashPassword));
+            await addUser(item.Email, item.Email, item.Phone,EncodePasswordmosso(password));
           }
         }
         return new Result

@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 using BackEnd.DAL.Entities;
 
-namespace RealState.DAL.Context
+namespace RealState.DAL.IBackEndContext
+
 {
   public interface IBackEndContext
   {
@@ -17,5 +18,6 @@ namespace RealState.DAL.Context
     DbSet<EsSrTechnical> EsSrTechnical { get; set; }
     DbSet<FileManager> FileManager { get; set; }
     DbSet<FileManagerRole> FileManagerRole { get; set; }
+    DbSet<fileManagerExtentions> fileManagerExtentions { get; set; }
   }
 }

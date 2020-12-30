@@ -2,7 +2,8 @@ using BackEnd.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RealState.DAL.Context;
+using RealState.DAL.IBackEndContext;
+
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -27,6 +28,7 @@ namespace BackEnd.DAL.Context
     public virtual DbSet<EsSrTechnical> EsSrTechnical { get; set; }
     public virtual DbSet<FileManager> FileManager { get; set; }
     public DbSet<FileManagerRole> FileManagerRole { get; set; }
+    public DbSet<fileManagerExtentions> fileManagerExtentions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

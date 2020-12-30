@@ -12,6 +12,7 @@ using BackEnd.BAL.Models;
 using System.Threading.Tasks;
 using BackEnd.Service.IService;
 using Microsoft.Extensions.Configuration;
+using BackEnd.DAL.Context;
 
 namespace EJ2APIServices.Controllers
 {
@@ -22,13 +23,16 @@ namespace EJ2APIServices.Controllers
     public string basePath;
     //string root = "F:\\asd";
     public IConfiguration Configuration { get; }
+    private readonly BakEndContext _BakEndContext;
     public FileManagerController(
       IHostingEnvironment hostingEnvironment,
       IFileManagerServices fileManagerServices,
-      IConfiguration iConfig)
+      IConfiguration iConfig,
+      BakEndContext BakEndContext)
     {
       this.basePath = hostingEnvironment.ContentRootPath;
-      this.operation = new PhysicalFileProvider();
+      _BakEndContext= BakEndContext;
+      this.operation = new PhysicalFileProvider(_BakEndContext);
       _fileManagerServices = fileManagerServices;
       Configuration = iConfig;
     }

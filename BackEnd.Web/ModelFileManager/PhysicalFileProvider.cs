@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Syncfusion.EJ2.FileManager.Base;
+using BackEnd.DAL.Context;
 
 
 #if EJ2_DNX
@@ -26,16 +27,18 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
 {
     public class PhysicalFileProvider : PhysicalFileProviderBase
     {
+    
         protected string contentRootPath;
-        protected string[] allowedExtension = new string[] { "*" };
+        protected string[] allowedExtension = new string[] {"*" };
         AccessDetails AccessDetails = new AccessDetails();
         private string rootName = string.Empty;
         protected string hostPath;
         protected string hostName;
         private string accessMessage = string.Empty;
-
-        public PhysicalFileProvider()
+        private readonly BakEndContext _BakEndContext;
+        public PhysicalFileProvider(BakEndContext BakEndContext)
         {
+           _BakEndContext = BakEndContext;
         }
 
         public void RootFolder(string name)
@@ -108,7 +111,9 @@ namespace Syncfusion.EJ2.FileManager.PhysicalFileProvider
                 FileManagerResponse readFiles = new FileManagerResponse();
                 if (!showHiddenItems)
                 {
-                    IEnumerable<FileManagerDirectoryContent> files = extensions.SelectMany(directory.GetFiles).Where(f => (f.Attributes & FileAttributes.Hidden) == 0)
+                  var listOfExtentionsDb=_BakEndContext.fileManagerExtentions.ToList();
+                   var ex = extensions.SelectMany(directory.GetFiles).Where(x=>(listOfExtentionsDb.Any(y=>y.extention==x.Extension)));
+                    IEnumerable<FileManagerDirectoryContent> files = ex.Where(f => (f.Attributes & FileAttributes.Hidden) == 0)
                             .Select(file => new FileManagerDirectoryContent
                             {
                                 Name = file.Name,

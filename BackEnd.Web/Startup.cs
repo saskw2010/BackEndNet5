@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using BackEnd.BAL.Models;
-using RealState.DAL.Context;
+
 using Microsoft.AspNetCore.Identity;
 using BackEnd.DAL.Context;
 using BackEnd.DAL.Entities;
@@ -36,6 +36,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using BackEnd.Web.Hubs;
+using RealState.DAL.IBackEndContext;
 
 namespace BackEnd.Web
 {
