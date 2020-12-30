@@ -17,10 +17,10 @@ namespace BackEnd.Web.Controllers
   //[Authorize]
   public class webSiteController: Controller
   {
-    private IworkSapceServices _websiteServices;
+    private IworkSapceService _websiteServices;
     private IConfiguration configuration;
     private readonly BakEndContext Context;
-    public webSiteController(IworkSapceServices websiteServices, BakEndContext dbContext,
+    public webSiteController(IworkSapceService websiteServices, BakEndContext dbContext,
       IConfiguration iConfig)
     {
       _websiteServices = websiteServices;

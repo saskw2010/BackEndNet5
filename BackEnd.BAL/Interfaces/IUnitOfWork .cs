@@ -23,6 +23,8 @@ namespace BackEnd.BAL.Interfaces
        GenericRepository<EsSrTechnical> EsSrTechnicalRepository { get; }
        GenericRepository<FileManager> FileManagerRepository { get; }
        GenericRepository<FileManagerRole> FileManagerRoleRepository { get; }
+       GenericRepository<EsSrWorkshopRegion> EsSrWorkshopRegionRepository { get; }
+       GenericRepository<EsSrItemTechnical> EsSrItemTechnicalRepository { get; }
 
   }
 }

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Service.Service
 {
-  public class WorkSpaceServices : IworkSapceServices
+  public class WorkSpaceServices : IworkSapceService
   {
     private IUnitOfWork unitOfWork;
     private IMapper _mapper;

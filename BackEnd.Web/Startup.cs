@@ -175,11 +175,13 @@ namespace BackEnd.Web
       //----------------------------end jwtSettings-------------------------------------
       //-------------------------inject service-----------------------------------------
       services.AddScoped<IidentityServices, IdentityServices>();
-      services.AddScoped<IworkSapceServices, WorkSpaceServices>();
+      services.AddScoped<IworkSapceService, WorkSpaceServices>();
       services.AddScoped<IRoleService, RoleService>();
       services.AddScoped<IEsSrTechnicalService, EsSrTechnicalService>();
       services.AddScoped<IEsSrClientService, EsSrClientService>();
       services.AddScoped<IFileManagerServices, FileManagerServices>();
+      services.AddScoped<IEsSrItemTechnicalService, EsSrItemTechnicalService>();
+      services.AddScoped<IEsSrWorkshopRegionServices, EsSrWorkshopRegionServices>();
       //--------------------------end of inject service--------------------------------
 
       //begin::autmapper

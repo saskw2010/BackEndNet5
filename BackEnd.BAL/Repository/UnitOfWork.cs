@@ -190,6 +190,24 @@ namespace BackEnd.BAL.Repository
       }
     }
 
+    public GenericRepository<EsSrWorkshopRegion> EsSrWorkshopRegionRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrWorkshopRegion>(Context);
+      }
+    }
+
+
+    public GenericRepository<EsSrItemTechnical> EsSrItemTechnicalRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrItemTechnical>(Context);
+      }
+    }
+
+
 
     //end workspace
 

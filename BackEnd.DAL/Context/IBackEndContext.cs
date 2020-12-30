@@ -19,5 +19,7 @@ namespace RealState.DAL.IBackEndContext
     DbSet<FileManager> FileManager { get; set; }
     DbSet<FileManagerRole> FileManagerRole { get; set; }
     DbSet<fileManagerExtentions> fileManagerExtentions { get; set; }
+    DbSet<EsSrItemTechnical> EsSrItemTechnical { get; set; }
+    DbSet<EsSrWorkshopRegion> EsSrWorkshopRegion { get; set; }
   }
 }

@@ -29,6 +29,8 @@ namespace BackEnd.DAL.Context
     public virtual DbSet<FileManager> FileManager { get; set; }
     public DbSet<FileManagerRole> FileManagerRole { get; set; }
     public DbSet<fileManagerExtentions> fileManagerExtentions { get; set; }
+    public DbSet<EsSrItemTechnical> EsSrItemTechnical { get; set; }
+    public DbSet<EsSrWorkshopRegion> EsSrWorkshopRegion { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

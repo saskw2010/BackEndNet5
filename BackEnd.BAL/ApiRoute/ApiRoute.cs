@@ -61,5 +61,11 @@ namespace BackEnd.BAL.ApiRoute
       public const string createUserForTechnicalsWithhashing = Base + "EsSrTchnical/createUserForTechnicalsWithhashing";
     }
 
+    //WorkshopRegion
+    public static class EsSrWorkshop
+    {
+      public const string checkAvailabelItem = Base + "EsSrWorkshopRegion/checkAvailabelItem";
+    }
+
   }
 }

@@ -33,9 +33,12 @@ namespace BackEnd.Service.MappingProfiles
         .ForMember(dest =>
              dest.filemanagerName,
              opt => opt.MapFrom(src => src.filemanagerName))
-             .ReverseMap(); ;
+             .ReverseMap();
 
-     
+      CreateMap<EsSrItemTechnical, EsSrItemTechnicalViewModel>().ReverseMap();
+      CreateMap<EsSrWorkshopRegion, EsSrWorkshopRegionViewModel>().ReverseMap();
+
+
     }
   }
 }
