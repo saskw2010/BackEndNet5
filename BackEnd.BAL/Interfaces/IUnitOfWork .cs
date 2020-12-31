@@ -25,6 +25,11 @@ namespace BackEnd.BAL.Interfaces
        GenericRepository<FileManagerRole> FileManagerRoleRepository { get; }
        GenericRepository<EsSrWorkshopRegion> EsSrWorkshopRegionRepository { get; }
        GenericRepository<EsSrItemTechnical> EsSrItemTechnicalRepository { get; }
+       GenericRepository<EsSrAttache> EsSrAttacheRepository { get; }
+       GenericRepository<EsSrPeriodLock> EsSrPeriodLockRepository { get; }
+       GenericRepository<EsSrPeriod> EsSrPeriodRepository { get; }
+       GenericRepository<EsSrPeriodTechnical> EsSrPeriodTechnicalRepository { get; }
+       GenericRepository<EsSrOrder> EsSrOrderRepository { get; }
 
   }
 }

@@ -21,5 +21,10 @@ namespace RealState.DAL.IBackEndContext
     DbSet<fileManagerExtentions> fileManagerExtentions { get; set; }
     DbSet<EsSrItemTechnical> EsSrItemTechnical { get; set; }
     DbSet<EsSrWorkshopRegion> EsSrWorkshopRegion { get; set; }
+    DbSet<EsSrAttache> EsSrAttache { get; set; }
+    DbSet<EsSrPeriodLock> EsSrPeriodLock { get; set; }
+    DbSet<EsSrPeriod> EsSrPeriod { get; set; }
+    DbSet<EsSrPeriodTechnical> EsSrPeriodTechnical { get; set; }
+    DbSet<EsSrOrder> EsSrOrder { get; set; }
   }
 }

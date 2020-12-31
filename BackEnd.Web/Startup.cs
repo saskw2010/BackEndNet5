@@ -37,7 +37,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using BackEnd.Web.Hubs;
 using RealState.DAL.IBackEndContext;
-
+using Microsoft.Extensions.FileProviders;
 namespace BackEnd.Web
 {
   public class Startup
@@ -182,6 +182,7 @@ namespace BackEnd.Web
       services.AddScoped<IFileManagerServices, FileManagerServices>();
       services.AddScoped<IEsSrItemTechnicalService, EsSrItemTechnicalService>();
       services.AddScoped<IEsSrWorkshopRegionServices, EsSrWorkshopRegionServices>();
+      services.AddScoped<IEsSrAttacheService, EsSrAttacheService>();
       //--------------------------end of inject service--------------------------------
 
       //begin::autmapper
@@ -239,6 +240,12 @@ namespace BackEnd.Web
       {
         endpoints.MapControllers();
         endpoints.MapHub<ChatHub>("/chatsocket");     // path will look like this https://localhost:44379/chatsocket 
+      });
+
+      app.UseStaticFiles(new StaticFileOptions
+      {
+        FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UploadFiles")),
+        RequestPath = "/wwwroot/UploadFiles"
       });
     }
   }

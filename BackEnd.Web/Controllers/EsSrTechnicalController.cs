@@ -13,13 +13,16 @@ namespace BackEnd.Web.Controllers
   {
     private IRoleService _roleService;
     private IEsSrTechnicalService _EsSrTechnicalService;
+    private IEsSrWorkshopRegionServices _EsSrWorkshopRegionServices;
     public EsSrTechnicalController(
       IRoleService roleService,
-      IEsSrTechnicalService EsSrTechnicalService
+      IEsSrTechnicalService EsSrTechnicalService,
+      IEsSrWorkshopRegionServices EsSrWorkshopRegionServices
       )
     {
       _roleService = roleService;
       _EsSrTechnicalService = EsSrTechnicalService;
+      _EsSrWorkshopRegionServices = EsSrWorkshopRegionServices;
     }
 
     #region createUserForTechnicals
@@ -39,5 +42,15 @@ namespace BackEnd.Web.Controllers
       return await _EsSrTechnicalService.createUserForTechnicalsWithhashing();
     }
     #endregion
+
+    #region checkAvailabelTechncails
+    [HttpPost(ApiRoute.Technical.GetAvailabelTechncails)]
+    public async Task<Result> GetAvailabelTechncails([FromBody]AllowedTechViewMode allowedTechViewMode) {
+      //get technical of thes Regions
+      return await _EsSrTechnicalService.GetAvailabelTechncails(allowedTechViewMode);
+      
+    }
+    #endregion
+
   }
 }

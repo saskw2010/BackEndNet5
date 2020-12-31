@@ -207,6 +207,46 @@ namespace BackEnd.BAL.Repository
       }
     }
 
+    public GenericRepository<EsSrAttache> EsSrAttacheRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrAttache>(Context);
+      }
+    }
+
+    public GenericRepository<EsSrPeriodLock> EsSrPeriodLockRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrPeriodLock>(Context);
+      }
+    }
+
+    public GenericRepository<EsSrPeriod> EsSrPeriodRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrPeriod>(Context);
+      }
+    }
+
+    public GenericRepository<EsSrPeriodTechnical> EsSrPeriodTechnicalRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrPeriodTechnical>(Context);
+      }
+    }
+
+    public GenericRepository<EsSrOrder> EsSrOrderRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrOrder>(Context);
+      }
+    }
+
 
 
     //end workspace
