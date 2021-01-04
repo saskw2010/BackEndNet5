@@ -116,7 +116,7 @@ namespace BackEnd.Service.Service
           var User = FindByEmailCustome(item.Email);
           if (User == null)
           {
-            await addUser(item.Email, item.Email, item.Phone,EncodePasswordmosso(password));
+            await addUser(item.Email, item.Email, item.Phone, EncodePasswordmosso(password));
           }
         }
         return new Result
@@ -215,19 +215,25 @@ namespace BackEnd.Service.Service
     #region GetAvailabelTechncails
     public async Task<Result> GetAvailabelTechncails(AllowedTechViewMode allowedTechViewMode)
     {
-      List<EsSrTechnical> AllTechncalsForWorkSopRegion = new List<EsSrTechnical>();
-      List<EsSrTechnicalViewModel> AllTechncalsForWorkSopRegionVm = new List<EsSrTechnicalViewModel>();
-      foreach (var workShopRItem in allowedTechViewMode.esSrWorkshopRegionViewModel)
-      {
-        var EsSrTechnicalList = _unitOfWork.EsSrTechnicalRepository.Get(filter: (x =>
-          (x.WorkshopRegionId == workShopRItem.WorkshopRegionId) &&
-          (x.EsSrItemTechnicals.Any(estItem => estItem.ItemId == allowedTechViewMode.ItemId))));
-        AllTechncalsForWorkSopRegion.AddRange(EsSrTechnicalList);
+      try {
+        List<EsSrTechnical> AllTechncalsForWorkSopRegion = new List<EsSrTechnical>();
+        List<EsSrTechnicalViewModel> AllTechncalsForWorkSopRegionVm = new List<EsSrTechnicalViewModel>();
+        foreach (var workShopRItem in allowedTechViewMode.esSrWorkshopRegionViewModel)
+        {
+          var EsSrTechnicalList = _unitOfWork.EsSrTechnicalRepository.Get(filter: (x =>
+            (x.WorkshopRegionId == workShopRItem.WorkshopRegionId) &&
+            (x.EsSrItemTechnicals.Any(estItem => estItem.ItemId == allowedTechViewMode.ItemId))));
+          AllTechncalsForWorkSopRegion.AddRange(EsSrTechnicalList);
+        }
+        List<allowPeriodsResponseVm> ss = new List<allowPeriodsResponseVm>();
+        ss = FilterEsSrPeriodTechnicalAllowed(AllTechncalsForWorkSopRegion, allowedTechViewMode.dateFrom, allowedTechViewMode.dateTo);
+        AllTechncalsForWorkSopRegionVm = _mapper.Map<List<EsSrTechnicalViewModel>>(AllTechncalsForWorkSopRegion);
+        return new Result { success = true, data = ss };
       }
-      List<allowPeriodsResponseVm> ss = new List<allowPeriodsResponseVm>();
-      ss = FilterEsSrPeriodTechnicalAllowed(AllTechncalsForWorkSopRegion, allowedTechViewMode.dateFrom,allowedTechViewMode.dateTo);
-      AllTechncalsForWorkSopRegionVm = _mapper.Map<List<EsSrTechnicalViewModel>>(AllTechncalsForWorkSopRegion);
-      return new Result { success=true,data = ss };
+      catch (Exception ex) {
+        return new Result { success = false,code="400", data = null,message= ExtensionMethods.FullMessage(ex) };
+      }
+     
     }
     #endregion
 
@@ -236,70 +242,74 @@ namespace BackEnd.Service.Service
     {
       List<allowPeriodsResponseVm> allowPeriodsReVm = new List<allowPeriodsResponseVm>();
       List<PeriodVm> pvm = new List<PeriodVm>();
-      
+      List<EsSrPeriodTechnical> esSrPeriodTechnicalsList = new List<EsSrPeriodTechnical>();
       foreach (var item in essrTechList)
       {
-        //all period lok
-        //var EsSrPeriodTechnicals=_unitOfWork.EsSrPeriodTechnicalRepository.Get(filter: (x => x.TechnicalId == item.TechnicalId));
-        
-        foreach (var periodTechnical in item.EsSrPeriodTechnicals.Select(x=>new { EsSrPeriodLocks=x.EsSrPeriodLocks,
-          PeriodId = x.PeriodId }))
+        esSrPeriodTechnicalsList.AddRange(item.EsSrPeriodTechnicals);
+      }
+      var periods = esSrPeriodTechnicalsList.Select(x => new
+      {
+        PireodId = x.PeriodId.Value,
+        NameAr = x.EsSrPeriod.NameAr,
+        NameEn = x.EsSrPeriod.NameEn,
+        EsSrPeriodLock = x.EsSrPeriod.EsSrPeriodLocks,
+        PeriodTechnicalsVm = esSrPeriodTechnicalsList.Where(y => y.PeriodId == x.PeriodId).ToList()
+      }).GroupBy(sc => new { sc.PireodId }).Select(g => g.First()).ToList();
+      foreach (DateTime day in EachDay(fromDateReques, todateReques))
+      {
+        foreach (var period in periods)
         {
-          foreach (DateTime day in EachDay(fromDateReques, todateReques))
+
+          var x = period.EsSrPeriodLock.Where(x => (x.PeriodTechnicalId == null)&&(x.FromDate <= day) && (x.ToDate >= day));
+          if (x.Count() == 0)
           {
-            
-            var x=periodTechnical.EsSrPeriodLocks.Select(s=>new
-            { EsSrPeriod = s.EsSrPeriod,
-              FromDate=s.FromDate,
-              ToDate=s.ToDate
-            }
-            ).Where(x => (x.FromDate <= day) && (x.ToDate >= day));
-            if (x.Count() == 0)
+            var tecVm = new List<PeriodTechnicalsVm>();
+            foreach (var periodTechnical in period.PeriodTechnicalsVm)
             {
-              //EsSrPeriodAllowed.Add(periodTechnical.PeriodId.Value);
-             var period= _unitOfWork.EsSrPeriodRepository.GetEntity(x=>x.PeriodId== periodTechnical.PeriodId.Value);
-              var tecVm= getTechnicalByPeriodId(period.PeriodId);
+              var y = periodTechnical.EsSrPeriodLocks.Where(x =>(x.PeriodTechnicalId == null)&&(x.FromDate <= day) && (x.ToDate >= day));
+              if (y.Count() == 0)
+              {
+                tecVm.Add(new PeriodTechnicalsVm() {
+                  PeriodTechnicalId = periodTechnical.PeriodTechnicalId,
+                });
+              }
+            }
+            if (tecVm.Count > 0) {
               PeriodVm obj = new PeriodVm
-              { PireodId= periodTechnical.PeriodId.Value,
-              NameAr= period.NameAr,
-              NameEn=period.NameEn,
-              PeriodTechnicalsVm= tecVm
+              {
+                PireodId = period.PireodId,
+                NameAr = period.NameAr,
+                NameEn = period.NameEn,
+                PeriodTechnicalsVm = tecVm
               };
               pvm.Add(obj);
-              
-              allowPeriodsResponseVm allowedVm = new allowPeriodsResponseVm {
-                Date=day,
-              PeriodVm= pvm
-              };
-              allowPeriodsReVm.Add(allowedVm);
             }
+           
           }
+          
+        }
 
+        if (pvm.Count > 0) {
+          allowPeriodsResponseVm allowedVm = new allowPeriodsResponseVm
+          {
+            Date = day,
+            PeriodVm = pvm
+          };
+          allowPeriodsReVm.Add(allowedVm);
         }
         
+        pvm = new List<PeriodVm>();
       }
-      return  allowPeriodsReVm;
+      return allowPeriodsReVm;
     }
     #endregion
-
     public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
     {
       for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
         yield return day;
     }
 
-    #region getTechnicalByPeriodId
-    public List<PeriodTechnicalsVm> getTechnicalByPeriodId(long periodId) {
-      List<PeriodTechnicalsVm> PeriodTechnicalsVm = new List<PeriodTechnicalsVm>();
-     var res= _unitOfWork.EsSrPeriodTechnicalRepository.Get(filter:(x=> x.PeriodId!= null?x.PeriodId.Value == periodId:false));
-      foreach (var item in res) {
-        PeriodTechnicalsVm tcVm = new PeriodTechnicalsVm();
-        tcVm.PeriodTechnicalId = item.PeriodTechnicalId;
-        PeriodTechnicalsVm.Add(tcVm);
-      }
-      return PeriodTechnicalsVm;
-    }
-    #endregion
+    
 
   }
 }

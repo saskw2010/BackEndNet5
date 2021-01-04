@@ -13,7 +13,7 @@ namespace BackEnd.DAL.Entities
     [ForeignKey("EsSrPeriodTechnical")]
     public Nullable<long> PeriodTechnicalId { get; set; }
     [ForeignKey("EsSrPeriod")]
-    public Nullable<long> WorkshopPeriodId { get; set; }
+    public Nullable<long> PeriodId { get; set; }
     public string DescriptionEn { get; set; }
     public string DescriptionAr { get; set; }
     public Nullable<System.DateTime> FromDate { get; set; }
