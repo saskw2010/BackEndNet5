@@ -36,6 +36,9 @@ namespace BackEnd.DAL.Context
     public virtual DbSet<EsSrPeriod> EsSrPeriod { get; set; }
     public virtual DbSet<EsSrPeriodTechnical> EsSrPeriodTechnical { get; set; }
     public virtual DbSet<EsSrOrder> EsSrOrder { get; set; }
+    public virtual DbSet<EsSrOrderStage> EsSrOrderStage { get; set; }
+    public virtual DbSet<EsSrOrderStageBase> EsSrOrderStageBase { get; set; }
+    public virtual DbSet<EsSrOrderStageBaseCatgeory> EsSrOrderStageBaseCatgeory { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

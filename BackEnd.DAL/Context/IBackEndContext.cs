@@ -26,5 +26,8 @@ namespace RealState.DAL.IBackEndContext
     DbSet<EsSrPeriod> EsSrPeriod { get; set; }
     DbSet<EsSrPeriodTechnical> EsSrPeriodTechnical { get; set; }
     DbSet<EsSrOrder> EsSrOrder { get; set; }
+    DbSet<EsSrOrderStage> EsSrOrderStage { get; set; }
+    DbSet<EsSrOrderStageBase> EsSrOrderStageBase { get; set; }
+    DbSet<EsSrOrderStageBaseCatgeory> EsSrOrderStageBaseCatgeory { get; set; }
   }
 }

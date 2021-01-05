@@ -70,11 +70,11 @@ namespace BackEnd.BAL.Repository
             int returnValue = 200;
             using (var dbContextTransaction = Context.Database.BeginTransaction())
             {
-                try
-                {
-                    await Context.SaveChangesAsync();
+        //try
+        //{
+          await Context.SaveChangesAsync();
                     dbContextTransaction.Commit();
-                }
+      //}
         //        catch (DbUpdateException ex)
         //        {
         //            var sqlException = ex.GetBaseException() as SqlException;
@@ -93,13 +93,13 @@ namespace BackEnd.BAL.Repository
         //            }
         //           returnValue = 500;
         //}
-                catch (Exception)
-                {
-                    //Log Exception Handling message                      
-                    returnValue = 500;
-                    dbContextTransaction.Rollback();
-                }
-            }
+        //catch (Exception)
+        //{
+        //  //Log Exception Handling message                      
+        //  returnValue = 500;
+        //  dbContextTransaction.Rollback();
+        //}
+      }
 
             return returnValue;
         }
@@ -247,9 +247,30 @@ namespace BackEnd.BAL.Repository
       }
     }
 
+    public GenericRepository<EsSrOrderStage> EsSrOrderStageRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrOrderStage>(Context);
+      }
+    }
 
+    public GenericRepository<EsSrOrderStageBase> EsSrOrderStageBaseRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrOrderStageBase>(Context);
+      }
+    }
 
-    //end workspace
+    public GenericRepository<EsSrOrderStageBaseCatgeory> EsSrOrderStageBaseCatgeoryRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrOrderStageBaseCatgeory>(Context);
+      }
+    }
+   
 
 
 

@@ -1,23 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace BackEnd.DAL.Entities
+namespace BackEnd.BAL.Models
 {
-  public class EsSrOrder
+  public class EsSrOrderViewModel
   {
-    //public EsSrOrder()
-    //{
-    //  this.EsSrOrderStages = new HashSet<EsSrOrderStage>();
-    //}
-    [Key]
-    public long OrderId { get; set; }
+    public long? CatgeoryId { get; set; }
+    public long? OrderId { get; set; }
+    public int? ShowOrder { get; set; }
     public Nullable<long> ItemId { get; set; }
     public Nullable<long> PromoCodeId { get; set; }
     public Nullable<long> ClientId { get; set; }
-    [ForeignKey("EsSrOrderStage")]
     public Nullable<long> OrderStageId { get; set; }
     public Nullable<decimal> MapLatitude { get; set; }
     public Nullable<decimal> MapLangitude { get; set; }
@@ -37,21 +31,9 @@ namespace BackEnd.DAL.Entities
     public Nullable<System.DateTime> ModifiedOn { get; set; }
     public Nullable<bool> IsDelete { get; set; }
     public Nullable<long> CityId { get; set; }
-    [ForeignKey("EsSrPeriodTechnical")]
     public Nullable<long> PeriodTechnicalId { get; set; }
     public Nullable<bool> IsApproval { get; set; }
     public string MapAddress { get; set; }
     public string AddressDetail { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-    public virtual ICollection<EsSrAttache> EsSrAttaches { get; set; }
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
- 
-    public virtual EsSrPeriodTechnical EsSrPeriodTechnical { get; set; }
-
-    //public virtual EsSrOrderStage EsSrOrderStage { get; set; }
-    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-    //public virtual ICollection<EsSrOrderStage> EsSrOrderStages { get; set; }
-
   }
 }

@@ -67,6 +67,12 @@ namespace BackEnd.BAL.ApiRoute
     {
       public const string checkAvailabelItem = Base + "EsSrWorkshopRegion/checkAvailabelTechncails";
     }
+    //EsSrOrderRouting
+    public static class EsSrOrderRouting
+    {
+      public const string saveOrder = Base +    "EsSrOrderRouting/saveOrder";
+      public const string UpdateOrder = Base + "EsSrOrderRouting/UpdateOrder";
+    }
 
   }
 }
