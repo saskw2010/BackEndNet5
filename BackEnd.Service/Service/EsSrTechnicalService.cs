@@ -215,7 +215,8 @@ namespace BackEnd.Service.Service
     #region GetAvailabelTechncails
     public async Task<Result> GetAvailabelTechncails(AllowedTechViewMode allowedTechViewMode)
     {
-      try {
+      try
+      {
         List<EsSrTechnical> AllTechncalsForWorkSopRegion = new List<EsSrTechnical>();
         List<EsSrTechnicalViewModel> AllTechncalsForWorkSopRegionVm = new List<EsSrTechnicalViewModel>();
         foreach (var workShopRItem in allowedTechViewMode.esSrWorkshopRegionViewModel)
@@ -225,14 +226,16 @@ namespace BackEnd.Service.Service
             (x.EsSrItemTechnicals.Any(estItem => estItem.ItemId == allowedTechViewMode.ItemId))));
           AllTechncalsForWorkSopRegion.AddRange(EsSrTechnicalList);
         }
+        
         List<allowPeriodsResponseVm> ss = new List<allowPeriodsResponseVm>();
         ss = FilterEsSrPeriodTechnicalAllowed(AllTechncalsForWorkSopRegion, allowedTechViewMode.dateFrom, allowedTechViewMode.dateTo);
         AllTechncalsForWorkSopRegionVm = _mapper.Map<List<EsSrTechnicalViewModel>>(AllTechncalsForWorkSopRegion);
         return new Result { success = true, data = ss };
-      }
+    }
       catch (Exception ex) {
-        return new Result { success = false,code="400", data = null,message= ExtensionMethods.FullMessage(ex) };
-      }
+        return new Result { success = false,code="400", data = null,message= ExtensionMethods.FullMessage(ex)
+  };
+}
      
     }
     #endregion
@@ -253,14 +256,15 @@ namespace BackEnd.Service.Service
         NameAr = x.EsSrPeriod.NameAr,
         NameEn = x.EsSrPeriod.NameEn,
         EsSrPeriodLock = x.EsSrPeriod.EsSrPeriodLocks,
+        EsSrTechnicalWorkDays = x.EsSrTechnical.EsSrTechnicalWorkDays,
         PeriodTechnicalsVm = esSrPeriodTechnicalsList.Where(y => y.PeriodId == x.PeriodId).ToList()
       }).GroupBy(sc => new { sc.PireodId }).Select(g => g.First()).ToList();
       foreach (DateTime day in EachDay(fromDateReques, todateReques))
       {
         foreach (var period in periods)
         {
-
           var x = period.EsSrPeriodLock.Where(x => (x.PeriodTechnicalId == null)&&(x.FromDate <= day) && (x.ToDate >= day));
+          
           if (x.Count() == 0)
           {
             var tecVm = new List<PeriodTechnicalsVm>();
@@ -275,14 +279,18 @@ namespace BackEnd.Service.Service
               }
             }
             if (tecVm.Count > 0) {
-              PeriodVm obj = new PeriodVm
-              {
-                PireodId = period.PireodId,
-                NameAr = period.NameAr,
-                NameEn = period.NameEn,
-                PeriodTechnicalsVm = tecVm
-              };
-              pvm.Add(obj);
+             var worksDay= period.EsSrTechnicalWorkDays.FirstOrDefault(x=>x.WorkDaysId == (long)day.DayOfWeek);
+              if (worksDay != null) {
+                PeriodVm obj = new PeriodVm
+                {
+                  PireodId = period.PireodId,
+                  NameAr = period.NameAr,
+                  NameEn = period.NameEn,
+                  PeriodTechnicalsVm = tecVm
+                };
+                pvm.Add(obj);
+              }
+              
             }
            
           }
@@ -293,7 +301,8 @@ namespace BackEnd.Service.Service
           allowPeriodsResponseVm allowedVm = new allowPeriodsResponseVm
           {
             Date = day,
-            PeriodVm = pvm
+            PeriodVm = pvm,
+            dayOfWork = day.DayOfWeek
           };
           allowPeriodsReVm.Add(allowedVm);
         }
@@ -309,7 +318,8 @@ namespace BackEnd.Service.Service
         yield return day;
     }
 
-    
+  
+
 
   }
 }

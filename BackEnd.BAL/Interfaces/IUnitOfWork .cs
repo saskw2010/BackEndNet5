@@ -33,6 +33,8 @@ namespace BackEnd.BAL.Interfaces
        GenericRepository<EsSrOrderStageBase> EsSrOrderStageBaseRepository { get; }
        GenericRepository<EsSrOrderStage> EsSrOrderStageRepository { get; }
        GenericRepository<EsSrOrderStageBaseCatgeory> EsSrOrderStageBaseCatgeoryRepository { get; }
+       GenericRepository<EsSrTechnicalWorkDays> EsSrTechnicalWorkDayRepository { get; }
+       GenericRepository<EsSrWorkDay> EsSrWorkDayRepository { get; }
 
   }
 }

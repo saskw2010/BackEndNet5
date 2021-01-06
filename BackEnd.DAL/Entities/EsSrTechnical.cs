@@ -33,6 +33,7 @@ namespace BackEnd.DAL.Entities
     public virtual ICollection<EsSrItemTechnical> EsSrItemTechnicals { get; set; }
     public virtual EsSrWorkshopRegion EsSrWorkshopRegion { get; set; }
     public virtual ICollection<EsSrPeriodTechnical> EsSrPeriodTechnicals { get; set; }
+    public virtual ICollection<EsSrTechnicalWorkDays> EsSrTechnicalWorkDays { get; set; }
 
   }
 }

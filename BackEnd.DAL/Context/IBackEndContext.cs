@@ -29,5 +29,7 @@ namespace RealState.DAL.IBackEndContext
     DbSet<EsSrOrderStage> EsSrOrderStage { get; set; }
     DbSet<EsSrOrderStageBase> EsSrOrderStageBase { get; set; }
     DbSet<EsSrOrderStageBaseCatgeory> EsSrOrderStageBaseCatgeory { get; set; }
+    DbSet<EsSrTechnicalWorkDays> EsSrTechnicalWorkDays { get; set; }
+    DbSet<EsSrWorkDay> EsSrWorkDay { get; set; }
   }
 }

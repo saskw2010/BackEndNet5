@@ -8,5 +8,6 @@ namespace BackEnd.BAL.Models
   {
     public DateTime Date { get; set; }
     public List<PeriodVm> PeriodVm { get; set; }
+    public DayOfWeek dayOfWork { get; set; }
   }
 }

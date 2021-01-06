@@ -270,7 +270,23 @@ namespace BackEnd.BAL.Repository
         return new GenericRepository<EsSrOrderStageBaseCatgeory>(Context);
       }
     }
-   
+
+    public GenericRepository<EsSrTechnicalWorkDays> EsSrTechnicalWorkDayRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrTechnicalWorkDays>(Context);
+      }
+    }
+
+    public GenericRepository<EsSrWorkDay> EsSrWorkDayRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrWorkDay>(Context);
+      }
+    }
+
 
 
 
