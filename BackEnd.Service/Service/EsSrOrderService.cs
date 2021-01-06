@@ -183,7 +183,7 @@ namespace BackEnd.Service.Service
       {
         EsSrOrderStage esSrOrderStage = new EsSrOrderStage
         {
-          ShowOrder = esSrOrderVm.ShowOrder,
+          ShowOrder = esSrOrderVm.OrderStageShowOrder,
           OrderId = esSrOrderVm.OrderId,
           DescriptionAr =  " تم تعديل الطلب رقم "+ esSrOrderVm.OrderId,
           DescriptionEn = "order number " + esSrOrderVm.OrderId + " is updated .",

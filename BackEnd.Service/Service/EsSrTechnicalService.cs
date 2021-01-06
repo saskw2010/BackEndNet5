@@ -257,7 +257,10 @@ namespace BackEnd.Service.Service
         NameEn = x.EsSrPeriod.NameEn,
         EsSrPeriodLock = x.EsSrPeriod.EsSrPeriodLocks,
         EsSrTechnicalWorkDays = x.EsSrTechnical.EsSrTechnicalWorkDays,
-        PeriodTechnicalsVm = esSrPeriodTechnicalsList.Where(y => y.PeriodId == x.PeriodId).ToList()
+        PeriodTechnicalsVm = esSrPeriodTechnicalsList.Where(y => y.PeriodId == x.PeriodId).ToList(),
+        maximumNumberOfOrderBerTechnical = x.EsSrTechnical.MaxNumOfOrder,
+        EsSrOrders = x.EsSrOrders
+
       }).GroupBy(sc => new { sc.PireodId }).Select(g => g.First()).ToList();
       foreach (DateTime day in EachDay(fromDateReques, todateReques))
       {
@@ -280,7 +283,9 @@ namespace BackEnd.Service.Service
             }
             if (tecVm.Count > 0) {
              var worksDay= period.EsSrTechnicalWorkDays.FirstOrDefault(x=>x.WorkDaysId == (long)day.DayOfWeek);
-              if (worksDay != null) {
+              //-------------------get Order By date------------------
+              var countOderOfDay = period.EsSrOrders.Where(x=>checkDate(x.OrderDate, day.Date));
+              if ((countOderOfDay.Count() <= period.maximumNumberOfOrderBerTechnical) && (worksDay != null)) {
                 PeriodVm obj = new PeriodVm
                 {
                   PireodId = period.PireodId,
@@ -290,6 +295,7 @@ namespace BackEnd.Service.Service
                 };
                 pvm.Add(obj);
               }
+
               
             }
            
@@ -317,8 +323,27 @@ namespace BackEnd.Service.Service
       for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
         yield return day;
     }
+    #region checkDate
+    private Boolean checkDate(DateTime? day1, DateTime? day2) {
+      if (day1 != null && day2 != null)
+      {
+        if ((day1.Value.Day == day2.Value.Day) && (day1.Value.Month == day2.Value.Month) && (day1.Value.Year == day2.Value.Year))
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      }
+      else {
+        return false;
+      }
+      
+    }
+    #endregion
 
-  
+
 
 
   }

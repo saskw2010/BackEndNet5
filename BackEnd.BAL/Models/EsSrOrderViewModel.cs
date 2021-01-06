@@ -8,7 +8,7 @@ namespace BackEnd.BAL.Models
   {
     public long? CatgeoryId { get; set; }
     public long? OrderId { get; set; }
-    public int? ShowOrder { get; set; }
+    public int? OrderStageShowOrder { get; set; }
     public Nullable<long> ItemId { get; set; }
     public Nullable<long> PromoCodeId { get; set; }
     public Nullable<long> ClientId { get; set; }
