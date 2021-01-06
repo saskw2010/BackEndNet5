@@ -42,7 +42,8 @@ namespace BackEnd.DAL.Entities
     public Nullable<bool> IsApproval { get; set; }
     public string MapAddress { get; set; }
     public string AddressDetail { get; set; }
-
+ 
+   
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     public virtual ICollection<EsSrAttache> EsSrAttaches { get; set; }
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

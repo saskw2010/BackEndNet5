@@ -29,7 +29,11 @@ namespace BackEnd.DAL.Entities
     public Nullable<System.DateTime> ModifiedOn { get; set; }
     public Nullable<bool> IsDelete { get; set; }
     public Nullable<int> ProgressValue { get; set; }
-
+    public Nullable<bool> MustClientApprove { get; set; }
+    public Nullable<bool> MustProviderApprove { get; set; }
+    public Nullable<bool> ClientApprove { get; set; }
+    public Nullable<bool> ProviderApprove { get; set; }
+    public string ClientNotes { get; set; }
     //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     //public virtual ICollection<EsSrOrder> EsSrOrders { get; set; }
     //public virtual EsSrOrder EsSrOrder { get; set; }

@@ -223,7 +223,8 @@ namespace BackEnd.Service.Service
         {
           var EsSrTechnicalList = _unitOfWork.EsSrTechnicalRepository.Get(filter: (x =>
             (x.WorkshopRegionId == workShopRItem.WorkshopRegionId) &&
-            (x.EsSrItemTechnicals.Any(estItem => estItem.ItemId == allowedTechViewMode.ItemId))));
+            (x.EsSrItemTechnicals.Any(estItem => estItem.ItemId == allowedTechViewMode.ItemId))
+            &&(x.IsActive == true) && (x.IsDelete == false)));
           AllTechncalsForWorkSopRegion.AddRange(EsSrTechnicalList);
         }
         
@@ -248,16 +249,18 @@ namespace BackEnd.Service.Service
       List<EsSrPeriodTechnical> esSrPeriodTechnicalsList = new List<EsSrPeriodTechnical>();
       foreach (var item in essrTechList)
       {
-        esSrPeriodTechnicalsList.AddRange(item.EsSrPeriodTechnicals);
+        var addedPeriod = item.EsSrPeriodTechnicals.Where(x=>(x.IsDelete==false && x.IsActive == true));
+        if (addedPeriod != null)
+          esSrPeriodTechnicalsList.AddRange(addedPeriod);
       }
       var periods = esSrPeriodTechnicalsList.Select(x => new
       {
         PireodId = x.PeriodId.Value,
         NameAr = x.EsSrPeriod.NameAr,
         NameEn = x.EsSrPeriod.NameEn,
-        EsSrPeriodLock = x.EsSrPeriod.EsSrPeriodLocks,
-        EsSrTechnicalWorkDays = x.EsSrTechnical.EsSrTechnicalWorkDays,
-        PeriodTechnicalsVm = esSrPeriodTechnicalsList.Where(y => y.PeriodId == x.PeriodId).ToList(),
+        EsSrPeriodLock = x.EsSrPeriod.EsSrPeriodLocks.Where(x=>x.IsDelete == false && x.IsActive == true),
+        EsSrTechnicalWorkDays = x.EsSrTechnical.EsSrTechnicalWorkDays.Where(x => x.IsDelete == false && x.IsActive == true),
+        PeriodTechnicalsVm = esSrPeriodTechnicalsList.Where(y => (y.PeriodId == x.PeriodId)&&(y.IsActive == true) && (y.IsDelete == false)).ToList(),
         maximumNumberOfOrderBerTechnical = x.EsSrTechnical.MaxNumOfOrder,
         EsSrOrders = x.EsSrOrders
 

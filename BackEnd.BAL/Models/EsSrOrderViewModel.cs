@@ -35,5 +35,6 @@ namespace BackEnd.BAL.Models
     public Nullable<bool> IsApproval { get; set; }
     public string MapAddress { get; set; }
     public string AddressDetail { get; set; }
+
   }
 }

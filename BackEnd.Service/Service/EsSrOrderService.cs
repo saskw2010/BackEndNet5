@@ -185,11 +185,15 @@ namespace BackEnd.Service.Service
         {
           ShowOrder = esSrOrderVm.OrderStageShowOrder,
           OrderId = esSrOrderVm.OrderId,
-          DescriptionAr =  " تم تعديل الطلب رقم "+ esSrOrderVm.OrderId,
-          DescriptionEn = "order number " + esSrOrderVm.OrderId + " is updated .",
+          DescriptionAr =  "  تعديل الطلب  ",
+          DescriptionEn = "Update Order",
           IsActive = true,
-          CreatedBy = esSrOrderVm.CreatedBy,
+          CreatedBy = esSrOrderVm.ModifiedBy,
           CreatedOn = DateTime.Now,
+          MustProviderApprove=true,
+          ClientNotes="تم تعديل الطلب من قبل العميل"+", order is updated from client",
+
+
           IsDelete = false
         };
         _unitOfWork.EsSrOrderStageRepository.Insert(esSrOrderStage);

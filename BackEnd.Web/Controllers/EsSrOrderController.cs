@@ -24,7 +24,7 @@ namespace BackEnd.Web.Controllers
     #endregion
 
     #region UpdateOrder
-    [HttpPut(ApiRoute.EsSrOrderRouting.UpdateOrder)]
+    [HttpPost(ApiRoute.EsSrOrderRouting.UpdateOrder)]
     public async Task<Result> UpdateOrder([FromBody] EsSrOrderViewModel esSrOrderVm)
     {
       return await _EsSrOrderService.UpdateOrder(esSrOrderVm);
