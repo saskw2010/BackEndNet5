@@ -35,9 +35,10 @@ namespace BackEnd.Web.Controllers
            _userManager = userManager;
         }
         [HttpPost("FileUpload")]
-        public async Task<Result> FileUpload(List<IFormFile> files,long id,string userName)
+        public async Task<Result> FileUpload(long id,string userName)
         {
       try {
+        var files=Request.Form.Files;
         if (files == null || files.Count == 0)
           return new Result {success=false,code="403",message="no file is selected"};
         long size = files.Sum(f => f.Length);

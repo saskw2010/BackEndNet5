@@ -225,6 +225,7 @@ namespace BackEnd.Web
       app.UseSwaggerUI(option =>
       {
         option.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
+        option.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
       });
       //-------------end of swagger configuration-----------
       app.UseCors("CorsPolicy");
