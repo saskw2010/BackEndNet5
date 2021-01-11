@@ -22,7 +22,7 @@ namespace BackEnd.BAL.Models
   {
 
     [XmlElement(ElementName = "foreignKeyColumn")]
-    public ForeignKeyColumn ForeignKeyColumn { get; set; }
+    public List<ForeignKeyColumn> ForeignKeyColumn { get; set; }
 
     [XmlAttribute(AttributeName = "id")]
     public string Id { get; set; }
@@ -39,7 +39,7 @@ namespace BackEnd.BAL.Models
   {
 
     [XmlElement(ElementName = "foreignKey")]
-    public ForeignKey ForeignKey { get; set; }
+    public List<ForeignKey> ForeignKey { get; set; }
   }
 
 
@@ -110,5 +110,9 @@ namespace BackEnd.BAL.Models
     public string Xmlns { get; set; }
   }
 
-  
+  public class SaveDataModel
+  {
+    public string controllerName { get; set; }
+    public DataModel dataModel { get; set; }
+  }
 }

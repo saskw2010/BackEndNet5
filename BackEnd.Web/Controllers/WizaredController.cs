@@ -8,11 +8,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using System.IO;
+using BackEnd.Service.IService;
 
 namespace BackEnd.Web.Controllers
 {
   public class WizaredController : ControllerBase
   {
+    private IWizaredService _WizaredService;
+    public WizaredController(IWizaredService WizaredService)
+    {
+      _WizaredService = WizaredService;
+    }
     #region ReadModelXml
     [HttpPost("ReadModelXml")]
     public void ReadModelXml()
@@ -62,6 +69,39 @@ namespace BackEnd.Web.Controllers
       };
     }
     #endregion
+
+
+    #region GetXml
+    [HttpGet("GetDataMode")]
+    public Result GetDataMode(string NameOfModel)
+    {
+      try
+      {
+        string xmlns = "urn:schemas-codeontime-com:data-model";
+        var serializer = new XmlSerializer(typeof(DataModel), xmlns);
+        DataModel resultingMessage = (DataModel)serializer.Deserialize(new XmlTextReader(@"E:\WytSky\CodeInTime\Jaber\controllers\" + NameOfModel + ".model.xml"));
+        return new Result { success = true, code = "200", data = resultingMessage };
+      }
+      catch (Exception ex)
+      {
+        return new Result { success = false, code = "403", data = ex.Message };
+      }
+
+    }
+    #endregion
+    [HttpPost("saveDataModel")]
+    #region saveDataModel
+    public Result saveDataModel([FromBody] SaveDataModel SaveDataModel) {
+      //Create Backup
+     var res= _WizaredService.createBackUp(@"E:\WytSky\CodeInTime\Jaber\controllers", SaveDataModel.controllerName);
+      if (res == true) {
+        _WizaredService.DeleteOldFile(@"E:\WytSky\CodeInTime\Jaber\controllers", SaveDataModel.controllerName+".model.xml");
+      }
+      //delete Old File
+      return new Result { success= res };
+    }
+    #endregion
+
 
   }
 }
