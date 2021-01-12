@@ -79,7 +79,9 @@ namespace BackEnd.Web.Controllers
       {
         string xmlns = "urn:schemas-codeontime-com:data-model";
         var serializer = new XmlSerializer(typeof(DataModel), xmlns);
-        DataModel resultingMessage = (DataModel)serializer.Deserialize(new XmlTextReader(@"E:\WytSky\CodeInTime\Jaber\controllers\" + NameOfModel + ".model.xml"));
+        var file = new XmlTextReader(@"E:\WytSky\CodeInTime\Jaber\controllers\" + NameOfModel + ".model.xml");
+        DataModel resultingMessage = (DataModel)serializer.Deserialize(file);
+        file.Close();
         return new Result { success = true, code = "200", data = resultingMessage };
       }
       catch (Exception ex)
@@ -105,9 +107,9 @@ namespace BackEnd.Web.Controllers
           serializer.Serialize(txtWriter, SaveDataModel.dataModel, ns);
           txtWriter.Close();
         }
+        return new Result { success = true,code="200",message="DataModel Updated Successfuly" };
       }
-      //delete Old File
-      return new Result { success= res };
+      return new Result { success = true, code = "403", message = "DataModel Updated Faild" };
     }
     #endregion
 

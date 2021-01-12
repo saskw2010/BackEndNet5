@@ -34,19 +34,19 @@ namespace BackEnd.Service.Service
     #region DeleteOldModel
     public bool DeleteOldFile(string path, string fileName)
     {
-      try
-      {
-        if (File.Exists(Path.Combine(path, fileName)))
-        {
+      //try
+      //{
+        //if (File.Exists(Path.Combine(path, fileName)))
+        //{
           // If file found, delete it    
           File.Delete(Path.Combine(path, fileName));
           return true;
-    }
-        return false;
-      }
-      catch (Exception ex) {
-        return false;
-      }
+    //}
+    //    return false;
+    //  }
+    //  catch (Exception ex) {
+    //    return false;
+    //  }
      
     }
     #endregion
