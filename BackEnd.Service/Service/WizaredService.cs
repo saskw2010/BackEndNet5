@@ -41,7 +41,7 @@ namespace BackEnd.Service.Service
           // If file found, delete it    
           File.Delete(Path.Combine(path, fileName));
           return true;
-        }
+    }
         return false;
       }
       catch (Exception ex) {

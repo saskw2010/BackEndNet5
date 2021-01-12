@@ -95,7 +95,16 @@ namespace BackEnd.Web.Controllers
       //Create Backup
      var res= _WizaredService.createBackUp(@"E:\WytSky\CodeInTime\Jaber\controllers", SaveDataModel.controllerName);
       if (res == true) {
-        _WizaredService.DeleteOldFile(@"E:\WytSky\CodeInTime\Jaber\controllers", SaveDataModel.controllerName+".model.xml");
+        var res2=_WizaredService.DeleteOldFile(@"E:\WytSky\CodeInTime\Jaber\controllers", SaveDataModel.controllerName+".model.xml");
+        if (res2) {
+          string xmlns = "urn:schemas-codeontime-com:data-model";
+          var serializer = new XmlSerializer(typeof(DataModel), xmlns);
+          TextWriter txtWriter = new StreamWriter(@"E:\WytSky\CodeInTime\Jaber\controllers\"+ SaveDataModel.controllerName + ".model.xml");
+          var ns = new XmlSerializerNamespaces();
+          ns.Add("", xmlns);
+          serializer.Serialize(txtWriter, SaveDataModel.dataModel, ns);
+          txtWriter.Close();
+        }
       }
       //delete Old File
       return new Result { success= res };
