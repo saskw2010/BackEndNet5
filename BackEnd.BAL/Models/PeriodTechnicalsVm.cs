@@ -7,5 +7,6 @@ namespace BackEnd.BAL.Models
   public class PeriodTechnicalsVm
   {
     public long PeriodTechnicalId { get; set; }
+    public int? maxNumberOfOrders { get; set; }
   }
 }

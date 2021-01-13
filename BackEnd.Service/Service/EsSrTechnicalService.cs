@@ -261,7 +261,7 @@ namespace BackEnd.Service.Service
         EsSrPeriodLock = x.EsSrPeriod.EsSrPeriodLocks.Where(x=>x.IsDelete == false && x.IsActive == true),
         EsSrTechnicalWorkDays = x.EsSrTechnical.EsSrTechnicalWorkDays.Where(x => x.IsDelete == false && x.IsActive == true),
         PeriodTechnicalsVm = esSrPeriodTechnicalsList.Where(y => (y.PeriodId == x.PeriodId)&&(y.IsActive == true) && (y.IsDelete == false)).ToList(),
-        maximumNumberOfOrderBerTechnical = x.EsSrTechnical.MaxNumOfOrder,
+        maximumNumberOfOrderBerTechnical = x.MaxNumOfOrder,
         EsSrOrders = x.EsSrOrders
 
       }).GroupBy(sc => new { sc.PireodId }).Select(g => g.First()).ToList();
@@ -281,6 +281,7 @@ namespace BackEnd.Service.Service
               {
                 tecVm.Add(new PeriodTechnicalsVm() {
                   PeriodTechnicalId = periodTechnical.PeriodTechnicalId,
+                  maxNumberOfOrders=periodTechnical.MaxNumOfOrder
                 });
               }
             }
@@ -324,7 +325,7 @@ namespace BackEnd.Service.Service
     public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
     {
       for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
-        yield return day;
+        yield return day.AddHours(12);
     }
     #region checkDate
     private Boolean checkDate(DateTime? day1, DateTime? day2) {

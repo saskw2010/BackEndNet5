@@ -12,13 +12,19 @@ namespace BackEnd.Web.Controllers
   public class EsSrOrderController: ControllerBase
   {
     private IEsSrOrderService _EsSrOrderService;
-    public EsSrOrderController(IEsSrOrderService EsSrOrderService)
+    private IEsSrPeriodTechnicalService _EsSrPeriodTechnicalService;
+    public EsSrOrderController(
+      IEsSrOrderService EsSrOrderService,
+      IEsSrPeriodTechnicalService EsSrPeriodTechnicalService)
     {
       _EsSrOrderService = EsSrOrderService;
+      _EsSrPeriodTechnicalService = EsSrPeriodTechnicalService;
     }
     #region saveOrder
     [HttpPost(ApiRoute.EsSrOrderRouting.saveOrder)]
     public async Task<Result> saveOrder([FromBody] EsSrOrderViewModel esSrOrderVm) {
+      var PeriodTehnicalId = _EsSrPeriodTechnicalService.GetTechnicalPeriodIdofLessNumberOfOrder(esSrOrderVm.periodTechnicalsVm, esSrOrderVm.OrderDate.Value);
+      esSrOrderVm.PeriodTechnicalId = PeriodTehnicalId;
       return await _EsSrOrderService.saveOrder(esSrOrderVm);
     }
     #endregion
@@ -27,6 +33,8 @@ namespace BackEnd.Web.Controllers
     [HttpPost(ApiRoute.EsSrOrderRouting.UpdateOrder)]
     public async Task<Result> UpdateOrder([FromBody] EsSrOrderViewModel esSrOrderVm)
     {
+      //return List Of PeriodTechnial
+      
       return await _EsSrOrderService.UpdateOrder(esSrOrderVm);
     }
     #endregion

@@ -23,6 +23,7 @@ namespace BackEnd.DAL.Entities
     public Nullable<System.DateTime> ModifiedOn { get; set; }
     public Nullable<bool> IsDelete { get; set; }
     public string Code { get; set; }
+    public Nullable<int> MaxNumOfOrder { get; set; }
 
     public virtual ICollection<EsSrOrder> EsSrOrders { get; set; }
     public virtual EsSrPeriod EsSrPeriod { get; set; }
