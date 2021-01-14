@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +18,7 @@ namespace BackEnd.BAL.Models
     [XmlIgnore]
     public string text { get; set; }
     [XmlElement(ElementName = "text")]
+    [JsonIgnore]
     public System.Xml.XmlCDataSection textCdata
     {
       get
@@ -189,6 +191,7 @@ namespace BackEnd.BAL.Models
     [XmlIgnore]
     public string description { get; set; }
     [XmlElement(ElementName = "description")]
+    [JsonIgnore]
     public System.Xml.XmlCDataSection descriptionCdata
     {
       get
@@ -328,6 +331,10 @@ namespace BackEnd.BAL.Models
     [XmlText]
     public string Text { get; set; }
   }
-
+  public class SaveDataController
+  {
+    public string controllerName { get; set; }
+    public DataController dataController { get; set; }
+  }
 
 }

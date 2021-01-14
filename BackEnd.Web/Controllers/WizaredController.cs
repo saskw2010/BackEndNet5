@@ -52,8 +52,9 @@ namespace BackEnd.Web.Controllers
       txtWriter.Close();
     }
     #endregion
-    [HttpGet("GetAllFinNameFromController")]
+
     #region GetAllFinNameFromController
+    [HttpGet("GetAllFinNameFromController")]
     public Result GetAllFinNameFromController()
     {
       List<string> FileNames = new List<string>();
@@ -98,8 +99,9 @@ namespace BackEnd.Web.Controllers
 
     }
     #endregion
-    [HttpPost("saveDataModel")]
+
     #region saveDataModel
+    [HttpPost("saveDataModel")]
     public Result saveDataModel([FromBody] SaveDataModel SaveDataModel) {
       //Create Backup
       var wizaredConfiguration = Configuration
@@ -120,6 +122,63 @@ namespace BackEnd.Web.Controllers
           txtWriter.Close();
         }
         return new Result { success = true,code="200",message="DataModel Updated Successfuly" };
+      }
+      return new Result { success = true, code = "403", message = "DataModel Updated Faild" };
+    }
+    #endregion
+
+    #region GetDataController
+    [HttpGet("GetDataController")]
+    public Result GetDataController(string NameOfDataController)
+    {
+      try
+      {
+        var wizaredConfiguration = Configuration
+          .GetSection("WizaredConfiguration")
+          .Get<WizaredConfiguration>();
+        string ControllerPath = wizaredConfiguration.ControllerPath;
+        string xmlns = "urn:schemas-codeontime-com:data-aquarium";
+        var serializer = new XmlSerializer(typeof(DataController), xmlns);
+        var file = new XmlTextReader(ControllerPath + NameOfDataController + ".xml");
+        DataController resultingMessage = (DataController)serializer.Deserialize(file);
+        file.Close();
+      return new Result { success = true, code = "200", data = resultingMessage };
+    }
+      catch (Exception ex)
+      {
+        return null;
+        return new Result { success = false, code = "403", data = ex.Message };
+      }
+
+}
+    #endregion
+
+
+    #region saveDataController
+    [HttpPost("saveDataController")]
+    public Result saveDataController([FromBody] SaveDataController saveDataController)
+    {
+      //Create Backup
+      var wizaredConfiguration = Configuration
+          .GetSection("WizaredConfiguration")
+          .Get<WizaredConfiguration>();
+      string ControllerPath = wizaredConfiguration.ControllerPath;
+
+      var res = _WizaredService.createBackUp(ControllerPath, saveDataController.controllerName);
+      if (res == true)
+      {
+        var res2 = _WizaredService.DeleteOldFile(ControllerPath, saveDataController.controllerName + ".xml");
+        if (res2)
+        {
+          string xmlns = "urn:schemas-codeontime-com:data-aquarium";
+          var serializer = new XmlSerializer(typeof(DataController), xmlns);
+          TextWriter txtWriter = new StreamWriter(ControllerPath + saveDataController.controllerName + ".xml");
+          var ns = new XmlSerializerNamespaces();
+          ns.Add("", xmlns);
+          serializer.Serialize(txtWriter, saveDataController.dataController, ns);
+          txtWriter.Close();
+        }
+        return new Result { success = true, code = "200", message = "DataModel Updated Successfuly" };
       }
       return new Result { success = true, code = "403", message = "DataModel Updated Faild" };
     }
