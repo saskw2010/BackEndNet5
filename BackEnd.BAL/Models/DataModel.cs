@@ -32,6 +32,8 @@ namespace BackEnd.BAL.Models
 
     [XmlAttribute(AttributeName = "parentTableName")]
     public string ParentTableName { get; set; }
+    [XmlAttribute(AttributeName = "baseForeignKey")]
+    public string baseForeignKey { get; set; }
   }
 
   [XmlRoot(ElementName = "foreignKeys")]

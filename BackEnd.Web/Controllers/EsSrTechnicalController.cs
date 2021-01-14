@@ -52,5 +52,11 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
+    #region UpdateTechnical
+     public async Task <Result> UpdateTechnical([FromBody] EsSrTechnicalViewModel esSrTechnicalViewModel) {
+      return await _EsSrTechnicalService.UpdateTechnical(esSrTechnicalViewModel);
+    }
+    #endregion
+
   }
 }

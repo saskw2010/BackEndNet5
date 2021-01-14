@@ -11,6 +11,8 @@ namespace BackEnd.Service.IService
     Task<Result> createUserForTechnicalAsync();
     Task<Result> createUserForTechnicalsWithhashing();
     Task<Result> GetAvailabelTechncails(AllowedTechViewMode allowedTechViewMode);
+    Task<Result> UpdateTechnical(EsSrTechnicalViewModel esSrTechnicalViewModel);
+
     
   }
 }

@@ -10,6 +10,7 @@ namespace BackEnd.Service.IService
   {
     Task<Result> CreateCLient(EsSrClientViewModel esSrClientViewModel);
     Task<Result> CreateCLientWithSocialId(EsSrClientViewModel esSrClientViewModel);
+    Task<Result> UpdateClient(EsSrClientViewModel esSrClientViewModel);
     Task<Result>  createUserForClientsAsync();
     
   }

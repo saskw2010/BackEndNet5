@@ -122,6 +122,13 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
+    #region UpdateClient
+    [HttpPost(ApiRoute.Client.UpdateCLient)]
+    public async Task<Result> UpdateCLient([FromBody] EsSrClientViewModel request)
+    {
+      return await _EsSrClientService.UpdateClient(request);
+    }
+    #endregion
 
   }
 }

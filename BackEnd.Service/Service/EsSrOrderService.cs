@@ -29,6 +29,8 @@ namespace BackEnd.Service.Service
       {
         EsSrOrder esSrOrder = new EsSrOrder();
         var obje = _mapper.Map(esSrOrderVm, esSrOrder);
+        obje.IsActive = true;
+        obje.IsDelete = false;
         _unitOfWork.EsSrOrderRepository.Insert(obje);
         var res1 = await _unitOfWork.SaveAsync();
         //---------getOrderStageByCategoryId

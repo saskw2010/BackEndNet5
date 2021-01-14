@@ -345,7 +345,14 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
-    
+
+    #region RestPassword
+    [HttpPost(ApiRoute.Identity.RestPassword)]
+    public async Task<Result> RestPassword([FromBody] RestPasswordViewModel restPasswordViewModel) {
+      return await _identityService.RestPassword(restPasswordViewModel);
+    }
+    #endregion
+
 
   }
 }

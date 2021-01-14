@@ -70,11 +70,11 @@ namespace BackEnd.BAL.Repository
             int returnValue = 200;
             using (var dbContextTransaction = Context.Database.BeginTransaction())
             {
-        //try
-        //{
+        try
+        {
           await Context.SaveChangesAsync();
                     dbContextTransaction.Commit();
-      //}
+       }
         //        catch (DbUpdateException ex)
         //        {
         //            var sqlException = ex.GetBaseException() as SqlException;
@@ -93,12 +93,12 @@ namespace BackEnd.BAL.Repository
         //            }
         //           returnValue = 500;
         //}
-        //catch (Exception)
-        //{
-        //  //Log Exception Handling message                      
-        //  returnValue = 500;
-        //  dbContextTransaction.Rollback();
-        //}
+        catch (Exception)
+        {
+          //Log Exception Handling message                      
+          returnValue = 500;
+          dbContextTransaction.Rollback();
+        }
       }
 
             return returnValue;

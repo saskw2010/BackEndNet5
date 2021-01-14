@@ -55,6 +55,7 @@ namespace BackEnd.Service.Service
         EsSrClient esSrClient = new EsSrClient();
         var obje = _mapper.Map(esSrClientViewModel, esSrClient);
         obje.IsDelete = false;
+        obje.IsActive = true;
         obje.HasPassword = EncodePasswordmosso(obje.HasPassword);
         _unitOfWork.EsSrClientRepository.Insert(obje);
         var result1 = await _unitOfWork.SaveAsync();
@@ -277,6 +278,7 @@ namespace BackEnd.Service.Service
         EsSrClient esSrClient = new EsSrClient();
         var obje = _mapper.Map(esSrClientViewModel, esSrClient);
         obje.IsDelete = false;
+        obje.IsActive = true;
         obje.HasPassword = EncodePasswordmosso(obje.HasPassword);
         _unitOfWork.EsSrClientRepository.Insert(obje);
         var result1 = await _unitOfWork.SaveAsync();
@@ -327,5 +329,50 @@ namespace BackEnd.Service.Service
         return false;
           }
     }
+
+    #region UpdateClient
+    public async Task<Result> UpdateClient(EsSrClientViewModel esSrClientViewModel)
+    {
+      try {
+        EsSrClient esSrClient = new EsSrClient();
+        var obje = _mapper.Map(esSrClientViewModel, esSrClient);
+        obje.IsDelete = false;
+        obje.IsActive = true;
+        obje.ModifiedOn = DateTime.Now;
+        _unitOfWork.EsSrClientRepository.Update(obje);
+        var result1 = await _unitOfWork.SaveAsync();
+        if (result1 == 200)
+        {
+          return new Result
+          {
+            success = true,
+            code = "200",
+            message = "Update Client Faild",
+            data = null
+          };
+        }
+        else
+        {
+          return new Result
+          {
+            success = false,
+            code = "403",
+            message = "Update Client Faild",
+            data = null
+          };
+        }
+      }
+      catch (Exception ex) {
+        return new Result
+        {
+          success = false,
+          code = "400",
+          data = null,
+          message = ExtensionMethods.FullMessage(ex)
+        };
+      }
+ 
+    }
+    #endregion
   }
 }

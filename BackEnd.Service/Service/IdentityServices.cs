@@ -898,7 +898,47 @@ namespace BackEnd.Service.Service
       }
       return false;
     }
+
     #endregion
-  }
+
+    #region RestPassword
+    public async Task<Result> RestPassword(RestPasswordViewModel restPasswordViewModel)
+    {
+      try {
+        var user = FindByUserNameCustom(restPasswordViewModel.UserName);
+        if (EncodePasswordmosso(restPasswordViewModel.NewPassword) == EncodePasswordmosso(restPasswordViewModel.OldPassword))
+        {
+          user.PasswordHash = EncodePasswordmosso(restPasswordViewModel.NewPassword);
+          await _userManager.UpdateAsync(user);
+          return new Result
+          {
+            success = true,
+            code = "200",
+            message = "Reset Password Success"
+          };
+        }
+        else{
+          return new Result
+          {
+            success = true,
+            code = "200",
+            message = "Reset Password faild "
+          };
+        }
+      }
+      catch (Exception ex) {
+        return new Result
+        {
+          success = true,
+          code = "403",
+          message = ExtensionMethods.FullMessage(ex)
+        };
+      }
+    }
+      
+      
+    }
+    #endregion
+  
 
 }

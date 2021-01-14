@@ -22,7 +22,8 @@ namespace BackEnd.Service.Service
     public long GetTechnicalPeriodIdofLessNumberOfOrder(List<PeriodTechnicalsVm> periodTechnicalsVm, DateTime orderDate)
     {
       
-     var ListOfOrders= _unitOfWork.EsSrOrderRepository.Get(filter: (x => checkDate(x.OrderDate, orderDate) && (x.IsActive == true) &&(x.IsDelete== false))).ToList();
+     var ListOfOrders= _unitOfWork.EsSrOrderRepository.Get(filter: (x => (x.IsActive == true) &&(x.IsDelete== false)));
+      ListOfOrders = ListOfOrders.Where(x => checkDate(x.OrderDate, orderDate));
       long maxTechnicalPeriodId = periodTechnicalsVm.FirstOrDefault().PeriodTechnicalId;
       int maxNumberOfOrder = 0;
       foreach (var element in periodTechnicalsVm) {

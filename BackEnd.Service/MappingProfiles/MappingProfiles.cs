@@ -39,6 +39,7 @@ namespace BackEnd.Service.MappingProfiles
       CreateMap<EsSrWorkshopRegion, EsSrWorkshopRegionViewModel>().ReverseMap();
       CreateMap<EsSrOrder, EsSrOrderViewModel>().ReverseMap();
       CreateMap<EsSrOrderStage, EsSrOrderStageBase>().ReverseMap();
+      CreateMap<EsSrOrderStage, EsSrOrderViewModel>().ReverseMap();
 
 
     }

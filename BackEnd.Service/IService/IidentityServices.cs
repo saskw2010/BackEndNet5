@@ -28,5 +28,6 @@ namespace BackEnd.Service.ISercice
     Task<Result> DeleteUser(string UserId);
     Task<UpdateUserResult> UpdateUser(string userId, string UserName, string Email, string PhoneNumber, string Password);
     bool RegexIsMatch(string password);
+    Task<Result> RestPassword(RestPasswordViewModel restPasswordViewModel);
   }
 }

@@ -258,6 +258,8 @@ namespace BackEnd.Service.Service
         PireodId = x.PeriodId.Value,
         NameAr = x.EsSrPeriod.NameAr,
         NameEn = x.EsSrPeriod.NameEn,
+        fromTime=x.EsSrPeriod.FromTime,
+        toTime=x.EsSrPeriod.ToTime,
         EsSrPeriodLock = x.EsSrPeriod.EsSrPeriodLocks.Where(x=>x.IsDelete == false && x.IsActive == true),
         EsSrTechnicalWorkDays = x.EsSrTechnical.EsSrTechnicalWorkDays.Where(x => x.IsDelete == false && x.IsActive == true),
         PeriodTechnicalsVm = esSrPeriodTechnicalsList.Where(y => (y.PeriodId == x.PeriodId)&&(y.IsActive == true) && (y.IsDelete == false)).ToList(),
@@ -265,10 +267,20 @@ namespace BackEnd.Service.Service
         EsSrOrders = x.EsSrOrders
 
       }).GroupBy(sc => new { sc.PireodId }).Select(g => g.First()).ToList();
+      bool flag = true;
       foreach (DateTime day in EachDay(fromDateReques, todateReques))
       {
+        
+       
         foreach (var period in periods)
         {
+          if (flag)
+          {
+            if (period.fromTime != null && fromDateReques.Hour >= period.fromTime.Value.Hours)
+            {
+              continue;
+            }
+          }
           var x = period.EsSrPeriodLock.Where(x => (x.PeriodTechnicalId == null)&&(x.FromDate <= day) && (x.ToDate >= day));
           
           if (x.Count() == 0)
@@ -285,7 +297,9 @@ namespace BackEnd.Service.Service
                 });
               }
             }
-            if (tecVm.Count > 0) {
+            if (tecVm.Count > 0 ) {
+              
+
              var worksDay= period.EsSrTechnicalWorkDays.FirstOrDefault(x=>x.WorkDaysId == (long)day.DayOfWeek);
               //-------------------get Order By date------------------
               var countOderOfDay = period.EsSrOrders.Where(x=>checkDate(x.OrderDate, day.Date));
@@ -318,6 +332,7 @@ namespace BackEnd.Service.Service
         }
         
         pvm = new List<PeriodVm>();
+        flag = false;
       }
       return allowPeriodsReVm;
     }
@@ -344,6 +359,53 @@ namespace BackEnd.Service.Service
         return false;
       }
       
+    }
+    #endregion
+
+    #region UpdateTechnical
+    public async Task<Result> UpdateTechnical(EsSrTechnicalViewModel esSrTechnicalViewModel)
+    {
+      try
+      {
+        EsSrTechnical esSrClient = new EsSrTechnical();
+        var obje = _mapper.Map(esSrTechnicalViewModel, esSrClient);
+        obje.IsDelete = false;
+        obje.IsActive = true;
+        obje.ModifiedOn = DateTime.Now;
+        _unitOfWork.EsSrTechnicalRepository.Update(obje);
+        var result1 = await _unitOfWork.SaveAsync();
+        if (result1 == 200)
+        {
+          return new Result
+          {
+            success = true,
+            code = "200",
+            message = "Update Client Faild",
+            data = null
+          };
+        }
+        else
+        {
+          return new Result
+          {
+            success = false,
+            code = "403",
+            message = "Update Client Faild",
+            data = null
+          };
+        }
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = false,
+          code = "400",
+          data = null,
+          message = ExtensionMethods.FullMessage(ex)
+        };
+      }
+
     }
     #endregion
 
