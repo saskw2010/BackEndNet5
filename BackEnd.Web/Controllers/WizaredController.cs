@@ -10,15 +10,18 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 using BackEnd.Service.IService;
+using Microsoft.Extensions.Configuration;
 
 namespace BackEnd.Web.Controllers
 {
   public class WizaredController : ControllerBase
   {
     private IWizaredService _WizaredService;
-    public WizaredController(IWizaredService WizaredService)
+    public IConfiguration Configuration { get; }
+    public WizaredController(IWizaredService WizaredService, IConfiguration iConfig)
     {
       _WizaredService = WizaredService;
+      Configuration = iConfig;
     }
     #region ReadModelXml
     [HttpPost("ReadModelXml")]
@@ -77,9 +80,13 @@ namespace BackEnd.Web.Controllers
     {
       try
       {
+        var wizaredConfiguration = Configuration
+          .GetSection("WizaredConfiguration")
+          .Get<WizaredConfiguration>();
+        string ControllerPath = wizaredConfiguration.ControllerPath;
         string xmlns = "urn:schemas-codeontime-com:data-model";
         var serializer = new XmlSerializer(typeof(DataModel), xmlns);
-        var file = new XmlTextReader(@"E:\WytSky\CodeInTime\Jaber\controllers\" + NameOfModel + ".model.xml");
+        var file = new XmlTextReader(ControllerPath + NameOfModel + ".model.xml");
         DataModel resultingMessage = (DataModel)serializer.Deserialize(file);
         file.Close();
         return new Result { success = true, code = "200", data = resultingMessage };
@@ -95,13 +102,18 @@ namespace BackEnd.Web.Controllers
     #region saveDataModel
     public Result saveDataModel([FromBody] SaveDataModel SaveDataModel) {
       //Create Backup
-     var res= _WizaredService.createBackUp(@"E:\WytSky\CodeInTime\Jaber\controllers", SaveDataModel.controllerName);
+      var wizaredConfiguration = Configuration
+          .GetSection("WizaredConfiguration")
+          .Get<WizaredConfiguration>();
+      string ControllerPath = wizaredConfiguration.ControllerPath;
+
+      var res= _WizaredService.createBackUp(ControllerPath, SaveDataModel.controllerName);
       if (res == true) {
-        var res2=_WizaredService.DeleteOldFile(@"E:\WytSky\CodeInTime\Jaber\controllers", SaveDataModel.controllerName+".model.xml");
+        var res2=_WizaredService.DeleteOldFile(ControllerPath, SaveDataModel.controllerName+".model.xml");
         if (res2) {
           string xmlns = "urn:schemas-codeontime-com:data-model";
           var serializer = new XmlSerializer(typeof(DataModel), xmlns);
-          TextWriter txtWriter = new StreamWriter(@"E:\WytSky\CodeInTime\Jaber\controllers\"+ SaveDataModel.controllerName + ".model.xml");
+          TextWriter txtWriter = new StreamWriter(ControllerPath + SaveDataModel.controllerName + ".model.xml");
           var ns = new XmlSerializerNamespaces();
           ns.Add("", xmlns);
           serializer.Serialize(txtWriter, SaveDataModel.dataModel, ns);
