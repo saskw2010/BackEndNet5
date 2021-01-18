@@ -60,7 +60,7 @@ namespace BackEnd.BAL.Models
   {
 
     [XmlElement(ElementName = "fieldOutput")]
-    public FieldOutput FieldOutput { get; set; }
+    public List<FieldOutput> FieldOutput { get; set; }
   }
 
   [XmlRoot(ElementName = "commands")]
