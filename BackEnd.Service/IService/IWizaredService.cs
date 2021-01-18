@@ -7,6 +7,7 @@ namespace BackEnd.Service.IService
   public interface IWizaredService
   {
     Boolean createBackUp(string path, string fileName);
+    Boolean createBackUpDataController(string path, string fileName);
     Boolean DeleteOldFile(string path, string fileName);
   }
 }

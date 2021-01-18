@@ -149,6 +149,7 @@ namespace EJ2APIServices.Controllers
     // gets the image(s) from the given path
     [HttpGet("api/FileManager/GetImage")]
     public IActionResult GetImage(FileManagerDirectoryContent args, string pathFile)
+
     {
       string BasePath = "";
       var FileManagerConfiguration = Configuration

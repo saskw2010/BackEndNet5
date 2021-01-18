@@ -164,7 +164,7 @@ namespace BackEnd.Web.Controllers
           .Get<WizaredConfiguration>();
       string ControllerPath = wizaredConfiguration.ControllerPath;
 
-      var res = _WizaredService.createBackUp(ControllerPath, saveDataController.controllerName);
+      var res = _WizaredService.createBackUpDataController(ControllerPath, saveDataController.controllerName);
       if (res == true)
       {
         var res2 = _WizaredService.DeleteOldFile(ControllerPath, saveDataController.controllerName + ".xml");

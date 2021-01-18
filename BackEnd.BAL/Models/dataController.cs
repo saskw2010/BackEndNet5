@@ -97,7 +97,7 @@ namespace BackEnd.BAL.Models
     public string Label { get; set; }
 
     [XmlElement(ElementName = "items")]
-    public Items Items { get; set; }
+    public List<Items> Items { get; set; }
 
     [XmlAttribute(AttributeName = "length")]
     public string Length { get; set; }
