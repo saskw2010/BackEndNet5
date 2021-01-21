@@ -80,6 +80,14 @@ namespace BackEnd.BAL.ApiRoute
     {
       public const string UpdateEsSrOrderStage = Base + "EsSrOrderStage/UpdateEsSrOrderStage";
     }
+    public static class SuperVisor
+    {
+      public const string createUserForSuperVisor = Base + "SuperVisor/createUserForSuperVisor";
+    }
+    public static class Engineer
+    {
+      public const string createUserForEnginner = Base + "Engineer/createUserForEnginner";
+    }
 
   }
 }

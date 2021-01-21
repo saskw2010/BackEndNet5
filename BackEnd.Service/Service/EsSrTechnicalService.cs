@@ -44,6 +44,7 @@ namespace BackEnd.Service.Service
         foreach (var item in esSrTechnical)
         {
           var User = FindByEmailCustome(item.Email);
+          User = FindByUserNameCustom(item.Email);
           if (User == null)
           {
             await addUser(item.Email, item.Email, item.Phone, item.HashPassword);
@@ -408,7 +409,12 @@ namespace BackEnd.Service.Service
 
     }
     #endregion
-
+    #region FindByUserNameCustom
+    public ApplicationUser FindByUserNameCustom(string userName)
+    {
+      return _BakEndContext.Users.FirstOrDefault(x => x.UserName == userName);
+    }
+    #endregion
 
 
 

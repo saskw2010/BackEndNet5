@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using BackEnd.Service.IService;
 using Microsoft.Extensions.Configuration;
 using BackEnd.DAL.Context;
+using System.Text;
 
 namespace EJ2APIServices.Controllers
 {
@@ -31,7 +32,7 @@ namespace EJ2APIServices.Controllers
       BakEndContext BakEndContext)
     {
       this.basePath = hostingEnvironment.ContentRootPath;
-      _BakEndContext= BakEndContext;
+      _BakEndContext = BakEndContext;
       this.operation = new PhysicalFileProvider(_BakEndContext);
       _fileManagerServices = fileManagerServices;
       Configuration = iConfig;
@@ -50,8 +51,8 @@ namespace EJ2APIServices.Controllers
       else {
         BasePath = System.IO.Directory.GetCurrentDirectory();
       }
-       
-      BasePath = BasePath +"\\"+ pathFile;
+
+      BasePath = BasePath + "\\" + pathFile;
       this.operation.RootFolder(BasePath);
       if (args.Action == "delete" || args.Action == "rename")
       {
@@ -119,7 +120,7 @@ namespace EJ2APIServices.Controllers
         Response.StatusCode = Convert.ToInt32(uploadResponse.Error.Code);
         Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = uploadResponse.Error.Message;
       }
-   
+
       return Content("");
 
     }
@@ -181,6 +182,32 @@ namespace EJ2APIServices.Controllers
     }
     #endregion
 
+    #region Edit
+    //Edit the selected file(s) 
+
+    [HttpPost("EditeFileManager")]
+    public Result EditeFileManager(string EditeName, string pathFile)
+    {
+      string BasePath = "";
+      var FileManagerConfiguration = Configuration
+           .GetSection("FileManagerConfiguration")
+           .Get<FileManagerConfiguration>();
+      if (FileManagerConfiguration.staticPath != "")
+      {
+        BasePath = FileManagerConfiguration.staticPath;
+      }
+      else
+      {
+        BasePath = System.IO.Directory.GetCurrentDirectory();
+      }
+
+      string BasePathEdit = BasePath + "\\" + pathFile + "\\" + EditeName;
+      //this.operation.RootFolder(BasePath);
+      //StreamReader reader = new StreamReader(BasePathEdit, System.Text.Encoding.UTF8, true);
+      string text = System.IO.File.ReadAllText(BasePathEdit, Encoding.UTF8);
+      return new Result { data = text };
+    }
+    #endregion
   }
 
 }

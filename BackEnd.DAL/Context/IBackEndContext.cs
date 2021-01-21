@@ -31,5 +31,7 @@ namespace RealState.DAL.IBackEndContext
     DbSet<EsSrOrderStageBaseCatgeory> EsSrOrderStageBaseCatgeory { get; set; }
     DbSet<EsSrTechnicalWorkDays> EsSrTechnicalWorkDays { get; set; }
     DbSet<EsSrWorkDay> EsSrWorkDay { get; set; }
+    DbSet<EsSrEngineer> EsSrEngineer { get; set; }
+    DbSet<EsSrSupervisor> EsSrSupervisor { get; set; }
   }
 }

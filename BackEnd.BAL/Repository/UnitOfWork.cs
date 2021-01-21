@@ -287,10 +287,20 @@ namespace BackEnd.BAL.Repository
       }
     }
 
-
-
-
-
+    public GenericRepository<EsSrSupervisor> EsSrSupervisorRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrSupervisor>(Context);
+      }
+    }
+    public GenericRepository<EsSrEngineer> EsSrEngineerRepository
+    {
+      get
+      {
+        return new GenericRepository<EsSrEngineer>(Context);
+      }
+    }
 
   }
 }

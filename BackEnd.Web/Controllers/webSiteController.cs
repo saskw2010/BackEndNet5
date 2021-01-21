@@ -7,6 +7,7 @@ using BackEnd.Service.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Web.Administration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace BackEnd.Web.Controllers
 {
   //[Authorize]
-  public class webSiteController: Controller
+  public class webSiteController : Controller
   {
     private IworkSapceService _websiteServices;
     private IConfiguration configuration;
@@ -31,13 +32,13 @@ namespace BackEnd.Web.Controllers
     public async Task<Result> CreateWebsite([FromBody] WorkSpaceVm request)
     {
       //var res=await _websiteServices.CreateWorkspace(request);
-        var   workspacevm = await _websiteServices.InsertWorkspace(request);
-        WorkspacelistBusinessRules wo = new WorkspacelistBusinessRules(configuration,Context);
-        var res=wo.r100Implementation(workspacevm);
-        return res;
+      var workspacevm = await _websiteServices.InsertWorkspace(request);
+      WorkspacelistBusinessRules wo = new WorkspacelistBusinessRules(configuration, Context);
+      var res = wo.r100Implementation(workspacevm);
+      return res;
     }
 
-    
+
     [HttpPost(ApiRoute.WebSite.CreateWebsiteV2)]
     public Boolean CreateWebsiteV2(WorkSpaceVm workspace)
     {
@@ -48,14 +49,16 @@ namespace BackEnd.Web.Controllers
     }
 
     [HttpGet(ApiRoute.WebSite.Get)]
-    public Result Get(string userId,int pageNumber = 1, int pageSize = 2) {
-    var res=_websiteServices.pagginationFunction(userId, pageNumber, pageSize);
-     return res;
+    public Result Get(string userId, int pageNumber = 1, int pageSize = 2)
+    {
+      var res = _websiteServices.pagginationFunction(userId, pageNumber, pageSize);
+      return res;
     }
 
     //begin::search
     [HttpGet(ApiRoute.WebSite.Filter)]
-    public Result Filter(string searchword,string userId, int pageNumber = 1, int pageSize = 2) {
+    public Result Filter(string searchword, string userId, int pageNumber = 1, int pageSize = 2)
+    {
       var res = _websiteServices.pagginationFunctionWithFilter(searchword, userId, pageNumber, pageSize);
       return res;
     }
@@ -70,6 +73,21 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
+    [HttpGet("GetAllSites")]
+    public Result GetAllSites()
+    {
+      List<string> NameOfSites = new List<string>();
+      using (ServerManager serverManager = new ServerManager())
+      {
+
+        var sites = serverManager.Sites;
+        foreach (var site in sites) {
+          NameOfSites.Add(site.Name);
+        }
+       
+      }
+      return new Result { data = NameOfSites };
+    }
 
   }
 }

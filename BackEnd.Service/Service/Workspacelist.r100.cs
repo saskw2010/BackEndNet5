@@ -377,7 +377,5 @@ namespace BackEnd.Service.Service
       string strEncodedText = utfencoder.GetString(bytText);
       base.WriteString(strEncodedText);
     }
-
-  
   }
 }
