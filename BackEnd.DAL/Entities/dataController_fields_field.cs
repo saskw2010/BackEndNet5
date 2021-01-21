@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackEnd.DAL.Entities
 { 
     public partial class dataController_fields_field
     {
+        [Key]
         public int dataController_fields_field1 { get; set; }
         public string dataController_name { get; set; }
         public string dataController_fields_field_isPrimaryKey { get; set; }

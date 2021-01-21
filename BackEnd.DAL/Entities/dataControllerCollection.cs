@@ -9,17 +9,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 namespace BackEnd.DAL.Entities
 {
   public partial class dataControllerCollection
     {
+        [Key]
         public int dataControllerCollection1 { get; set; }
         public string dataControllerCollection_xmlns { get; set; }
         public string dataControllerCollection_snapshot { get; set; }
         public string dataControllerCollection_Name { get; set; }
         public string dataControllerCollection_Version { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<dataController> dataControllers { get; set; }
     }
 }
