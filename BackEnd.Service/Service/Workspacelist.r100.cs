@@ -79,7 +79,7 @@ namespace BackEnd.Service.Service
       // This is the placeholder for method implementation.
 
       string MyApplicationPoolstring = "";
-      MyApplicationPoolstring = workspace.WorkSpaceName;
+      MyApplicationPoolstring = workspace.DatabaseName;
       ServerManager server = new ServerManager();
       ApplicationPool myApplicationPool = null/* TODO Change to default(_) if this is not a reference type */;
 
@@ -153,7 +153,7 @@ namespace BackEnd.Service.Service
           //commit
           string sqlfilepathscrpt = @"c:\sourceDirectory\SqlScripts\installsqlmembership.sql";
           // 'Dim script As String = file.OpenText().ReadToEnd()
-         bool created= createDataBase(workspace.WorkSpaceName);
+         bool created= createDataBase(workspace.DatabaseName);
           //commit
           bool xpoli;
           xpoli = createfromsqlscript(sqlfilepathscrpt, sqlConnectionString);

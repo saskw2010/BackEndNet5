@@ -33,5 +33,14 @@ namespace RealState.DAL.IBackEndContext
     DbSet<EsSrWorkDay> EsSrWorkDay { get; set; }
     DbSet<EsSrEngineer> EsSrEngineer { get; set; }
     DbSet<EsSrSupervisor> EsSrSupervisor { get; set; }
+    DbSet<EsSrWorkshop> EsSrWorkshop { get; set; }
+    DbSet<xmlController> xmlController { get; set; }
+    DbSet<XmlFile> XmlFile { get; set; }
+    DbSet<dataController> dataControllers { get; set; }
+    DbSet<dataController_commands> dataController_commands { get; set; }
+    DbSet<dataController_commandstableslist> dataController_commandstableslist { get; set; }
+    DbSet<dataController_fields_field> dataController_fields_field { get; set; }
+    DbSet<dataController_views> dataController_views { get; set; }
+    DbSet<dataControllerCollection> dataControllerCollections { get; set; }
   }
 }

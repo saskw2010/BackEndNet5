@@ -36,6 +36,8 @@ namespace BackEnd.DAL.Entities
     public string ModifiedBy { get; set; }
     public Nullable<System.DateTime> ModifiedOn { get; set; }
     public Nullable<bool> IsDelete { get; set; }
+    public Nullable<bool> IsCompleted { get; set; }
+    public Nullable<bool> IsCanceled { get; set; }
     public Nullable<long> CityId { get; set; }
     [ForeignKey("EsSrPeriodTechnical")]
     public Nullable<long> PeriodTechnicalId { get; set; }

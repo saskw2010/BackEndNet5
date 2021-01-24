@@ -16,6 +16,8 @@ namespace BackEnd.DAL.Entities
     public Nullable<long> PeriodId { get; set; }
     public Nullable<bool> IsActive { get; set; }
     public Nullable<int> ShowOrder { get; set; }
+    [ForeignKey("EsSrWorkshopRegion")]
+    public Nullable<long> WorkshopRegionId { get; set; }
     public string Notes { get; set; }
     public string CreatedBy { get; set; }
     public Nullable<System.DateTime> CreatedOn { get; set; }
@@ -29,5 +31,7 @@ namespace BackEnd.DAL.Entities
     public virtual EsSrPeriod EsSrPeriod { get; set; }
     public virtual ICollection<EsSrPeriodLock> EsSrPeriodLocks { get; set; }
     public virtual EsSrTechnical EsSrTechnical { get; set; }
+    public virtual EsSrWorkshopRegion EsSrWorkshopRegion { get; set; }
+
   }
 }

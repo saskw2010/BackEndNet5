@@ -7,6 +7,6 @@ namespace BackEnd.Service.IService
 {
   public interface IEsSrPeriodTechnicalService
   {
-    long GetTechnicalPeriodIdofLessNumberOfOrder(List<PeriodTechnicalsVm> periodTechnicalsVm,DateTime orderDate);
+    long? GetTechnicalPeriodIdofLessNumberOfOrder(EsSrOrderViewModel EsSrOrder, List<PeriodTechnicalsVm> periodTechnicalsVm,DateTime orderDate);
   }
 }

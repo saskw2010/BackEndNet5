@@ -259,8 +259,9 @@ namespace BackEnd.Service.Service
         PireodId = x.PeriodId.Value,
         NameAr = x.EsSrPeriod.NameAr,
         NameEn = x.EsSrPeriod.NameEn,
-        fromTime=x.EsSrPeriod.FromTime,
-        toTime=x.EsSrPeriod.ToTime,
+        fromTime = x.EsSrPeriod.FromTime,
+        toTime = x.EsSrPeriod.ToTime,
+        WorkshopRegionId = x.WorkshopRegionId,
         EsSrPeriodLock = x.EsSrPeriod.EsSrPeriodLocks.Where(x=>x.IsDelete == false && x.IsActive == true),
         EsSrTechnicalWorkDays = x.EsSrTechnical.EsSrTechnicalWorkDays.Where(x => x.IsDelete == false && x.IsActive == true),
         PeriodTechnicalsVm = esSrPeriodTechnicalsList.Where(y => (y.PeriodId == x.PeriodId)&&(y.IsActive == true) && (y.IsDelete == false)).ToList(),
@@ -293,8 +294,9 @@ namespace BackEnd.Service.Service
               if (y.Count() == 0)
               {
                 tecVm.Add(new PeriodTechnicalsVm() {
-                  PeriodTechnicalId = periodTechnical.PeriodTechnicalId,
-                  maxNumberOfOrders=periodTechnical.MaxNumOfOrder
+                    PeriodTechnicalId = periodTechnical.PeriodTechnicalId,
+                    maxNumberOfOrders=periodTechnical.MaxNumOfOrder,
+                    WorkshopRegionId = periodTechnical.WorkshopRegionId
                 });
               }
             }

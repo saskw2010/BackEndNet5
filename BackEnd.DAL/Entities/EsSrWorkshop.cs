@@ -1,19 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace BackEnd.DAL.Entities
 {
-  public class EsSrWorkshopRegion
+  public class EsSrWorkshop
   {
-    [Key]
-   public long WorkshopRegionId { get; set; }
-   [ForeignKey("EsSrWorkshop")]
-    public Nullable<long> WorkshopId { get; set; }
+    public long WorkshopId { get; set; }
+    public Nullable<long> CityId { get; set; }
     public Nullable<long> PicStockId { get; set; }
-    public string Code { get; set; }
+    public string NameAr { get; set; }
+    public string NameEn { get; set; }
     public string DescriptionEn { get; set; }
     public string DescriptionAr { get; set; }
     public Nullable<decimal> MapLatitude { get; set; }
@@ -31,11 +28,9 @@ namespace BackEnd.DAL.Entities
     public Nullable<System.DateTime> CreatedOn { get; set; }
     public string ModifiedBy { get; set; }
     public Nullable<System.DateTime> ModifiedOn { get; set; }
+    public string Code { get; set; }
     public Nullable<bool> IsDelete { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-    public virtual ICollection<EsSrTechnical> EsSrTechnicals { get; set; }
-    public virtual ICollection<EsSrPeriodTechnical> EsSrPeriodTechnical { get; set; }
-    public virtual EsSrWorkshop EsSrWorkshop { get; set; }
+    public Nullable<long> OrganisationId { get; set; }
+    public virtual ICollection<EsSrWorkshopRegion> EsSrWorkshopRegions { get; set; }
   }
 }

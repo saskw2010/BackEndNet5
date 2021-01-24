@@ -36,7 +36,7 @@ namespace BackEnd.Service.Service
         {
           if (item.MapLangitude != null && item.MapLatitude != null)
           {
-            var dist = findDistanceBetweenTwoCoordinates(lng, lat, item.MapLangitude.Value, item.MapLatitude.Value)/1000;
+            var dist = findDistanceBetweenTwoCoordinates(lng, lat, item.EsSrWorkshop.MapLangitude.Value, item.EsSrWorkshop.MapLatitude.Value)/1000;
             if (item.MapArea >= dist)
             {
               itemReginList.Add(item);
@@ -71,6 +71,7 @@ namespace BackEnd.Service.Service
         var dist=coord.GetDistanceTo(new GeoCoordinate(Convert.ToDouble(lanFromWrkShop), Convert.ToDouble(latFromWorkShop)));
       return Convert.ToDecimal(dist);
     }
+
 
   }
 }

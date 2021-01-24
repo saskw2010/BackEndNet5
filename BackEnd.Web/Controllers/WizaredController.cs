@@ -57,8 +57,11 @@ namespace BackEnd.Web.Controllers
     [HttpGet("GetAllFinNameFromController")]
     public Result GetAllFinNameFromController()
     {
+      var wizaredConfiguration = Configuration
+         .GetSection("WizaredConfiguration")
+         .Get<WizaredConfiguration>();
       List<string> FileNames = new List<string>();
-      string folderPath = @"E:\WytSky\CodeInTime\Jaber\controllers";
+      string folderPath = wizaredConfiguration.ControllerPath;
       foreach (string file in Directory.EnumerateFiles(folderPath, "*.model.xml"))
       {
         string fileName =Path.GetFileNameWithoutExtension(file);
