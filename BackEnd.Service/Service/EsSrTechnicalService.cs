@@ -266,6 +266,7 @@ namespace BackEnd.Service.Service
         EsSrTechnicalWorkDays = x.EsSrTechnical.EsSrTechnicalWorkDays.Where(x => x.IsDelete == false && x.IsActive == true),
         PeriodTechnicalsVm = esSrPeriodTechnicalsList.Where(y => (y.PeriodId == x.PeriodId)&&(y.IsActive == true) && (y.IsDelete == false)).ToList(),
         maximumNumberOfOrderBerTechnical = x.MaxNumOfOrder,
+        sumMax = esSrPeriodTechnicalsList.Sum(y=>y.MaxNumOfOrder),
         EsSrOrders = x.EsSrOrders
 
       }).GroupBy(sc => new { sc.PireodId }).Select(g => g.First()).ToList();
