@@ -23,7 +23,7 @@ namespace BackEnd.Web.Controllers
     #region saveOrder
     [HttpPost(ApiRoute.EsSrOrderRouting.saveOrder)]
     public async Task<Result> saveOrder([FromBody] EsSrOrderViewModel esSrOrderVm) {
-      var PeriodTehnicalId = _EsSrPeriodTechnicalService.GetTechnicalPeriodIdofLessNumberOfOrder(esSrOrderVm.periodTechnicalsVm, esSrOrderVm.OrderDate.Value);
+      var PeriodTehnicalId = _EsSrPeriodTechnicalService.GetTechnicalPeriodIdofLessNumberOfOrder(esSrOrderVm,esSrOrderVm.periodTechnicalsVm, esSrOrderVm.OrderDate.Value);
       esSrOrderVm.PeriodTechnicalId = PeriodTehnicalId;
       return await _EsSrOrderService.saveOrder(esSrOrderVm);
     }
