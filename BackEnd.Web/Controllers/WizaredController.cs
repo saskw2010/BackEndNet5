@@ -11,6 +11,8 @@ using System.Xml.Serialization;
 using System.IO;
 using BackEnd.Service.IService;
 using Microsoft.Extensions.Configuration;
+using BackEnd.DAL.Entities;
+using System.Text;
 
 namespace BackEnd.Web.Controllers
 {
@@ -61,7 +63,7 @@ namespace BackEnd.Web.Controllers
          .GetSection("WizaredConfiguration")
          .Get<WizaredConfiguration>();
       List<string> FileNames = new List<string>();
-      string folderPath = wizaredConfiguration.ControllerPath;
+      string folderPath = wizaredConfiguration.ControllerPath + "\\" + "Jaber\\controllers\\";
       foreach (string file in Directory.EnumerateFiles(folderPath, "*.model.xml"))
       {
         string fileName =Path.GetFileNameWithoutExtension(file);
@@ -187,6 +189,56 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
+
+    #region Recurence
+    [HttpGet("Recurence ")]
+    public async Task<Result> Recurence(string controllerName)
+    {
+      var wizaredConfiguration = Configuration
+         .GetSection("WizaredConfiguration")
+         .Get<WizaredConfiguration>();
+      List <xmlControllerViewModel> xmlControllerList = new List<xmlControllerViewModel>();
+      string folderPath = wizaredConfiguration.ControllerPath+"\\"+ controllerName + "\\controllers\\";
+      foreach (string file in Directory.EnumerateFiles(folderPath, "*.model.xml"))
+      {
+       
+        string fileName = Path.GetFileNameWithoutExtension(file);
+        string[] FileBase = fileName.Split('.');
+        xmlControllerViewModel xmlControllerObj = new xmlControllerViewModel
+        {
+          Name= FileBase[0]
+        };
+        xmlControllerList.Add(xmlControllerObj);
+
+      }
+      var res= await _WizaredService.insertControllers(xmlControllerList);
+
+      List<XmlFileViewModel> XmlFileListVM = new List<XmlFileViewModel>();
+      if (res.success == true) {
+        foreach (var item in (List<xmlController>)res.data) {
+          string DataControllerText = System.IO.File.ReadAllText(wizaredConfiguration.ControllerPath + "\\" + controllerName + "\\controllers\\" + item.Name + ".xml", Encoding.UTF8);
+          string DataModelText = System.IO.File.ReadAllText(wizaredConfiguration.ControllerPath + "\\" + controllerName + "\\controllers\\" + item.Name+".model" + ".xml", Encoding.UTF8);
+          var count=_WizaredService.chechVersionOfCompany(item.Name, controllerName);
+          XmlFileViewModel XmlFileVM = new XmlFileViewModel{
+            DataControllerXml= DataControllerText,
+            DataModelXml= DataModelText,
+            CompanyName= controllerName,
+            CountryFkId= item.Id,
+            FileName=item.Name,
+            Version="V_"+ count
+          };
+          XmlFileListVM.Add(XmlFileVM);
+          //  string xmlns = "urn:schemas-codeontime-com:data-aquarium";
+          //  var serializer = new XmlSerializer(typeof(DataController), xmlns);
+          //  var file = new XmlTextReader(wizaredConfiguration.ControllerPath + item.Name + ".xml");
+          //  DataController resultingMessage = (DataController)serializer.Deserialize(file);
+        }
+   
+      }
+      var res2 = await _WizaredService.insertXmlFile(XmlFileListVM);
+      return res2;
+    }
+    #endregion
 
   }
 }

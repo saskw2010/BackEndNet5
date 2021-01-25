@@ -10,6 +10,6 @@ namespace BackEnd.DAL.Entities
     [Key]
     public int Id { get; set; }
     public string Name { get; set; }
-    public ICollection<XmlFile> XmlFile { get; set; }
+    public virtual ICollection<XmlFile> XmlFile { get; set; }
   }
 }

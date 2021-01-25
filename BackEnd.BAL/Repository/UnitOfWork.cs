@@ -301,6 +301,67 @@ namespace BackEnd.BAL.Repository
         return new GenericRepository<EsSrEngineer>(Context);
       }
     }
+    public GenericRepository<xmlController> xmlControllerRepository
+    {
+      get
+      {
+        return new GenericRepository<xmlController>(Context);
+      }
+    }
+    public GenericRepository<XmlFile> XmlFileRepository
+    {
+      get
+      {
+        return new GenericRepository<XmlFile>(Context);
+      }
+    }
 
+    public GenericRepository<dataController> dataControllersRepository
+    {
+      get
+      {
+        return new GenericRepository<dataController>(Context);
+      }
+    }
+
+    public GenericRepository<dataController_commands> dataController_commandsRepository
+    {
+      get
+      {
+        return new GenericRepository<dataController_commands>(Context);
+      }
+    }
+
+    public GenericRepository<dataController_commandstableslist> dataController_commandstableslistRepository
+    {
+      get
+      {
+        return new GenericRepository<dataController_commandstableslist>(Context);
+      }
+    }
+
+    public GenericRepository<dataController_fields_field> dataController_fields_fieldRepository
+    {
+      get
+      {
+        return new GenericRepository<dataController_fields_field>(Context);
+      }
+    }
+
+    public GenericRepository<dataController_views> dataController_viewsRepository
+    {
+      get
+      {
+        return new GenericRepository<dataController_views>(Context);
+      }
+    }
+
+    public GenericRepository<dataControllerCollection> dataControllerCollectionRepository
+    {
+      get
+      {
+        return new GenericRepository<dataControllerCollection>(Context);
+      }
+    }
   }
 }

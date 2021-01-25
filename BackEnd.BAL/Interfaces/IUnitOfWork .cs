@@ -37,6 +37,14 @@ namespace BackEnd.BAL.Interfaces
        GenericRepository<EsSrWorkDay> EsSrWorkDayRepository { get; }
        GenericRepository<EsSrSupervisor> EsSrSupervisorRepository { get; }
        GenericRepository<EsSrEngineer> EsSrEngineerRepository { get; }
+       GenericRepository<xmlController> xmlControllerRepository { get; }
+       GenericRepository<XmlFile> XmlFileRepository { get; }
+       GenericRepository<dataController> dataControllersRepository { get; }
+       GenericRepository<dataController_commands> dataController_commandsRepository { get; }
+       GenericRepository<dataController_commandstableslist> dataController_commandstableslistRepository { get; }
+       GenericRepository<dataController_fields_field> dataController_fields_fieldRepository { get; }
+       GenericRepository<dataController_views> dataController_viewsRepository { get; }
+       GenericRepository<dataControllerCollection> dataControllerCollectionRepository { get; }
 
   }
 }

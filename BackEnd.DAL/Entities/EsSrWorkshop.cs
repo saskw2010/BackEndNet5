@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace BackEnd.DAL.Entities
 {
   public class EsSrWorkshop
   {
+    [Key]
     public long WorkshopId { get; set; }
     public Nullable<long> CityId { get; set; }
     public Nullable<long> PicStockId { get; set; }
