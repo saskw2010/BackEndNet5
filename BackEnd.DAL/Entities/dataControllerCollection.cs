@@ -16,7 +16,7 @@ namespace BackEnd.DAL.Entities
   public partial class dataControllerCollection
     {
         [Key]
-        public int dataControllerCollection1 { get; set; }
+        public int dataControllerCollectionId { get; set; }
         public string dataControllerCollection_xmlns { get; set; }
         public string dataControllerCollection_snapshot { get; set; }
         public string dataControllerCollection_Name { get; set; }

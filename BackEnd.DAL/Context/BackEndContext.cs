@@ -46,7 +46,7 @@ namespace BackEnd.DAL.Context
     public virtual DbSet<EsSrWorkshop> EsSrWorkshop { get; set; }
     public virtual DbSet<xmlController> xmlController { get; set; }
     public virtual DbSet<XmlFile> XmlFile { get; set; }
-    public virtual DbSet<dataController> dataControllers { get; set; }
+    public virtual DbSet<dataController> dataController { get; set; }
     public virtual DbSet<dataController_commands> dataController_commands { get; set; }
     public virtual DbSet<dataController_commandstableslist> dataController_commandstableslist { get; set; }
     public virtual DbSet<dataController_fields_field> dataController_fields_field { get; set; }

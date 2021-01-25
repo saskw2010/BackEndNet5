@@ -15,5 +15,6 @@ namespace BackEnd.Service.IService
    Task<Result> insertXmlFile(List<XmlFileViewModel> XmlFileVM);
    int chechVersionOfCompany(string fileName,string companyName);
    int validController(string fileName);
+    Task<Result> InsertDataController(List<dataControllerViewModel> dataControllerVM);
   }
 }

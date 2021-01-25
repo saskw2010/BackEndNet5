@@ -42,6 +42,7 @@ namespace BackEnd.Service.MappingProfiles
       CreateMap<EsSrOrderStage, EsSrOrderViewModel>().ReverseMap();
       CreateMap<xmlController, xmlControllerViewModel>().ReverseMap();
       CreateMap<XmlFile, XmlFileViewModel>().ReverseMap();
+      CreateMap<dataController, dataControllerViewModel>().ReverseMap();
 
 
     }

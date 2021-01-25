@@ -231,15 +231,42 @@ namespace BackEnd.Web.Controllers
             Version="V_"+ count
           };
           XmlFileListVM.Add(XmlFileVM);
-          //  string xmlns = "urn:schemas-codeontime-com:data-aquarium";
-          //  var serializer = new XmlSerializer(typeof(DataController), xmlns);
-          //  var file = new XmlTextReader(wizaredConfiguration.ControllerPath + item.Name + ".xml");
-          //  DataController resultingMessage = (DataController)serializer.Deserialize(file);
         }
-   
       }
       var res2 = await _WizaredService.insertXmlFile(XmlFileListVM);
-      return res2;
+      
+        return await snapShotController(XmlFileListVM);
+     
+      
+    }
+    #endregion
+
+    #region snapShot
+    private async Task<Result> snapShotController(List<XmlFileViewModel> XmlFileVM) {
+      try {
+        List<dataControllerViewModel> dataControllerViewModelList = new List<dataControllerViewModel>();
+        foreach (var item in XmlFileVM)
+        {
+          string xmlns = "urn:schemas-codeontime-com:data-aquarium";
+          var serializer = new XmlSerializer(typeof(DataController), xmlns);
+          var datacontrollerObj = (DataController)serializer.Deserialize(new StringReader(item.DataControllerXml));
+          dataControllerViewModel dataControllerVM = new dataControllerViewModel {
+            dataController_name= datacontrollerObj.Name,
+            dataController_nativeSchema= "dbo",
+            dataController_nativeTableName=datacontrollerObj.Name,
+            dataController_conflictDetection= datacontrollerObj.ConflictDetection,
+            dataController_label=datacontrollerObj.Label
+          };
+          dataControllerViewModelList.Add(dataControllerVM);
+        }
+       return await _WizaredService.InsertDataController(dataControllerViewModelList);
+
+      }
+      catch (Exception ex) {
+        return new Result { success = false };
+      }
+     
+
     }
     #endregion
 

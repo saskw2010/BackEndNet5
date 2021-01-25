@@ -192,5 +192,49 @@ namespace BackEnd.Service.Service
      return _unitOfWork.xmlControllerRepository.Get(x => x.Name == fileName).Count();
     }
     #endregion
+
+    public async Task<Result> InsertDataController(List<dataControllerViewModel> dataControllerVM)
+    {
+      try
+      {
+         List<dataController> dataController = new List<dataController>();
+         var Dto1 = _mapper.Map(dataControllerVM, dataController);
+        _unitOfWork.dataControllersRepository.AddRange(Dto1);
+         var result = await _unitOfWork.SaveAsync();
+        if (result == 200)
+        {
+          return new Result
+          {
+            success = true,
+            code = "200",
+            data = Dto1,
+            message = "controllers saved successfuly"
+          };
+        }
+        else
+        {
+          return new Result
+          {
+            success = false,
+            code = "400",
+            data = null,
+            message = "controllers saved Faild"
+          };
+        }
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = false,
+          code = "400",
+          data = null,
+          message = ExtensionMethods.FullMessage(ex)
+        };
+
+      }
+    }
+
+
   }
 }

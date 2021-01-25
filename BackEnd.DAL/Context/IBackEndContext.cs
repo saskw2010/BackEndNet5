@@ -36,7 +36,7 @@ namespace RealState.DAL.IBackEndContext
     DbSet<EsSrWorkshop> EsSrWorkshop { get; set; }
     DbSet<xmlController> xmlController { get; set; }
     DbSet<XmlFile> XmlFile { get; set; }
-    DbSet<dataController> dataControllers { get; set; }
+    DbSet<dataController> dataController { get; set; }
     DbSet<dataController_commands> dataController_commands { get; set; }
     DbSet<dataController_commandstableslist> dataController_commandstableslist { get; set; }
     DbSet<dataController_fields_field> dataController_fields_field { get; set; }

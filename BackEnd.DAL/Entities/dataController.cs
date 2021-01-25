@@ -13,10 +13,10 @@ public  class dataController
         public string dataController_conflictDetection { get; set; }
         public string dataController_label { get; set; }
         [ForeignKey("dataControllerCollection")]
-        public Nullable<int> dataControllerCollection { get; set; }
+        public Nullable<int> dataControllerCollectionFkId { get; set; }
         public virtual ICollection<dataController_commands> dataController_commands { get; set; }
         public virtual ICollection<dataController_commandstableslist> dataController_commandstableslist { get; set; }
         public virtual ICollection<dataController_views> dataController_views { get; set; }
-        public virtual dataControllerCollection dataControllerCollection1 { get; set; }
+        public virtual dataControllerCollection dataControllerCollection { get; set; }
     }
 }
