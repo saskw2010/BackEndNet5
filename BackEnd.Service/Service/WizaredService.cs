@@ -150,7 +150,7 @@ namespace BackEnd.Service.Service
           {
             success = true,
             code = "200",
-            data = Dto1,
+            data = null,
             message = "xmlFile saved successfuly"
           };
         }
@@ -183,6 +183,13 @@ namespace BackEnd.Service.Service
     public int chechVersionOfCompany(string fileName,string companyName)
     {
      return _unitOfWork.XmlFileRepository.Get(filter:(x=>x.CompanyName == companyName && x.FileName == fileName)).Count();
+    }
+    #endregion
+
+    #region validController
+    public int validController(string fileName)
+    {
+     return _unitOfWork.xmlControllerRepository.Get(x => x.Name == fileName).Count();
     }
     #endregion
   }

@@ -92,7 +92,7 @@ namespace BackEnd.Web.Controllers
         string ControllerPath = wizaredConfiguration.ControllerPath;
         string xmlns = "urn:schemas-codeontime-com:data-model";
         var serializer = new XmlSerializer(typeof(DataModel), xmlns);
-        var file = new XmlTextReader(ControllerPath + NameOfModel + ".model.xml");
+        var file = new XmlTextReader(ControllerPath+ "\\Jaber\\controllers\\" + NameOfModel + ".model.xml");
         DataModel resultingMessage = (DataModel)serializer.Deserialize(file);
         file.Close();
         return new Result { success = true, code = "200", data = resultingMessage };
@@ -144,7 +144,7 @@ namespace BackEnd.Web.Controllers
         string ControllerPath = wizaredConfiguration.ControllerPath;
         string xmlns = "urn:schemas-codeontime-com:data-aquarium";
         var serializer = new XmlSerializer(typeof(DataController), xmlns);
-        var file = new XmlTextReader(ControllerPath + NameOfDataController + ".xml");
+        var file = new XmlTextReader(ControllerPath +"\\Jaber\\controllers\\"+NameOfDataController + ".xml");
         DataController resultingMessage = (DataController)serializer.Deserialize(file);
         file.Close();
       return new Result { success = true, code = "200", data = resultingMessage };
@@ -208,6 +208,9 @@ namespace BackEnd.Web.Controllers
         {
           Name= FileBase[0]
         };
+        int countOfController = _WizaredService.validController(xmlControllerObj.Name);
+
+        if (countOfController < 1) 
         xmlControllerList.Add(xmlControllerObj);
 
       }
