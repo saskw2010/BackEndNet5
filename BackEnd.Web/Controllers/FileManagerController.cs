@@ -14,6 +14,7 @@ using BackEnd.Service.IService;
 using Microsoft.Extensions.Configuration;
 using BackEnd.DAL.Context;
 using System.Text;
+using System.IO;
 
 namespace EJ2APIServices.Controllers
 {
@@ -209,15 +210,17 @@ namespace EJ2APIServices.Controllers
     }
     #endregion
 
+    //savefile and backup the old file
     [HttpPost("SaveFileManager")]
-    public Result SaveFileManager(string EditeName, string pathFile,string content)
+    public Result SaveFileManager(string EditeName, string pathFile,
+        string content)
     {
-      
+
       string BasePath = "";
       var FileManagerConfiguration = Configuration
            .GetSection("FileManagerConfiguration")
            .Get<FileManagerConfiguration>();
-  
+
       if (FileManagerConfiguration.staticPath != "")
       {
         BasePath = FileManagerConfiguration.staticPath;
@@ -226,16 +229,20 @@ namespace EJ2APIServices.Controllers
       {
         BasePath = System.IO.Directory.GetCurrentDirectory();
       }
-      string sourceDirectory = BasePath + "\\" + pathFile;
-      operation.createBackUp(sourceDirectory, EditeName);
+      string PathEdit = BasePath + "\\" + pathFile;
+      string BackFileEdite = PathEdit + "\\" + EditeName;
+      operation.createBackUp(PathEdit, EditeName);
+      System.IO.File.Delete(BackFileEdite);
+      using (StreamWriter outputFile = new StreamWriter(Path.Combine(BackFileEdite)))
+      {
 
-      string BasePathEdit = BasePath + "\\" + pathFile + "\\" + EditeName;
-      //System.IO.File.Delete(BasePathEdit);
-      //this.operation.RootFolder(BasePath);
-      //StreamReader reader = new StreamReader(BasePathEdit, System.Text.Encoding.UTF8, true);
-      return new Result { success=true,code="200",data = null };
+        outputFile.Write(content);
+
+        outputFile.Close();
+      }
+
+      return new Result { success = true };
     }
-
   }
 
 }
