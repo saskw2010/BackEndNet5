@@ -11,7 +11,7 @@ namespace BackEnd.Service.IService
     Boolean createBackUp(string path, string fileName);
     Boolean createBackUpDataController(string path, string fileName);
     Boolean DeleteOldFile(string path, string fileName);
-   Task<Result> insertControllers(List<xmlControllerViewModel> xmlControllerVm);
+   Task<Result> insertControllers(xmlControllerViewModel xmlControllerVm);
    Task<Result> insertXmlFile(List<XmlFileViewModel> XmlFileVM);
    int chechVersionOfCompany(string fileName,string companyName);
    int validController(string fileName);

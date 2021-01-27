@@ -15,7 +15,7 @@ namespace BackEnd.DAL.Entities
     public string CompanyName { get; set; }
     public string Version { get; set; }
     [ForeignKey("xmlController")]
-    public int CountryFkId { get; set; }
+    public int CoontrollerFkId { get; set; }
     public string FileName { get; set; }
     public virtual xmlController xmlController { get; set; }
 

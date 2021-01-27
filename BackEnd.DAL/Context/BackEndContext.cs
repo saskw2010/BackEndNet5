@@ -51,8 +51,7 @@ namespace BackEnd.DAL.Context
     public virtual DbSet<dataController_commandstableslist> dataController_commandstableslist { get; set; }
     public virtual DbSet<dataController_fields_field> dataController_fields_field { get; set; }
     public virtual DbSet<dataController_views> dataController_views { get; set; }
-    public virtual DbSet<dataControllerCollection> dataControllerCollections { get; set; }
-
+  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);

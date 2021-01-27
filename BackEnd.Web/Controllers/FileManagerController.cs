@@ -208,6 +208,34 @@ namespace EJ2APIServices.Controllers
       return new Result { data = text };
     }
     #endregion
+
+    [HttpPost("SaveFileManager")]
+    public Result SaveFileManager(string EditeName, string pathFile,string content)
+    {
+      
+      string BasePath = "";
+      var FileManagerConfiguration = Configuration
+           .GetSection("FileManagerConfiguration")
+           .Get<FileManagerConfiguration>();
+  
+      if (FileManagerConfiguration.staticPath != "")
+      {
+        BasePath = FileManagerConfiguration.staticPath;
+      }
+      else
+      {
+        BasePath = System.IO.Directory.GetCurrentDirectory();
+      }
+      string sourceDirectory = BasePath + "\\" + pathFile;
+      operation.createBackUp(sourceDirectory, EditeName);
+
+      string BasePathEdit = BasePath + "\\" + pathFile + "\\" + EditeName;
+      //System.IO.File.Delete(BasePathEdit);
+      //this.operation.RootFolder(BasePath);
+      //StreamReader reader = new StreamReader(BasePathEdit, System.Text.Encoding.UTF8, true);
+      return new Result { success=true,code="200",data = null };
+    }
+
   }
 
 }

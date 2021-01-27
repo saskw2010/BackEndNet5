@@ -44,7 +44,6 @@ namespace BackEnd.BAL.Interfaces
        GenericRepository<dataController_commandstableslist> dataController_commandstableslistRepository { get; }
        GenericRepository<dataController_fields_field> dataController_fields_fieldRepository { get; }
        GenericRepository<dataController_views> dataController_viewsRepository { get; }
-       GenericRepository<dataControllerCollection> dataControllerCollectionRepository { get; }
-
+      
   }
 }

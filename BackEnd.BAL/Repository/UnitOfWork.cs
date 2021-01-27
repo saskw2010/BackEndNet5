@@ -356,12 +356,6 @@ namespace BackEnd.BAL.Repository
       }
     }
 
-    public GenericRepository<dataControllerCollection> dataControllerCollectionRepository
-    {
-      get
-      {
-        return new GenericRepository<dataControllerCollection>(Context);
-      }
-    }
+  
   }
 }

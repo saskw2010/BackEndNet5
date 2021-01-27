@@ -18,14 +18,15 @@ namespace BackEnd.DAL.Entities
     {
         [Key]
         public long dataController_views_view { get; set; }
-       [ForeignKey("dataController")]
+ 
         public string dataController_name { get; set; }
         public string dataController_views_view_id { get; set; }
         public string dataController_views_view_type { get; set; }
         public string dataController_views_view_label { get; set; }
         public string dataController_views_view_commandId { get; set; }
         public string dataController_views_view_headerText { get; set; }
-    
+        [ForeignKey("dataController")]
+        public Nullable<int> datacontrollerFkId { get; set; }
         public virtual dataController dataController { get; set; }
     }
 }

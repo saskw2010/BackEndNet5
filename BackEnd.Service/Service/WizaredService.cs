@@ -92,13 +92,13 @@ namespace BackEnd.Service.Service
 
     #region insertControllers
 
-    public async Task<Result> insertControllers(List<xmlControllerViewModel> xmlControllerVm)
+    public async Task<Result> insertControllers(xmlControllerViewModel xmlControllerVm)
     {
       try
       {
-        List<xmlController> xmlController = new List<xmlController>();
+        xmlController xmlController = new xmlController();
         var Dto1 = _mapper.Map(xmlControllerVm, xmlController);
-        _unitOfWork.xmlControllerRepository.AddRange(Dto1);
+        _unitOfWork.xmlControllerRepository.Insert(Dto1);
         var result = await _unitOfWork.SaveAsync();
         if (result == 200)
         {
@@ -150,7 +150,7 @@ namespace BackEnd.Service.Service
           {
             success = true,
             code = "200",
-            data = null,
+            data = Dto1,
             message = "xmlFile saved successfuly"
           };
         }
@@ -189,7 +189,7 @@ namespace BackEnd.Service.Service
     #region validController
     public int validController(string fileName)
     {
-     return _unitOfWork.xmlControllerRepository.Get(x => x.Name == fileName).Count();
+      return _unitOfWork.xmlControllerRepository.Get(x => x.dataControllerCollection_Name == fileName).Count();
     }
     #endregion
 

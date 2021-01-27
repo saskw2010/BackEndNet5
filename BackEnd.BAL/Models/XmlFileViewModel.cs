@@ -11,7 +11,7 @@ namespace BackEnd.BAL.Models
     public string DataControllerXml { get; set; }
     public string CompanyName { get; set; }
     public string Version { get; set; }
-    public int CountryFkId { get; set; }
+    public int CoontrollerFkId { get; set; }
     public string FileName { get; set; }
   }
 }
