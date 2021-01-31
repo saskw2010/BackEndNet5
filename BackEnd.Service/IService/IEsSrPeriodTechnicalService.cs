@@ -5,8 +5,8 @@ using System.Text;
 
 namespace BackEnd.Service.IService
 {
-  public interface IEsSrPeriodTechnicalService
-  {
-    long? GetTechnicalPeriodIdofLessNumberOfOrder(EsSrOrderViewModel EsSrOrder, List<PeriodTechnicalsVm> periodTechnicalsVm,DateTime orderDate);
-  }
+    public interface IEsSrPeriodTechnicalService
+    {
+        EsSrOrderViewModel GetTechnicalPeriodIdofLessNumberOfOrder(EsSrOrderViewModel EsSrOrder);
+    }
 }

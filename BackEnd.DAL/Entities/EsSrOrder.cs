@@ -17,6 +17,8 @@ namespace BackEnd.DAL.Entities
     public Nullable<long> ItemId { get; set; }
     public Nullable<long> PromoCodeId { get; set; }
     public Nullable<long> ClientId { get; set; }
+    public Nullable<long> PeriodId { get; set; }
+    public Nullable<long> WorkshopRegionId { get; set; }
     [ForeignKey("EsSrOrderStage")]
     public Nullable<long> OrderStageId { get; set; }
     public Nullable<decimal> MapLatitude { get; set; }

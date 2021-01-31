@@ -11,207 +11,225 @@ using System.Threading.Tasks;
 
 namespace BackEnd.Service.Service
 {
-  public class EsSrOrderService : IEsSrOrderService
-  {
-    private IUnitOfWork _unitOfWork;
-    private IMapper _mapper;
-    public EsSrOrderService(IUnitOfWork unitOfWork,
-      IMapper mapper
-      )
+    public class EsSrOrderService : IEsSrOrderService
     {
-      _unitOfWork = unitOfWork;
-      _mapper = mapper;
-    }
-    #region saveOrder
-    public async Task<Result> saveOrder(EsSrOrderViewModel esSrOrderVm)
-    {
-      try
-      {
-        EsSrOrder esSrOrder = new EsSrOrder();
-        var obje = _mapper.Map(esSrOrderVm, esSrOrder);
-        obje.IsActive = true;
-        obje.IsDelete = false;
-        obje.IsCanceled = false;
-        obje.IsCompleted = false;
-        _unitOfWork.EsSrOrderRepository.Insert(obje);
-        var res1 = await _unitOfWork.SaveAsync();
-        //---------getOrderStageByCategoryId
-        var orderStageBase=getOrderStageByCategoryId(esSrOrderVm.CatgeoryId.Value);
-        foreach (var item in orderStageBase) {
-          var res2 = addOrderStage(item, obje.OrderId, obje.CreatedBy);
-        }
-        //---------------update orderStageId in order
-        long orderStageId= GetFirstElementOfOrderStageByOrderId(obje.OrderId);
-        updateOrderStage(obje.OrderId, orderStageId);
+        #region privateFilde
+        private IUnitOfWork _unitOfWork;
+        private IMapper _mapper;
+        #endregion
 
-
-
-        if (res1 == 200)
+        #region EsSrOrderService
+        public EsSrOrderService(IUnitOfWork unitOfWork, IMapper mapper )
         {
-          return new Result
-          {
-            success = true,
-            code = "200",
-            message = "row added successfuly",
-            data= obje.OrderId
-          };
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        else {
+        #endregion
 
-          return new Result
-          {
-            success = false,
-            code = "403",
-            message = "row added Falid"
-          };
-        }
-        //--------end getOrderStageByCategoryId
-       
-    }
-      catch (Exception ex)
-      {
-        return new Result {
-          success = false,
-          code = "400",
-          data = null,
-          message = ExtensionMethods.FullMessage(ex)
-  };
-}
-    }
-    #endregion
-
-    #region getOrderStageByCategoryId
-    public List<EsSrOrderStageBase> getOrderStageByCategoryId(long CatgeoryId) {
-     var res= _unitOfWork.EsSrOrderStageBaseCatgeoryRepository.Get(filter: (x=>x.CatgeoryId== CatgeoryId)).ToList();
-      List<EsSrOrderStageBase> esSrOrderStageBaseList = new List<EsSrOrderStageBase>();
-      foreach (var item in res) {
-        EsSrOrderStageBase esSrOrderStageBase = new EsSrOrderStageBase();
-        esSrOrderStageBase = item.EsSrOrderStageBase;
-        esSrOrderStageBaseList.Add(esSrOrderStageBase);
-      }
-      return esSrOrderStageBaseList;
-    }
-    #endregion
-
-    #region addOrderStage
-    private Boolean addOrderStage(EsSrOrderStageBase esSrOrderStageBase,long OrderId,string createdBy) {
-      try {
-        EsSrOrderStage esSrOrderStage = new EsSrOrderStage();
-        var obje = _mapper.Map(esSrOrderStageBase, esSrOrderStage);
-        obje.OrderId = OrderId;
-        obje.CreatedBy = createdBy;
-        obje.CreatedOn = DateTime.Now;
-        obje.ModifiedOn = null;
-        obje.ModifiedBy = null;
-        obje.ProgressValue = 0;
-        _unitOfWork.EsSrOrderStageRepository.Insert(obje);
-        _unitOfWork.Save();
-        return true;
-      }
-      catch (Exception ex) {
-        return false;
-      }
-     
-    }
-    #endregion
-
-    #region GetOrderStage of orderStageBy orderId
-    long GetFirstElementOfOrderStageByOrderId(long orderID) {
-     var res= _unitOfWork.EsSrOrderStageRepository.Get(filter: (x => x.OrderId == orderID)).OrderBy(y=>y.ShowOrder);
-      return res.FirstOrDefault().OrderStageId;
-    }
-
-    #endregion
-
-    #region deleteOrderById
-    private void RoleBackByOrderId(long orderId) {
-      _unitOfWork.EsSrOrderRepository.Delete(orderId);
-    }
-    #endregion
-
-    #region updateOrderStage
-    Boolean updateOrderStage(long orderID,long orderStageId) {
-      var order=_unitOfWork.EsSrOrderRepository.GetEntity(x => x.OrderId == orderID);
-      order.OrderStageId = orderStageId;
-      _unitOfWork.EsSrOrderRepository.Update(order);
-      _unitOfWork.Save();
-      return true;
-    }
-    #endregion
-
-    #region UpdateOrder
-    public async Task<Result> UpdateOrder(EsSrOrderViewModel esSrOrderVm)
-    {
-      try
-      {
-        var orderStageId= await AddOrderStageUpdateOrder(esSrOrderVm);
-        if (orderStageId > 0)
+        #region saveOrder
+        public async Task<Result> saveOrder(EsSrOrderViewModel esSrOrderVm)
         {
-          EsSrOrder esSrOrder = new EsSrOrder();
-          var obje = _mapper.Map(esSrOrderVm, esSrOrder);
-          obje.OrderStageId = orderStageId;
-          _unitOfWork.EsSrOrderRepository.Update(obje);
-          await _unitOfWork.SaveAsync();
-          return new Result
-          {
-            success = true,
-            code = "200",
-            message = "row updated successfuly"
-          };
+            try
+            {
+                EsSrOrder esSrOrder = new EsSrOrder();
+                var obje = _mapper.Map(esSrOrderVm, esSrOrder);
+                obje.IsActive = true;
+                obje.IsDelete = false;
+                obje.IsCanceled = false;
+                obje.IsCompleted = false;
+                _unitOfWork.EsSrOrderRepository.Insert(obje);
+                var res1 = await _unitOfWork.SaveAsync();
+                //---------getOrderStageByCategoryId
+                var orderStageBase = getOrderStageByCategoryId(esSrOrderVm.CatgeoryId.Value);
+                foreach (var item in orderStageBase)
+                {
+                    var res2 = addOrderStage(item, obje.OrderId, obje.CreatedBy);
+                }
+                //---------------update orderStageId in order
+                long orderStageId = GetFirstElementOfOrderStageByOrderId(obje.OrderId);
+                updateOrderStage(obje.OrderId, orderStageId);
+
+
+
+                if (res1 == 200)
+                {
+                    return new Result
+                    {
+                        success = true,
+                        code = "200",
+                        message = "row added successfuly",
+                        data = obje.OrderId
+                    };
+                }
+                else
+                {
+
+                    return new Result
+                    {
+                        success = false,
+                        code = "403",
+                        message = "row added Falid"
+                    };
+                }
+                //--------end getOrderStageByCategoryId
+
+            }
+            catch (Exception ex)
+            {
+                return new Result
+                {
+                    success = false,
+                    code = "400",
+                    data = null,
+                    message = ExtensionMethods.FullMessage(ex)
+                };
+            }
         }
-        else {
-          return new Result
-          {
-            success = false,
-            code = "403",
-            message = "row updated Falid"
-          };
+        #endregion
+
+        #region getOrderStageByCategoryId
+        public List<EsSrOrderStageBase> getOrderStageByCategoryId(long CatgeoryId)
+        {
+            var res = _unitOfWork.EsSrOrderStageBaseCatgeoryRepository.Get(filter: (x => x.CatgeoryId == CatgeoryId)).ToList();
+            List<EsSrOrderStageBase> esSrOrderStageBaseList = new List<EsSrOrderStageBase>();
+            foreach (var item in res)
+            {
+                EsSrOrderStageBase esSrOrderStageBase = new EsSrOrderStageBase();
+                esSrOrderStageBase = item.EsSrOrderStageBase;
+                esSrOrderStageBaseList.Add(esSrOrderStageBase);
+            }
+            return esSrOrderStageBaseList;
+        }
+        #endregion
+
+        #region addOrderStage
+        private Boolean addOrderStage(EsSrOrderStageBase esSrOrderStageBase, long OrderId, string createdBy)
+        {
+            try
+            {
+                EsSrOrderStage esSrOrderStage = new EsSrOrderStage();
+                var obje = _mapper.Map(esSrOrderStageBase, esSrOrderStage);
+                obje.OrderId = OrderId;
+                obje.CreatedBy = createdBy;
+                obje.CreatedOn = DateTime.Now;
+                obje.ModifiedOn = null;
+                obje.ModifiedBy = null;
+                obje.ProgressValue = 0;
+                _unitOfWork.EsSrOrderStageRepository.Insert(obje);
+                _unitOfWork.Save();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+        #endregion
+
+        #region GetOrderStage of orderStageBy orderId
+        long GetFirstElementOfOrderStageByOrderId(long orderID)
+        {
+            var res = _unitOfWork.EsSrOrderStageRepository.Get(filter: (x => x.OrderId == orderID)).OrderBy(y => y.ShowOrder);
+            return res.FirstOrDefault().OrderStageId;
         }
 
-    }
-       catch (Exception ex)
-      {
-        return new Result
+        #endregion
+
+        #region deleteOrderById
+        private void RoleBackByOrderId(long orderId)
         {
-          success = false,
-          code = "400",
-          data = null,
-          message = ExtensionMethods.FullMessage(ex)
-  };
-}
-    }
-    #endregion
+            _unitOfWork.EsSrOrderRepository.Delete(orderId);
+        }
+        #endregion
 
-    #region AddOrderStage
-    public async Task<long> AddOrderStageUpdateOrder(EsSrOrderViewModel esSrOrderVm) {
-      try
-      {
-        EsSrOrderStage esSrOrderStage = new EsSrOrderStage
+        #region updateOrderStage
+        Boolean updateOrderStage(long orderID, long orderStageId)
         {
-          ShowOrder = esSrOrderVm.OrderStageShowOrder,
-          OrderId = esSrOrderVm.OrderId,
-          DescriptionAr =  "  تعديل الطلب  ",
-          DescriptionEn = "Update Order",
-          IsActive = true,
-          CreatedBy = esSrOrderVm.ModifiedBy,
-          CreatedOn = DateTime.Now,
-          MustProviderApprove=true,
-          ClientNotes="تم تعديل الطلب من قبل العميل"+", order is updated from client",
+            var order = _unitOfWork.EsSrOrderRepository.GetEntity(x => x.OrderId == orderID);
+            order.OrderStageId = orderStageId;
+            _unitOfWork.EsSrOrderRepository.Update(order);
+            _unitOfWork.Save();
+            return true;
+        }
+        #endregion
+
+        #region UpdateOrder
+        public async Task<Result> UpdateOrder(EsSrOrderViewModel esSrOrderVm)
+        {
+            try
+            {
+                var orderStageId = await AddOrderStageUpdateOrder(esSrOrderVm);
+                if (orderStageId > 0)
+                {
+                    EsSrOrder esSrOrder = new EsSrOrder();
+                    var obje = _mapper.Map(esSrOrderVm, esSrOrder);
+                    obje.OrderStageId = orderStageId;
+                    _unitOfWork.EsSrOrderRepository.Update(obje);
+                    await _unitOfWork.SaveAsync();
+                    return new Result
+                    {
+                        success = true,
+                        code = "200",
+                        message = "row updated successfuly"
+                    };
+                }
+                else
+                {
+                    return new Result
+                    {
+                        success = false,
+                        code = "403",
+                        message = "row updated Falid"
+                    };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new Result
+                {
+                    success = false,
+                    code = "400",
+                    data = null,
+                    message = ExtensionMethods.FullMessage(ex)
+                };
+            }
+        }
+        #endregion
+
+        #region AddOrderStage
+        public async Task<long> AddOrderStageUpdateOrder(EsSrOrderViewModel esSrOrderVm)
+        {
+            try
+            {
+                EsSrOrderStage esSrOrderStage = new EsSrOrderStage
+                {
+                    ShowOrder = esSrOrderVm.OrderStageShowOrder,
+                    OrderId = esSrOrderVm.OrderId,
+                    DescriptionAr = "  تعديل الطلب  ",
+                    DescriptionEn = "Update Order",
+                    IsActive = true,
+                    CreatedBy = esSrOrderVm.ModifiedBy,
+                    CreatedOn = DateTime.Now,
+                    MustProviderApprove = true,
+                    ClientNotes = "تم تعديل الطلب من قبل العميل" + ", order is updated from client",
 
 
-          IsDelete = false
-        };
-        _unitOfWork.EsSrOrderStageRepository.Insert(esSrOrderStage);
-        await _unitOfWork.SaveAsync();
-        return esSrOrderStage.OrderStageId;
+                    IsDelete = false
+                };
+                _unitOfWork.EsSrOrderStageRepository.Insert(esSrOrderStage);
+                await _unitOfWork.SaveAsync();
+                return esSrOrderStage.OrderStageId;
+
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+
+        }
+        #endregion
 
     }
-      catch (Exception ex) {
-        return 0;
-      }
-
-}
-    #endregion
-
-  }
 }
