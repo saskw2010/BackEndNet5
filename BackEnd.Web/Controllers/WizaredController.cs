@@ -283,7 +283,7 @@ namespace BackEnd.Web.Controllers
           dataControllerViewModelList.Add(dataControllerVM);
 
         }
-       var resultDatacontroller= await _WizaredService.InsertDataController(dataControllerViewModelList);
+       return  await _WizaredService.InsertDataController(dataControllerViewModelList);
         //if()
 
 

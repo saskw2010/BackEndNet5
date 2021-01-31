@@ -212,6 +212,7 @@ namespace BackEnd.Web
       services.AddSingleton(emailConfig);
       services.AddScoped<IEmailSender, EmailSender>();
       services.AddScoped<IemailService, emailService>();
+      services.AddScoped<IEsSrItemService, EsSrItemService>();
       //---------------------------------------------------
     }
 

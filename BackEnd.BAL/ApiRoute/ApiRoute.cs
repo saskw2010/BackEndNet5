@@ -88,6 +88,10 @@ namespace BackEnd.BAL.ApiRoute
     {
       public const string createUserForEnginner = Base + "Engineer/createUserForEnginner";
     }
+    public static class ItemRoute
+    {
+      public const string GetAllItem = Base + "ItemRoute/GetAllItem";
+    }
 
   }
 }

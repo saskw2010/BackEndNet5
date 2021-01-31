@@ -41,5 +41,6 @@ namespace RealState.DAL.IBackEndContext
     DbSet<dataController_commandstableslist> dataController_commandstableslist { get; set; }
     DbSet<dataController_fields_field> dataController_fields_field { get; set; }
     DbSet<dataController_views> dataController_views { get; set; }
+    List<Object> GetEsSr_Proc_GetActiveItems();
   }
 }
