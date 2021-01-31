@@ -256,7 +256,7 @@ namespace BackEnd.Service.Service
       }
       var periods = esSrPeriodTechnicalsList.Select(x => new
       {
-        PireodId = x.PeriodId.Value,
+        PeriodId = x.PeriodId.Value,
         NameAr = x.EsSrPeriod.NameAr,
         NameEn = x.EsSrPeriod.NameEn,
         fromTime = x.EsSrPeriod.FromTime,
@@ -269,7 +269,7 @@ namespace BackEnd.Service.Service
         sumMax = esSrPeriodTechnicalsList.Sum(y=>y.MaxNumOfOrder),
         EsSrOrders = x.EsSrOrders
 
-      }).GroupBy(sc => new { sc.PireodId }).Select(g => g.First()).ToList();
+      }).GroupBy(sc => new { sc.PeriodId }).Select(g => g.First()).ToList();
       bool flag = true;
       foreach (DateTime day in EachDay(fromDateReques, todateReques))
       {
@@ -310,7 +310,7 @@ namespace BackEnd.Service.Service
               if ((countOderOfDay.Count() <= period.maximumNumberOfOrderBerTechnical) && (worksDay != null)) {
                 PeriodVm obj = new PeriodVm
                 {
-                  PireodId = period.PireodId,
+                  PeriodId = period.PeriodId,
                   NameAr = period.NameAr,
                   NameEn = period.NameEn,
                   PeriodTechnicalsVm = tecVm

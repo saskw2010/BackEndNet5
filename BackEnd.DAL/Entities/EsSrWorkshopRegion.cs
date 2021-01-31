@@ -14,8 +14,8 @@ namespace BackEnd.DAL.Entities
     public Nullable<long> WorkshopId { get; set; }
     public Nullable<long> PicStockId { get; set; }
     public string Code { get; set; }
-    public string DescriptionEn { get; set; }
-    public string DescriptionAr { get; set; }
+    public string NameEn { get; set; }
+    public string NameAr{ get; set; }
     public Nullable<decimal> MapLatitude { get; set; }
     public Nullable<decimal> MapLangitude { get; set; }
     public Nullable<decimal> MapArea { get; set; }

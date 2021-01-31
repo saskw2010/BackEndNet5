@@ -44,7 +44,6 @@ namespace BackEnd.Service.MappingProfiles
       CreateMap<XmlFile, XmlFileViewModel>().ReverseMap();
       CreateMap<dataController, dataControllerViewModel>().ReverseMap();
 
-
     }
   }
 }

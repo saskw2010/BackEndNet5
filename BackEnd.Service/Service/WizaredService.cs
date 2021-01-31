@@ -197,9 +197,29 @@ namespace BackEnd.Service.Service
     {
       try
       {
-         List<dataController> dataController = new List<dataController>();
-         var Dto1 = _mapper.Map(dataControllerVM, dataController);
-        _unitOfWork.dataControllersRepository.AddRange(Dto1);
+        List<dataController> dataControllerList = new List<dataController>();
+        foreach (var item in dataControllerVM)
+        {
+          dataController dataController = new dataController();
+          dataController.dataController_name = item.dataController_name;
+          dataController.dataController_nativeSchema = item.dataController_nativeSchema;
+          dataController.dataController_nativeTableName = item.dataController_nativeTableName;
+          dataController.dataController_conflictDetection = item.dataController_conflictDetection;
+          dataController.dataController_label = item.dataController_label;
+          dataController.xmlFkId = item.xmlFkId;
+          dataController.dataController_commandstableslist = new List<dataController_commandstableslist>();
+          foreach (var obj in item.dataController_commandstableslist)
+          {
+            var dataController_commandstableslis = new dataController_commandstableslist();
+            dataController_commandstableslis.dataController_commands_command_tableslist = obj.dataController_commands_command_tableslist;
+            dataController_commandstableslis.dataController_name = obj.dataController_name;
+
+            dataController.dataController_commandstableslist.Add(dataController_commandstableslis);
+          }
+          dataControllerList.Add(dataController);
+        }
+        
+        _unitOfWork.dataControllersRepository.AddRange(dataControllerList);
          var result = await _unitOfWork.SaveAsync();
         if (result == 200)
         {
@@ -207,7 +227,7 @@ namespace BackEnd.Service.Service
           {
             success = true,
             code = "200",
-            data = Dto1,
+            data = null,
             message = "controllers saved successfuly"
           };
         }

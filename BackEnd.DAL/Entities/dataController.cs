@@ -16,7 +16,7 @@ public  class dataController
         [ForeignKey("XmlFile")]
         public Nullable<int> xmlFkId { get; set; }
         public virtual ICollection<dataController_commands> dataController_commands { get; set; }
-        public virtual ICollection<dataController_commandstableslist> dataController_commandstableslist { get; set; }
+        public virtual List<dataController_commandstableslist> dataController_commandstableslist { get; set; }
         public virtual ICollection<dataController_views> dataController_views { get; set; }
         public virtual XmlFile XmlFile { get; set; }
   }

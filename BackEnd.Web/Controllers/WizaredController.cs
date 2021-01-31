@@ -271,20 +271,27 @@ namespace BackEnd.Web.Controllers
           string xmlns = "urn:schemas-codeontime-com:data-aquarium";
           var serializer = new XmlSerializer(typeof(DataController), xmlns);
           var datacontrollerObj = (DataController)serializer.Deserialize(new StringReader(item.DataControllerXml));
-          dataControllerViewModel dataControllerVM = new dataControllerViewModel {
-            dataController_name= datacontrollerObj.Name,
-            dataController_nativeSchema= "dbo",
-            dataController_nativeTableName=datacontrollerObj.Name,
-            dataController_conflictDetection= datacontrollerObj.ConflictDetection,
-            dataController_label=datacontrollerObj.Label,
-            xmlFkId= item.Id,
+          var NameOfController=datacontrollerObj.Name;
+          List<dataController_commandstableslistVM> dataControllerTableList = new List<dataController_commandstableslistVM>();
+          foreach (var command in datacontrollerObj.Commands.Command) {
+            dataControllerTableList.AddRange (getTableListTablesList(command.text, NameOfController));
+          }
+          dataControllerViewModel dataControllerVM = new dataControllerViewModel
+          {
+            dataController_name = datacontrollerObj.Name,
+            dataController_nativeSchema = "dbo",
+            dataController_nativeTableName = datacontrollerObj.Name,
+            dataController_conflictDetection = datacontrollerObj.ConflictDetection,
+            dataController_label = datacontrollerObj.Label,
+            xmlFkId = item.Id,
+            dataController_commandstableslist= dataControllerTableList
 
           };
           dataControllerViewModelList.Add(dataControllerVM);
 
         }
-       return  await _WizaredService.InsertDataController(dataControllerViewModelList);
-        //if()
+        return await _WizaredService.InsertDataController(dataControllerViewModelList);
+        
 
 
       }
@@ -297,8 +304,9 @@ namespace BackEnd.Web.Controllers
     #endregion
 
     #region
-    public void AddDataControllerCommandsTablesList(string iteratorcomamands_Commandtext1)
+    public List<dataController_commandstableslistVM> getTableListTablesList(string iteratorcomamands_Commandtext1,string Name)
     {
+      List<dataController_commandstableslistVM> dataControllerTableList = new List<dataController_commandstableslistVM>();
       SelectClauseDictionary expressions;
       var statementMatch = DataControllerBase.SqlSelectRegex1.Match(iteratorcomamands_Commandtext1);
       if (!statementMatch.Success)
@@ -311,11 +319,18 @@ namespace BackEnd.Web.Controllers
         var mtable = expresvalue.Replace(@"\", string.Empty);
         if (mtable.Length > 0)
         {
-          Console.WriteLine("mtable", mtable);
+          if (!dataControllerTableList.Any(x => x.dataController_commands_command_tableslist == mtable)) {
+            var dataControllerTableElement = new dataController_commandstableslistVM {
+              dataController_name= Name,
+              dataController_commands_command_tableslist= mtable,
+            };
+            dataControllerTableList.Add(dataControllerTableElement);
+          }
 
         }
 
       }
+      return dataControllerTableList;
     }
     #endregion
     private SelectClauseDictionary ParseSelectExpressions(string selectClause)
