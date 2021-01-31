@@ -264,6 +264,7 @@ namespace BackEnd.Web.Controllers
     #region snapShot
     private async Task<Result> snapShotDataControllerController(List<XmlFile> XmlFileVM) {
       try {
+        List<string> TextCommand = new List<string>();
         List<dataControllerViewModel> dataControllerViewModelList = new List<dataControllerViewModel>();
         foreach (var item in XmlFileVM)
         {
@@ -280,8 +281,11 @@ namespace BackEnd.Web.Controllers
 
           };
           dataControllerViewModelList.Add(dataControllerVM);
+
         }
-       return await _WizaredService.InsertDataController(dataControllerViewModelList);
+       var resultDatacontroller= await _WizaredService.InsertDataController(dataControllerViewModelList);
+        //if()
+
 
       }
       catch (Exception ex) {
@@ -292,6 +296,53 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
-  
+    #region
+    public void AddDataControllerCommandsTablesList(string iteratorcomamands_Commandtext1)
+    {
+      SelectClauseDictionary expressions;
+      var statementMatch = DataControllerBase.SqlSelectRegex1.Match(iteratorcomamands_Commandtext1);
+      if (!statementMatch.Success)
+        statementMatch = DataControllerBase.SqlSelectRegex2.Match(iteratorcomamands_Commandtext1);
+      expressions = ParseSelectExpressions(statementMatch.Groups["Select"].Value);
+      foreach (KeyValuePair<string, string> expres in expressions)
+      {
+        char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
+        var expresvalue = expres.Value.Split(delimiterChars)[0];
+        var mtable = expresvalue.Replace(@"\", string.Empty);
+        if (mtable.Length > 0)
+        {
+          Console.WriteLine("mtable", mtable);
+
+        }
+
+      }
+    }
+    #endregion
+    private SelectClauseDictionary ParseSelectExpressions(string selectClause)
+    {
+      var expressions = new SelectClauseDictionary();
+      var fieldMatch = DataControllerBase.SelectExpressionRegex.Match(selectClause);
+      while (fieldMatch.Success)
+      {
+        var expression = fieldMatch.Groups["Expression"].Value;
+        var fieldName = fieldMatch.Groups["FieldName"].Value;
+        var aliasField = fieldMatch.Groups["Alias"].Value;
+        if (!(string.IsNullOrEmpty(expression)))
+        {
+          if (string.IsNullOrEmpty(aliasField))
+            if (string.IsNullOrEmpty(fieldName))
+              aliasField = expression;
+            else
+              aliasField = fieldName;
+          if (!(expressions.ContainsKey(aliasField)))
+            expressions.Add(aliasField, expression);
+        }
+        fieldMatch = fieldMatch.NextMatch();
+      }
+
+
+      return expressions;
+
+    }
   }
 }
