@@ -189,6 +189,7 @@ namespace BackEnd.Web
       services.AddScoped<IEsSrOrderService, EsSrOrderService>();
       services.AddScoped<IEsSrEngineerService, EsSrEngineerService>();
       services.AddScoped<IEsSrSupervisorService, EsSrSupervisorService>();
+      services.AddScoped<IEsSrItemService, EsSrItemService>();
       //--------------------------end of inject service--------------------------------
 
       //begin::autmapper
