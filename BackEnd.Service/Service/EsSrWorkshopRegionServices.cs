@@ -27,9 +27,11 @@ namespace BackEnd.Service.Service
       try
       {
         var itemRegion = _unitOfWork.EsSrWorkshopRegionRepository.Get(filter:
-          (reg => reg.EsSrTechnicals.Any(x => x.EsSrItemTechnicals.Any(it =>
-          (it.ItemId == itemId) && (reg.IsActive == true) && (reg.IsDelete == false)))
-          &&(reg.IsActive==true) && (reg.IsDelete == false)));
+            (reg => reg.EsSrTechnicals.Any(x => x.EsSrItemTechnicals.Any(it =>
+            (it.ItemId == itemId) && (it.IsActive == true) && (it.IsDelete == false))
+            && x.EsSrPeriodTechnicals.Any(pt =>
+            (pt.WorkshopRegionId == x.WorkshopRegionId) && (pt.IsActive == true) && (pt.IsDelete == false)))
+            && (reg.IsActive == true) && (reg.IsDelete == false)));
         var itemReginList = new List<EsSrWorkshopRegion>();
         var itemRegionVm = new List<EsSrWorkshopRegionViewModel>();
         foreach (var item in itemRegion)

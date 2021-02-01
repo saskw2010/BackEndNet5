@@ -322,11 +322,12 @@ namespace BackEnd.Service.Service
                         if (tecVm.Count > 0)
                         {
                             var worksDay = period.EsSrTechnicalWorkDays.FirstOrDefault(x => x.WorkDaysId == (long)day.DayOfWeek);
-                            //-------------------get Order By date------------------
-                            var orderCountOnPeriod = _unitOfWork.EsSrOrderRepository.Get(x => checkDate(x.OrderDate, day.Date) && x.PeriodId == period.PeriodId && x.WorkshopRegionId == period.WorkshopRegionId && (x.IsCanceled == false) && (x.IsActive == true) && (x.IsDelete == false));
-                            //var countOderOfDay = period.EsSrOrders.Where(x => checkDate(x.OrderDate, day.Date));
-                            //if ((countOderOfDay.Count() <= period.maximumNumberOfOrderBerTechnical) && (worksDay != null))
-                            if (orderCountOnPeriod != null && (orderCountOnPeriod.Count() <= period.sumMax) && (worksDay != null))
+              //-------------------get Order By date------------------
+              var orderCountOnPeriod = _unitOfWork.EsSrOrderRepository.Get(x => x.PeriodId == period.PeriodId && x.WorkshopRegionId == period.WorkshopRegionId && (x.IsCanceled == false) && (x.IsActive == true) && (x.IsDelete == false));
+              orderCountOnPeriod = orderCountOnPeriod.Where(x => checkDate(x.OrderDate, day.Date)).ToList();
+              //var countOderOfDay = period.EsSrOrders.Where(x => checkDate(x.OrderDate, day.Date));
+              //if ((countOderOfDay.Count() <= period.maximumNumberOfOrderBerTechnical) && (worksDay != null))
+              if (orderCountOnPeriod != null && (orderCountOnPeriod.Count() <= period.sumMax) && (worksDay != null))
                             {
                                 PeriodVm obj = new PeriodVm
                                 {
