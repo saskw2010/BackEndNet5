@@ -26,8 +26,8 @@ namespace BackEnd.Service.Service
         #region GetTechnicalPeriodIdofLessNumberOfOrder
         public EsSrOrderViewModel GetTechnicalPeriodIdofLessNumberOfOrder(EsSrOrderViewModel EsSrOrdervm)
         {
-
-            var ListOfOrders = _unitOfWork.EsSrOrderRepository.Get(filter: (x => checkDate(x.OrderDate, EsSrOrdervm.OrderDate) && (x.IsCanceled == false) &&(x.IsActive == true) && (x.IsDelete == false)));
+            var ListOfOrders = _unitOfWork.EsSrOrderRepository.Get(filter: (x => (x.IsCanceled == false) && (x.IsActive == true) && (x.IsDelete == false)));
+            ListOfOrders = ListOfOrders.Where(x => checkDate(x.OrderDate, EsSrOrdervm.OrderDate)).ToList();
             //ListOfOrders = ListOfOrders.Where(x => checkDate(x.OrderDate, EsSrOrdervm.OrderDate));
             //long maxTechnicalPeriodId = EsSrOrdervm.periodTechnicalsVm.FirstOrDefault().PeriodTechnicalId;
             //int maxNumberOfOrder = 0;

@@ -29,10 +29,22 @@ namespace BackEnd.Web.Controllers
         #region saveOrder
         [HttpPost(ApiRoute.EsSrOrderRouting.saveOrder)]
         public async Task<Result> saveOrder([FromBody] EsSrOrderViewModel esSrOrderVm)
-        {
+      {
+       try { 
             var order = _EsSrPeriodTechnicalService.GetTechnicalPeriodIdofLessNumberOfOrder(esSrOrderVm);
             //esSrOrderVm.PeriodTechnicalId = PeriodTehnicalId;
             return await _EsSrOrderService.saveOrder(order);
+           }
+            catch (Exception ex)
+            {
+                return new Result
+                {
+                    success = false,
+                    code = "400",
+                    data = null,
+                    message = ExtensionMethods.FullMessage(ex)
+                 };
+        }
         }
         #endregion
 

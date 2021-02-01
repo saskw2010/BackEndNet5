@@ -37,6 +37,7 @@ namespace BackEnd.Service.Service
                 obje.IsDelete = false;
                 obje.IsCanceled = false;
                 obje.IsCompleted = false;
+                obje.CreatedOn = DateTime.Now;
                 _unitOfWork.EsSrOrderRepository.Insert(obje);
                 var res1 = await _unitOfWork.SaveAsync();
                 //---------getOrderStageByCategoryId
