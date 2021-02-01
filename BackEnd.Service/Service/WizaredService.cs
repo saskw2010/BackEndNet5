@@ -229,6 +229,20 @@ namespace BackEnd.Service.Service
             dataController.dataController_commands.Add(datacontrollerCommand);
           }
           dataControllerList.Add(dataController);
+
+          dataController.dataController_views = new List<dataController_views>();
+          foreach (var obj in item.dataController_views)
+          {
+            var datacontrollerView = new dataController_views();
+            datacontrollerView.dataController_name = obj.dataController_name;
+            datacontrollerView.dataController_views_view_id = obj.dataController_views_view_id;
+            datacontrollerView.dataController_views_view_type = obj.dataController_views_view_type;
+            datacontrollerView.dataController_views_view_label = obj.dataController_views_view_label;
+            datacontrollerView.dataController_views_view_commandId = obj.dataController_views_view_commandId;
+            datacontrollerView.dataController_views_view_headerText = obj.dataController_views_view_headerText;
+            dataController.dataController_views.Add(datacontrollerView);
+          }
+          dataControllerList.Add(dataController);
         }
         
         _unitOfWork.dataControllersRepository.AddRange(dataControllerList);

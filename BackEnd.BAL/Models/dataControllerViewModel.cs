@@ -15,5 +15,6 @@ namespace BackEnd.BAL.Models
     public Nullable<int> xmlFkId { get; set; }
     public List<dataController_commandstableslistVM> dataController_commandstableslist { get; set; }
     public List<dataController_commandsViewModel> dataController_commands { get; set; }
+    public List<dataController_viewsViewModel> dataController_views { get; set; }
   }
 }

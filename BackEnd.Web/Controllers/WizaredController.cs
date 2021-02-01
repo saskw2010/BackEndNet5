@@ -66,15 +66,15 @@ namespace BackEnd.Web.Controllers
       string folderPath = wizaredConfiguration.ControllerPath + "\\" + "Jaber\\controllers\\";
       foreach (string file in Directory.EnumerateFiles(folderPath, "*.model.xml"))
       {
-        string fileName =Path.GetFileNameWithoutExtension(file);
+        string fileName = Path.GetFileNameWithoutExtension(file);
         string[] FileBase = fileName.Split('.');
         FileNames.Add(FileBase[0]);
       }
       return new Result
       {
-        success=true,
-        code="200",
-        data= FileNames
+        success = true,
+        code = "200",
+        data = FileNames
       };
     }
     #endregion
@@ -92,7 +92,7 @@ namespace BackEnd.Web.Controllers
         string ControllerPath = wizaredConfiguration.ControllerPath;
         string xmlns = "urn:schemas-codeontime-com:data-model";
         var serializer = new XmlSerializer(typeof(DataModel), xmlns);
-        var file = new XmlTextReader(ControllerPath+ "\\Jaber\\controllers\\" + NameOfModel + ".model.xml");
+        var file = new XmlTextReader(ControllerPath + "\\Jaber\\controllers\\" + NameOfModel + ".model.xml");
         DataModel resultingMessage = (DataModel)serializer.Deserialize(file);
         file.Close();
         return new Result { success = true, code = "200", data = resultingMessage };
@@ -107,17 +107,20 @@ namespace BackEnd.Web.Controllers
 
     #region saveDataModel
     [HttpPost("saveDataModel")]
-    public Result saveDataModel([FromBody] SaveDataModel SaveDataModel) {
+    public Result saveDataModel([FromBody] SaveDataModel SaveDataModel)
+    {
       //Create Backup
       var wizaredConfiguration = Configuration
           .GetSection("WizaredConfiguration")
           .Get<WizaredConfiguration>();
       string ControllerPath = wizaredConfiguration.ControllerPath;
 
-      var res= _WizaredService.createBackUp(ControllerPath, SaveDataModel.controllerName);
-      if (res == true) {
-        var res2=_WizaredService.DeleteOldFile(ControllerPath, SaveDataModel.controllerName+".model.xml");
-        if (res2) {
+      var res = _WizaredService.createBackUp(ControllerPath, SaveDataModel.controllerName);
+      if (res == true)
+      {
+        var res2 = _WizaredService.DeleteOldFile(ControllerPath, SaveDataModel.controllerName + ".model.xml");
+        if (res2)
+        {
           string xmlns = "urn:schemas-codeontime-com:data-model";
           var serializer = new XmlSerializer(typeof(DataModel), xmlns);
           TextWriter txtWriter = new StreamWriter(ControllerPath + SaveDataModel.controllerName + ".model.xml");
@@ -126,7 +129,7 @@ namespace BackEnd.Web.Controllers
           serializer.Serialize(txtWriter, SaveDataModel.dataModel, ns);
           txtWriter.Close();
         }
-        return new Result { success = true,code="200",message="DataModel Updated Successfuly" };
+        return new Result { success = true, code = "200", message = "DataModel Updated Successfuly" };
       }
       return new Result { success = true, code = "403", message = "DataModel Updated Faild" };
     }
@@ -144,18 +147,18 @@ namespace BackEnd.Web.Controllers
         string ControllerPath = wizaredConfiguration.ControllerPath;
         string xmlns = "urn:schemas-codeontime-com:data-aquarium";
         var serializer = new XmlSerializer(typeof(DataController), xmlns);
-        var file = new XmlTextReader(ControllerPath +"\\Jaber\\controllers\\"+NameOfDataController + ".xml");
+        var file = new XmlTextReader(ControllerPath + "\\Jaber\\controllers\\" + NameOfDataController + ".xml");
         DataController resultingMessage = (DataController)serializer.Deserialize(file);
         file.Close();
-      return new Result { success = true, code = "200", data = resultingMessage };
-    }
+        return new Result { success = true, code = "200", data = resultingMessage };
+      }
       catch (Exception ex)
       {
         return null;
         return new Result { success = false, code = "403", data = ex.Message };
       }
 
-}
+    }
     #endregion
 
 
@@ -194,18 +197,19 @@ namespace BackEnd.Web.Controllers
     [HttpGet("Recurence ")]
     public async Task<Result> Recurence(string companyName)
     {
-      int countOfCompany=_WizaredService.validController(companyName);
+      int countOfCompany = _WizaredService.validController(companyName);
 
-        xmlControllerViewModel xmlControllerObj = new xmlControllerViewModel
-        {
-          dataControllerCollection_xmlns = "urn:schemas-codeontime-com:data-aquarium",
-          dataControllerCollection_snapshot="true",
-          dataControllerCollection_Name= companyName,
-          dataControllerCollection_Version="V_"+ countOfCompany
+      xmlControllerViewModel xmlControllerObj = new xmlControllerViewModel
+      {
+        dataControllerCollection_xmlns = "urn:schemas-codeontime-com:data-aquarium",
+        dataControllerCollection_snapshot = "true",
+        dataControllerCollection_Name = companyName,
+        dataControllerCollection_Version = "V_" + countOfCompany
 
-        };
+      };
       var res = await _WizaredService.insertControllers(xmlControllerObj);
-      if (res.success == true) {
+      if (res.success == true)
+      {
         var wizaredConfiguration = Configuration
        .GetSection("WizaredConfiguration")
        .Get<WizaredConfiguration>();
@@ -228,7 +232,7 @@ namespace BackEnd.Web.Controllers
           {
             string DataControllerText = System.IO.File.ReadAllText(wizaredConfiguration.ControllerPath + "\\" + companyName + "\\controllers\\" + item + ".xml", Encoding.UTF8);
             string DataModelText = System.IO.File.ReadAllText(wizaredConfiguration.ControllerPath + "\\" + companyName + "\\controllers\\" + item + ".model" + ".xml", Encoding.UTF8);
-            
+
             XmlFileViewModel XmlFileVM = new XmlFileViewModel
             {
               DataControllerXml = DataControllerText,
@@ -237,14 +241,15 @@ namespace BackEnd.Web.Controllers
               CoontrollerFkId = ((xmlController)res.data).Id,
               FileName = item,
               Version = ((xmlController)res.data).dataControllerCollection_Version,
-              
+
             };
             XmlFileListVM.Add(XmlFileVM);
           }
-      
-        var res2 = await _WizaredService.insertXmlFile(XmlFileListVM);
 
-          if (res2.success == true) {
+          var res2 = await _WizaredService.insertXmlFile(XmlFileListVM);
+
+          if (res2.success == true)
+          {
             var resDatacontroller = await snapShotDataControllerController((List<XmlFile>)res2.data);
             return resDatacontroller;
           }
@@ -255,15 +260,17 @@ namespace BackEnd.Web.Controllers
       }
       return res;
 
-     
+
 
 
     }
     #endregion
 
     #region snapShot
-    private async Task<Result> snapShotDataControllerController(List<XmlFile> XmlFileVM) {
-      try {
+    private async Task<Result> snapShotDataControllerController(List<XmlFile> XmlFileVM)
+    {
+      try
+      {
         List<string> TextCommand = new List<string>();
         List<dataControllerViewModel> dataControllerViewModelList = new List<dataControllerViewModel>();
         foreach (var item in XmlFileVM)
@@ -271,11 +278,13 @@ namespace BackEnd.Web.Controllers
           string xmlns = "urn:schemas-codeontime-com:data-aquarium";
           var serializer = new XmlSerializer(typeof(DataController), xmlns);
           var datacontrollerObj = (DataController)serializer.Deserialize(new StringReader(item.DataControllerXml));
-          var NameOfController=datacontrollerObj.Name;
+          var NameOfController = datacontrollerObj.Name;
           List<dataController_commandstableslistVM> dataControllerTableList = new List<dataController_commandstableslistVM>();
-          foreach (var command in datacontrollerObj.Commands.Command) {
-            dataControllerTableList.AddRange (getTableListTablesList(command.text, NameOfController));
+          foreach (var command in datacontrollerObj.Commands.Command)
+          {
+            dataControllerTableList.AddRange(getTableListTablesList(command.text, NameOfController));
           }
+          //----map datacontrollerCommandList
           List<dataController_commandsViewModel> datacontrollerCommandList = new List<dataController_commandsViewModel>();
           foreach (var command in datacontrollerObj.Commands.Command)
           {
@@ -286,15 +295,31 @@ namespace BackEnd.Web.Controllers
             datacontrollerCommand.dataController_commands_command_id = command.Id;
             datacontrollerCommand.dataController_commands_command_text = command.text;
             datacontrollerCommand.dataController_commands_command_event = command.Event;
-            if (command.Output != null) {
-              if (command.Output.FieldOutput != null) {
+            if (command.Output != null)
+            {
+              if (command.Output.FieldOutput != null)
+              {
                 datacontrollerCommand.dataController_commands_command_output_fieldOutput_fieldName = command.Output.FieldOutput.FirstOrDefault().FieldName;
               }
             }
-
-            
             datacontrollerCommandList.Add(datacontrollerCommand);
           }
+          //--end of datacontrollerCommandList
+
+          //----map view
+          List<dataController_viewsViewModel> dataController_viewsList = new List<dataController_viewsViewModel>();
+          foreach (var view in datacontrollerObj.Views.View)
+          {
+            var datacontrollerView = new dataController_viewsViewModel();
+            datacontrollerView.dataController_name = NameOfController;
+            datacontrollerView.dataController_views_view_id = view.Id;
+            datacontrollerView.dataController_views_view_type = view.Type;
+            datacontrollerView.dataController_views_view_label = view.Label;
+            datacontrollerView.dataController_views_view_commandId = view.CommandId;
+            datacontrollerView.dataController_views_view_headerText = view.HeaderText;
+            dataController_viewsList.Add(datacontrollerView);
+          }
+          //--end of view
           dataControllerViewModel dataControllerVM = new dataControllerViewModel
           {
             dataController_name = datacontrollerObj.Name,
@@ -303,28 +328,30 @@ namespace BackEnd.Web.Controllers
             dataController_conflictDetection = datacontrollerObj.ConflictDetection,
             dataController_label = datacontrollerObj.Label,
             xmlFkId = item.Id,
-            dataController_commandstableslist= dataControllerTableList,
-            dataController_commands= datacontrollerCommandList
+            dataController_commandstableslist = dataControllerTableList,
+            dataController_commands = datacontrollerCommandList,
+           dataController_views= dataController_viewsList
 
           };
           dataControllerViewModelList.Add(dataControllerVM);
 
         }
         return await _WizaredService.InsertDataController(dataControllerViewModelList);
-        
+
 
 
       }
-      catch (Exception ex) {
+      catch (Exception ex)
+      {
         return new Result { success = false };
       }
-     
+
 
     }
     #endregion
 
     #region
-    public List<dataController_commandstableslistVM> getTableListTablesList(string iteratorcomamands_Commandtext1,string Name)
+    public List<dataController_commandstableslistVM> getTableListTablesList(string iteratorcomamands_Commandtext1, string Name)
     {
       List<dataController_commandstableslistVM> dataControllerTableList = new List<dataController_commandstableslistVM>();
       SelectClauseDictionary expressions;
@@ -339,10 +366,12 @@ namespace BackEnd.Web.Controllers
         var mtable = expresvalue.Replace(@"\", string.Empty);
         if (mtable.Length > 0)
         {
-          if (!dataControllerTableList.Any(x => x.dataController_commands_command_tableslist == mtable)) {
-            var dataControllerTableElement = new dataController_commandstableslistVM {
-              dataController_name= Name,
-              dataController_commands_command_tableslist= mtable,
+          if (!dataControllerTableList.Any(x => x.dataController_commands_command_tableslist == mtable))
+          {
+            var dataControllerTableElement = new dataController_commandstableslistVM
+            {
+              dataController_name = Name,
+              dataController_commands_command_tableslist = mtable,
             };
             dataControllerTableList.Add(dataControllerTableElement);
           }
