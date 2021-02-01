@@ -305,7 +305,36 @@ namespace BackEnd.Web.Controllers
             datacontrollerCommandList.Add(datacontrollerCommand);
           }
           //--end of datacontrollerCommandList
+          //----map Fields
+          List <dataController_fields_fieldViewModel> dataController_fieldsList = new List<dataController_fields_fieldViewModel>();
+          foreach (var field in datacontrollerObj.Fields.Field)
+          {
+            var datacontrollerView = new dataController_fields_fieldViewModel();
+            datacontrollerView.dataController_name = NameOfController;
+            datacontrollerView.dataController_fields_field_isPrimaryKey = field.IsPrimaryKey;
+            datacontrollerView.dataController_fields_field_name = field.Name;
+            datacontrollerView.dataController_fields_field_label = field.Label;
+            datacontrollerView.dataController_fields_field_allowNulls = field.AllowNulls;
+            datacontrollerView.dataController_fields_field_readOnly = field.ReadOnly;
+            datacontrollerView.dataController_fields_field_type = field.Type;
+            datacontrollerView.dataController_fields_field_showInSummary = field.ShowInSummary;
+            datacontrollerView.dataController_fields_field_dataFormatString = field.DataFormatString;
+            datacontrollerView.dataController_fields_field_default = field.Default;
+            if (field.Length != null) {
+              datacontrollerView.dataController_fields_field_length = int.Parse(field.Length);
+            }
 
+            if (field.Items.Count() > 0)
+            {
+              datacontrollerView.dataController_fields_field_items_style = field.Items.FirstOrDefault().Style;
+              datacontrollerView.dataController_fields_field_items_dataTextField = field.Items.FirstOrDefault().DataTextField;
+              datacontrollerView.dataController_fields_field_items_newDataView = field.Items.FirstOrDefault().NewDataView;
+              datacontrollerView.dataController_fields_field_items_dataValueField = field.Items.FirstOrDefault().DataValueField;
+              datacontrollerView.dataController_fields_field_items_dataController = field.Items.FirstOrDefault().DataController;
+            }
+            dataController_fieldsList.Add(datacontrollerView);
+          }
+          //--end of Fields
           //----map view
           List<dataController_viewsViewModel> dataController_viewsList = new List<dataController_viewsViewModel>();
           foreach (var view in datacontrollerObj.Views.View)
@@ -320,6 +349,7 @@ namespace BackEnd.Web.Controllers
             dataController_viewsList.Add(datacontrollerView);
           }
           //--end of view
+        
           dataControllerViewModel dataControllerVM = new dataControllerViewModel
           {
             dataController_name = datacontrollerObj.Name,
@@ -330,7 +360,9 @@ namespace BackEnd.Web.Controllers
             xmlFkId = item.Id,
             dataController_commandstableslist = dataControllerTableList,
             dataController_commands = datacontrollerCommandList,
-           dataController_views= dataController_viewsList
+           dataController_views= dataController_viewsList,
+           dataController_fields_field= dataController_fieldsList
+
 
           };
           dataControllerViewModelList.Add(dataControllerVM);
@@ -343,7 +375,7 @@ namespace BackEnd.Web.Controllers
       }
       catch (Exception ex)
       {
-        return new Result { success = false };
+        return new Result { success = false,code="403", message = ExtensionMethods.FullMessage(ex) };
       }
 
 

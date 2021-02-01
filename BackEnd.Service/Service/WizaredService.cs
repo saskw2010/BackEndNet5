@@ -243,6 +243,30 @@ namespace BackEnd.Service.Service
             dataController.dataController_views.Add(datacontrollerView);
           }
           dataControllerList.Add(dataController);
+
+          dataController.dataController_fields_field = new List<dataController_fields_field>();
+          foreach (var obj in item.dataController_fields_field)
+          {
+            var field = new dataController_fields_field();
+            field.dataController_name = obj.dataController_name;
+            field.dataController_fields_field_isPrimaryKey = obj.dataController_fields_field_isPrimaryKey;
+            field.dataController_fields_field_name = obj.dataController_fields_field_name;
+            field.dataController_fields_field_label = obj.dataController_fields_field_label;
+            field.dataController_fields_field_allowNulls = obj.dataController_fields_field_allowNulls;
+            field.dataController_fields_field_readOnly = obj.dataController_fields_field_readOnly;
+            field.dataController_fields_field_type = obj.dataController_fields_field_type;
+            field.dataController_fields_field_showInSummary = obj.dataController_fields_field_showInSummary;
+            field.dataController_fields_field_dataFormatString = obj.dataController_fields_field_dataFormatString;
+            field.dataController_fields_field_default = obj.dataController_fields_field_default;
+            field.dataController_fields_field_length = obj.dataController_fields_field_length;
+            field.dataController_fields_field_items_style = obj.dataController_fields_field_items_style;
+            field.dataController_fields_field_items_dataTextField = obj.dataController_fields_field_items_dataTextField;
+            field.dataController_fields_field_items_newDataView = obj.dataController_fields_field_items_newDataView;
+            field.dataController_fields_field_items_dataValueField = obj.dataController_fields_field_items_dataValueField;
+            field.dataController_fields_field_items_dataController = obj.dataController_fields_field_items_dataController;
+            dataController.dataController_fields_field.Add(field);
+          }
+          dataControllerList.Add(dataController);
         }
         
         _unitOfWork.dataControllersRepository.AddRange(dataControllerList);

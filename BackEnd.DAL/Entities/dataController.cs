@@ -19,5 +19,6 @@ public  class dataController
         public virtual List<dataController_commandstableslist> dataController_commandstableslist { get; set; }
         public virtual ICollection<dataController_views> dataController_views { get; set; }
         public virtual XmlFile XmlFile { get; set; }
+        public virtual ICollection<dataController_fields_field> dataController_fields_field { get; set; }
   }
 }

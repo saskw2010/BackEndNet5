@@ -18,7 +18,6 @@ namespace BackEnd.DAL.Entities
     {
         [Key]
         public long dataController_views_view { get; set; }
- 
         public string dataController_name { get; set; }
         public string dataController_views_view_id { get; set; }
         public string dataController_views_view_type { get; set; }
@@ -28,5 +27,6 @@ namespace BackEnd.DAL.Entities
         [ForeignKey("dataController")]
         public Nullable<int> datacontrollerFkId { get; set; }
         public virtual dataController dataController { get; set; }
-    }
+        public virtual ICollection<dataController_dataFields> dataController_dataFields { get; set; }
+  }
 }

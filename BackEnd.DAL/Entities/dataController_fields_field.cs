@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BackEnd.DAL.Entities
 { 
     public partial class dataController_fields_field
     {
         [Key]
-        public int dataController_fields_field1 { get; set; }
+        public int dataController_fields_fieldId { get; set; }
         public string dataController_name { get; set; }
         public string dataController_fields_field_isPrimaryKey { get; set; }
         public string dataController_fields_field_name { get; set; }
@@ -26,5 +27,8 @@ namespace BackEnd.DAL.Entities
         public string dataController_fields_field_items_dataController { get; set; }
         public string dataController_fields_field_items_searchOnStart { get; set; }
         public string dataController_fields_field_items_copy { get; set; }
-    }
+        [ForeignKey("dataController")]
+        public Nullable<int> datacontrollerFkId { get; set; }
+        public virtual dataController dataController { get; set; }
+  }
 }
