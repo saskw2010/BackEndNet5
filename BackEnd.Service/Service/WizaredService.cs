@@ -216,6 +216,18 @@ namespace BackEnd.Service.Service
 
             dataController.dataController_commandstableslist.Add(dataController_commandstableslis);
           }
+          dataController.dataController_commands = new List<dataController_commands>();
+          foreach (var obj in item.dataController_commands)
+          {
+            var datacontrollerCommand = new dataController_commands();
+            datacontrollerCommand.dataController_name = obj.dataController_name;
+            datacontrollerCommand.dataController_commands_command_type = obj.dataController_commands_command_type;
+            datacontrollerCommand.dataController_commands_command_id = obj.dataController_commands_command_id;
+            datacontrollerCommand.dataController_commands_command_text = obj.dataController_commands_command_text;
+            datacontrollerCommand.dataController_commands_command_event = obj.dataController_commands_command_event;
+            datacontrollerCommand.dataController_commands_command_output_fieldOutput_fieldName = obj.dataController_commands_command_output_fieldOutput_fieldName;
+            dataController.dataController_commands.Add(datacontrollerCommand);
+          }
           dataControllerList.Add(dataController);
         }
         

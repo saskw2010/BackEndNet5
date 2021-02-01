@@ -833,7 +833,7 @@ namespace BackEnd.Service.Service
           UserName = socialCode,
           PhoneNumber = PhoneNumber,
           //PasswordHash= Encrypt(Password,"xxx"),
-          PasswordHash = EncodePasswordmosso(socialCode),
+          PasswordHash = EncodePasswordmosso(Password),
           userTypeId = 4,
           confirmed = true,
           EmailConfirmed = true,

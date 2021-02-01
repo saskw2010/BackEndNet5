@@ -276,6 +276,25 @@ namespace BackEnd.Web.Controllers
           foreach (var command in datacontrollerObj.Commands.Command) {
             dataControllerTableList.AddRange (getTableListTablesList(command.text, NameOfController));
           }
+          List<dataController_commandsViewModel> datacontrollerCommandList = new List<dataController_commandsViewModel>();
+          foreach (var command in datacontrollerObj.Commands.Command)
+          {
+            var datacontrollerCommand = new dataController_commandsViewModel();
+
+            datacontrollerCommand.dataController_name = NameOfController;
+            datacontrollerCommand.dataController_commands_command_type = command.Type;
+            datacontrollerCommand.dataController_commands_command_id = command.Id;
+            datacontrollerCommand.dataController_commands_command_text = command.text;
+            datacontrollerCommand.dataController_commands_command_event = command.Event;
+            if (command.Output != null) {
+              if (command.Output.FieldOutput != null) {
+                datacontrollerCommand.dataController_commands_command_output_fieldOutput_fieldName = command.Output.FieldOutput.FirstOrDefault().FieldName;
+              }
+            }
+
+            
+            datacontrollerCommandList.Add(datacontrollerCommand);
+          }
           dataControllerViewModel dataControllerVM = new dataControllerViewModel
           {
             dataController_name = datacontrollerObj.Name,
@@ -284,7 +303,8 @@ namespace BackEnd.Web.Controllers
             dataController_conflictDetection = datacontrollerObj.ConflictDetection,
             dataController_label = datacontrollerObj.Label,
             xmlFkId = item.Id,
-            dataController_commandstableslist= dataControllerTableList
+            dataController_commandstableslist= dataControllerTableList,
+            dataController_commands= datacontrollerCommandList
 
           };
           dataControllerViewModelList.Add(dataControllerVM);
