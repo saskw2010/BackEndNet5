@@ -27,6 +27,6 @@ namespace BackEnd.DAL.Entities
         [ForeignKey("dataController")]
         public Nullable<int> datacontrollerFkId { get; set; }
         public virtual dataController dataController { get; set; }
-        public virtual ICollection<dataController_dataFields> dataController_dataFields { get; set; }
+        public virtual ICollection<dataController_dataFieldsGrid> dataController_dataFields { get; set; }
   }
 }

@@ -46,17 +46,37 @@ namespace BackEnd.Web.Controllers
                  };
         }
         }
-        #endregion
+    #endregion
 
-        #region UpdateOrder
-        [HttpPost(ApiRoute.EsSrOrderRouting.UpdateOrder)]
-        public async Task<Result> UpdateOrder([FromBody] EsSrOrderViewModel esSrOrderVm)
+    #region UpdateOrder
+    [HttpPost(ApiRoute.EsSrOrderRouting.UpdateOrder)]
+    public async Task<Result> UpdateOrder([FromBody] EsSrOrderViewModel esSrOrderVm)
+    {
+      try
+      {
+        //return List Of PeriodTechnial
+        if (esSrOrderVm.periodTechnicalsVm != null)
         {
-            //return List Of PeriodTechnial
-
-            return await _EsSrOrderService.UpdateOrder(esSrOrderVm);
+          var order = _EsSrPeriodTechnicalService.GetTechnicalPeriodIdofLessNumberOfOrder(esSrOrderVm);
+          return await _EsSrOrderService.UpdateOrder(order);
         }
-        #endregion
-
+        else
+        {
+          return await _EsSrOrderService.UpdateOrder(esSrOrderVm);
+        }
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = false,
+          code = "400",
+          data = null,
+          message = ExtensionMethods.FullMessage(ex)
+        };
+      }
     }
+    #endregion
+
+  }
 }

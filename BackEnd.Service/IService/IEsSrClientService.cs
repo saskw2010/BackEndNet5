@@ -12,6 +12,7 @@ namespace BackEnd.Service.IService
     Task<Result> CreateCLientWithSocialId(EsSrClientViewModel esSrClientViewModel);
     Task<Result> UpdateClient(EsSrClientViewModel esSrClientViewModel);
     Task<Result>  createUserForClientsAsync();
-    
+    Task<Result> GetCLientByEmail(string email);
+
   }
 }

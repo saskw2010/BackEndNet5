@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace BackEnd.DAL.Entities
 {
-  public class dataController_dataFields
+  public class dataController_dataFieldsGrid
   {
+    [Key]
     public long FieldId { get; set; }
     public string FieldName { get; set; }
     public string AliasFieldName { get; set; }

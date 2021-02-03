@@ -904,9 +904,10 @@ namespace BackEnd.Service.Service
     #region RestPassword
     public async Task<Result> RestPassword(RestPasswordViewModel restPasswordViewModel)
     {
-      try {
+      try
+      {
         var user = FindByUserNameCustom(restPasswordViewModel.UserName);
-        if (EncodePasswordmosso(restPasswordViewModel.NewPassword) == EncodePasswordmosso(restPasswordViewModel.OldPassword))
+        if (user != null)
         {
           user.PasswordHash = EncodePasswordmosso(restPasswordViewModel.NewPassword);
           await _userManager.UpdateAsync(user);
@@ -917,7 +918,8 @@ namespace BackEnd.Service.Service
             message = "Reset Password Success"
           };
         }
-        else{
+        else
+        {
           return new Result
           {
             success = true,
@@ -926,7 +928,8 @@ namespace BackEnd.Service.Service
           };
         }
       }
-      catch (Exception ex) {
+      catch (Exception ex)
+      {
         return new Result
         {
           success = true,
@@ -935,10 +938,49 @@ namespace BackEnd.Service.Service
         };
       }
     }
-      
-      
+    #endregion
+
+    #region ChangePassword
+    public async Task<Result> ChangePassword(RestPasswordViewModel restPasswordViewModel)
+    {
+      try
+      {
+        var user = FindByUserNameCustom(restPasswordViewModel.UserName);
+        if (EncodePasswordmosso(restPasswordViewModel.NewPassword) == EncodePasswordmosso(restPasswordViewModel.OldPassword))
+        {
+          user.PasswordHash = EncodePasswordmosso(restPasswordViewModel.NewPassword);
+          await _userManager.UpdateAsync(user);
+          return new Result
+          {
+            success = true,
+            code = "200",
+            message = "Change Password Success"
+          };
+        }
+        else
+        {
+          return new Result
+          {
+            success = true,
+            code = "200",
+            message = "Change Password faild "
+          };
+        }
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = true,
+          code = "403",
+          message = ExtensionMethods.FullMessage(ex)
+        };
+      }
     }
     #endregion
-  
+
+
+  }
+
 
 }

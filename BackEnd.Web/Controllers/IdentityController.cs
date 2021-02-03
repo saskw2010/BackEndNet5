@@ -353,6 +353,13 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
+    #region ChangePassword
+    [HttpPost(ApiRoute.Identity.ChangePassword)]
+    public async Task<Result> ChangePassword([FromBody] RestPasswordViewModel restPasswordViewModel)
+    {
+      return await _identityService.ChangePassword(restPasswordViewModel);
+    }
+    #endregion
 
   }
 }

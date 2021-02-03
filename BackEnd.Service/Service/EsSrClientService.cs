@@ -44,7 +44,8 @@ namespace BackEnd.Service.Service
     {
       try
       {
-        if (checEmailALreadyExist(esSrClientViewModel.Email)) {
+        if (checEmailALreadyExist(esSrClientViewModel.Email))
+        {
           return new Result
           {
             success = false,
@@ -80,7 +81,8 @@ namespace BackEnd.Service.Service
           };
         }
       }
-      catch (Exception ex) {
+      catch (Exception ex)
+      {
 
         return new Result
         {
@@ -130,12 +132,15 @@ namespace BackEnd.Service.Service
     #endregion
 
     #region checEmailALreadyExist
-    public Boolean checEmailALreadyExist(string email) {
-     var res= _unitOfWork.EsSrClientRepository.GetEntity(filter:(x=>x.Email == email));
-      if (res != null) {
+    public Boolean checEmailALreadyExist(string email)
+    {
+      var res = _unitOfWork.EsSrClientRepository.GetEntity(filter: (x => x.Email == email));
+      if (res != null)
+      {
         return true;
       }
-      else {
+      else
+      {
         return false;
       }
     }
@@ -169,6 +174,33 @@ namespace BackEnd.Service.Service
           success = false,
           code = "403",
           message = "faild"
+        };
+      }
+    }
+    #endregion
+
+    #region GetCLientByEmail(string email)
+    public async Task<Result> GetCLientByEmail(string email)
+    {
+      try
+      {
+        var cleint = _unitOfWork.EsSrClientRepository.GetEntity(x => x.Email == email);
+        return new Result
+        {
+          success = true,
+          code = "200",
+          data = cleint,
+          message = "User add Successfuly"
+        };
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = false,
+          code = "400",
+          data = null,
+          message = ExtensionMethods.FullMessage(ex)
         };
       }
     }
@@ -212,7 +244,7 @@ namespace BackEnd.Service.Service
     {
       //int num = _random.Next(1000, 9999);
       // await _emailService.sendVerficationMobile(num, Email);
-   
+
       var newUser = new ApplicationUser
       {
         Email = Email,
@@ -250,10 +282,11 @@ namespace BackEnd.Service.Service
     #region CreateCLientWithSocialId
     public async Task<Result> CreateCLientWithSocialId(EsSrClientViewModel esSrClientViewModel)
     {
-     
+
       try
       {
-        if (!FindCustomerBySocailId(esSrClientViewModel.SocialId)) {
+        if (!FindCustomerBySocailId(esSrClientViewModel.SocialId))
+        {
           return new Result
           {
             success = false,
@@ -263,7 +296,8 @@ namespace BackEnd.Service.Service
         }
 
 
-        if (!string.IsNullOrEmpty(esSrClientViewModel.Email)) {
+        if (!string.IsNullOrEmpty(esSrClientViewModel.Email))
+        {
           if (checEmailALreadyExist(esSrClientViewModel.Email))
           {
             return new Result
@@ -274,7 +308,7 @@ namespace BackEnd.Service.Service
             };
           }
         }
-     
+
         EsSrClient esSrClient = new EsSrClient();
         var obje = _mapper.Map(esSrClientViewModel, esSrClient);
         obje.IsDelete = false;
@@ -320,20 +354,22 @@ namespace BackEnd.Service.Service
 
     public Boolean FindCustomerBySocailId(string socialId)
     {
-      var res= _unitOfWork.EsSrClientRepository.Get(filter: (x => x.SocialId == socialId));
+      var res = _unitOfWork.EsSrClientRepository.Get(filter: (x => x.SocialId == socialId));
       if (res != null)
       {
         return true;
       }
-      else {
+      else
+      {
         return false;
-          }
+      }
     }
 
     #region UpdateClient
     public async Task<Result> UpdateClient(EsSrClientViewModel esSrClientViewModel)
     {
-      try {
+      try
+      {
         EsSrClient esSrClient = new EsSrClient();
         var obje = _mapper.Map(esSrClientViewModel, esSrClient);
         obje.IsDelete = false;
@@ -362,7 +398,8 @@ namespace BackEnd.Service.Service
           };
         }
       }
-      catch (Exception ex) {
+      catch (Exception ex)
+      {
         return new Result
         {
           success = false,
@@ -371,7 +408,7 @@ namespace BackEnd.Service.Service
           message = ExtensionMethods.FullMessage(ex)
         };
       }
- 
+
     }
     #endregion
   }

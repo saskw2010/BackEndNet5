@@ -28,6 +28,7 @@ namespace BackEnd.BAL.ApiRoute
       public const string GetUserByUserName = Base + "Identity/GetUserByUserName";
       public const string GetByUserId = Base + "Identity/GetByUserId";
       public const string RestPassword = Base + "Identity/RestPassword";
+      public const string ChangePassword = Base + "Identity/ChangePassword";
     }
 
     public static class WebSite
@@ -53,6 +54,7 @@ namespace BackEnd.BAL.ApiRoute
     {
       public const string CreateCLient = Base + "EsSrClient/CreateCLient";
       public const string createUserForClients = Base + "EsSrClient/createUserForClients";
+      public const string GetCLientByEmail = Base + "EsSrClient/GetCLientByEmail";
       public const string socialRegister = Base + "EsSrClient/socialRegister";
       public const string UpdateCLient = Base + "EsSrClient/UpdateCLient";
     }

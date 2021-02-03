@@ -240,6 +240,15 @@ namespace BackEnd.Service.Service
             datacontrollerView.dataController_views_view_label = obj.dataController_views_view_label;
             datacontrollerView.dataController_views_view_commandId = obj.dataController_views_view_commandId;
             datacontrollerView.dataController_views_view_headerText = obj.dataController_views_view_headerText;
+            List<dataController_dataFieldsGrid> dataFiledList = new List<dataController_dataFieldsGrid>();
+            foreach (var element in obj.dataController_dataFields) {
+              dataController_dataFieldsGrid dataController_dataFieldsObj = new dataController_dataFieldsGrid();
+              dataController_dataFieldsObj.FieldName = element.FieldName;
+              dataController_dataFieldsObj.AliasFieldName = element.AliasFieldName;
+              dataController_dataFieldsObj.Columns = element.Columns;
+              dataFiledList.Add(dataController_dataFieldsObj);
+            }
+            datacontrollerView.dataController_dataFields = dataFiledList;
             dataController.dataController_views.Add(datacontrollerView);
           }
           dataControllerList.Add(dataController);

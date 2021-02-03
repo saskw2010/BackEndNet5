@@ -105,7 +105,14 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
-
+    #region GetCLientByEmail
+    [HttpGet(ApiRoute.Client.GetCLientByEmail)]
+    public async Task<Result> GetCLientByEmail(string email)
+    {
+      var res1 = await _EsSrClientService.GetCLientByEmail(email);
+      return res1;
+    }
+    #endregion
 
     #region socialRegister
     [HttpPost(ApiRoute.Client.socialRegister)]

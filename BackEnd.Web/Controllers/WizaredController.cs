@@ -346,6 +346,21 @@ namespace BackEnd.Web.Controllers
             datacontrollerView.dataController_views_view_label = view.Label;
             datacontrollerView.dataController_views_view_commandId = view.CommandId;
             datacontrollerView.dataController_views_view_headerText = view.HeaderText;
+            List<dataController_dataFieldsGridViewModel> dataFiledList = new List<dataController_dataFieldsGridViewModel>();
+            if (view.Id == "grid1") {
+              foreach (var element in view.DataFields.DataField)
+              {
+                var dataFiledObjec = new dataController_dataFieldsGridViewModel();
+                dataFiledObjec.FieldName = element.FieldName;
+                dataFiledObjec.AliasFieldName = element.AliasFieldName;
+                dataFiledObjec.Columns = element.Columns;
+                dataFiledList.Add(dataFiledObjec);
+              }
+            }
+           
+
+            datacontrollerView.dataController_dataFields = new List<dataController_dataFieldsGridViewModel>();
+            datacontrollerView.dataController_dataFields.AddRange(dataFiledList);
             dataController_viewsList.Add(datacontrollerView);
           }
           //--end of view
