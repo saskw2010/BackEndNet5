@@ -43,6 +43,7 @@ namespace BackEnd.Service.MappingProfiles
       CreateMap<xmlController, xmlControllerViewModel>().ReverseMap();
       CreateMap<XmlFile, XmlFileViewModel>().ReverseMap();
       CreateMap<dataController, dataControllerViewModel>().ReverseMap();
+      CreateMap<fileManagerExtentions, FileMangerExtentionViewModel>().ReverseMap();
 
     }
   }

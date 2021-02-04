@@ -57,6 +57,7 @@ namespace BackEnd.BAL.ApiRoute
       public const string GetCLientByEmail = Base + "EsSrClient/GetCLientByEmail";
       public const string socialRegister = Base + "EsSrClient/socialRegister";
       public const string UpdateCLient = Base + "EsSrClient/UpdateCLient";
+      public const string UpdateCLientFbToken = Base + "EsSrClient/UpdateCLientFbToken";
     }
 
     public static class Technical

@@ -34,13 +34,16 @@ namespace BackEnd.Web.Controllers
            _identityServices = identityServices;
            _userManager = userManager;
         }
-        [HttpPost("FileUpload")]
-        public async Task<Result> FileUpload(long id,string userName)
-        {
-      try {
-        var files=Request.Form.Files;
+
+    #region   FileUpload
+    [HttpPost("FileUpload")]
+    public async Task<Result> FileUpload(long id, string userName)
+    {
+      try
+      {
+        var files = Request.Form.Files;
         if (files == null || files.Count == 0)
-          return new Result {success=false,code="403",message="no file is selected"};
+          return new Result { success = false, code = "403", message = "no file is selected" };
         long size = files.Sum(f => f.Length);
         var filePaths = new List<string>();
         foreach (var formFile in files)
@@ -72,19 +75,72 @@ namespace BackEnd.Web.Controllers
         // process uploaded files
         // Don't rely on or trust the FileName property without validation.
         //return Ok(new { count = files.Count, size, filePaths });
-        
-          return await _EsSrAttacheService.saveAttatche(filePaths, id, userName, size);
-        
-      } catch (Exception ex) {
-        return new Result {
-          success=false,
-          message=ex.Message,
-          code="403"
+
+        return await _EsSrAttacheService.saveAttatche(filePaths, id, userName, size);
+
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = false,
+          message = ex.Message,
+          code = "403"
         };
       }
-
-      
-
     }
+    #endregion
+
+    #region   EditFile
+    [HttpPost("EditFile")]
+    public async Task<Result> EditFile(long essrAttatchId, string userName, IFormFile files)
+    {
+      try
+      {
+        //var files = Request.Form.Files.FirstOrDefault();
+        if (files == null )
+          return new Result { success = false, code = "403", message = "no file is selected" };
+        long size = files.Length;
+        string filePaths="" ;
+        
+          if (files.Length > 0)
+          {
+            // full path to file in temp location
+            var folderName = Path.Combine("wwwroot/UploadFiles");
+            if (!Directory.Exists(folderName))
+            {
+              Directory.CreateDirectory(folderName);
+            }
+
+            string extension = Path.GetExtension(files.FileName);
+
+
+            string fileName = Path.GetFileNameWithoutExtension(files.FileName);
+            var fileNameWithDate = fileName + DateTime.Now.Ticks;
+            var filepath = Path.Combine(folderName, fileNameWithDate + extension);
+
+
+            using (var stream = new FileStream(filepath, FileMode.Create))
+            {
+              await files.CopyToAsync(stream);
+            }
+            filePaths=fileNameWithDate + extension;
+          }
+        return await _EsSrAttacheService.UpdateAttatch(essrAttatchId, filePaths, userName, size);
+
+
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = false,
+          message = ex.Message,
+          code = "403"
+        };
+      }
+    }
+        #endregion
+      
     }
 }

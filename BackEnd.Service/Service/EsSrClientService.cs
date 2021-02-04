@@ -239,6 +239,51 @@ namespace BackEnd.Service.Service
     }
     #endregion
 
+    #region UpdateCLientFbToken(string userName,string FbToken)
+    public async Task<Result> UpdateCLientFbToken(string userName, string FbToken)
+    {
+      try
+      {
+        var User = FindByEmailCustome(userName);
+        EsSrClient esSrClient = new EsSrClient();
+        var obje = _mapper.Map(User, esSrClient);
+        obje.ModifiedOn = DateTime.Now;
+        _unitOfWork.EsSrClientRepository.Update(obje);
+        var result1 = await _unitOfWork.SaveAsync();
+        if (result1 == 200)
+        {
+          return new Result
+          {
+            success = true,
+            code = "200",
+            message = "Update Client Faild",
+            data = null
+          };
+        }
+        else
+        {
+          return new Result
+          {
+            success = false,
+            code = "403",
+            message = "Update Client Faild",
+            data = null
+          };
+        }
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = false,
+          code = "400",
+          data = null,
+          message = ExtensionMethods.FullMessage(ex)
+        };
+      }
+    }
+    #endregion
+
     #region addUser
     public async Task addUser(string UserName, string Email, string PhoneNumber, string Password)
     {

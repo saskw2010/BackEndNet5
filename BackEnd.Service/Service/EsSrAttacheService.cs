@@ -72,5 +72,55 @@ namespace BackEnd.Service.Service
       }
     
     }
+
+    public async Task<Result> UpdateAttatch(long essrAttatchId, string FileName, string UserName, long Length)
+    {
+      try
+      {
+       
+        EsSrAttache EsSrAttacheObj =await _unitOfWork.EsSrAttacheRepository.GetAsyncByID(essrAttatchId);
+        string folderName = "wwwroot/UploadFiles";
+        var Oldfile = System.IO.Path.Combine(folderName, EsSrAttacheObj.FileName);
+        try
+        {
+          System.IO.File.Delete(Oldfile);
+        }
+        catch { }
+        EsSrAttacheObj.FileName = FileName;
+        EsSrAttacheObj.ModifiedBy = UserName;
+        EsSrAttacheObj.Length = Length;
+        EsSrAttacheObj.ModifiedOn = DateTime.Now;
+        _unitOfWork.EsSrAttacheRepository.Update(EsSrAttacheObj);
+        var res = await _unitOfWork.SaveAsync();
+       
+        if (res == 200)
+        {
+          return new Result
+          {
+            success = true,
+            code = "200",
+            message = "attache added successfuly"
+          };
+        }
+        else
+        {
+          return new Result
+          {
+            success = false,
+            code = "403",
+            message = "attache added faild"
+          };
+        }
+      }
+      catch (Exception ex)
+      {
+        return new Result
+        {
+          success = false,
+          code = "403",
+          message = ex.Message
+        };
+      }
+    }
   }
 }

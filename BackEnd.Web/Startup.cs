@@ -190,6 +190,7 @@ namespace BackEnd.Web
       services.AddScoped<IEsSrEngineerService, EsSrEngineerService>();
       services.AddScoped<IEsSrSupervisorService, EsSrSupervisorService>();
       services.AddScoped<IEsSrItemService, EsSrItemService>();
+      services.AddScoped<IFileMangerExtentionService, FileMangerExtentionService>();
       //--------------------------end of inject service--------------------------------
 
       //begin::autmapper

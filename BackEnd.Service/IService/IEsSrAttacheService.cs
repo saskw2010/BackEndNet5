@@ -9,5 +9,6 @@ namespace BackEnd.Service.IService
   public interface IEsSrAttacheService
   {
     Task<Result> saveAttatche(List<string> FileName,long OrderId,string UserName,long Length);
+    Task<Result> UpdateAttatch(long essrAttatchId, string FileName,string UserName,long Length);
   }
 }

@@ -13,6 +13,7 @@ namespace BackEnd.Service.IService
     Task<Result> UpdateClient(EsSrClientViewModel esSrClientViewModel);
     Task<Result>  createUserForClientsAsync();
     Task<Result> GetCLientByEmail(string email);
+    Task<Result> UpdateCLientFbToken(string userName, string FbToken);
 
   }
 }

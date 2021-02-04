@@ -105,6 +105,15 @@ namespace BackEnd.Web.Controllers
     }
     #endregion
 
+    #region UpdateCLientFbToken
+    [HttpGet(ApiRoute.Client.UpdateCLientFbToken)]
+    public async Task<Result> UpdateCLientFbToken(string userName, string FbToken)
+    {
+      var res1 = await _EsSrClientService.UpdateCLientFbToken(userName, FbToken);
+      return res1;
+    }
+    #endregion
+
     #region GetCLientByEmail
     [HttpGet(ApiRoute.Client.GetCLientByEmail)]
     public async Task<Result> GetCLientByEmail(string email)

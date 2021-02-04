@@ -356,6 +356,12 @@ namespace BackEnd.BAL.Repository
       }
     }
 
-  
+    public GenericRepository<fileManagerExtentions> FileManagerExtentionRepository
+    {
+      get
+      {
+        return new GenericRepository<fileManagerExtentions>(Context);
+      }
+    }
   }
 }
