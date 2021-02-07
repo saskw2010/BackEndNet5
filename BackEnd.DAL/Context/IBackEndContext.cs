@@ -42,6 +42,10 @@ namespace RealState.DAL.IBackEndContext
     DbSet<dataController_fields_field> dataController_fields_field { get; set; }
     DbSet<dataController_views> dataController_views { get; set; }
     DbSet<dataController_dataFieldsGrid> dataController_dataFieldsGrid { get; set; }
+    DbSet<dataController_categoryCreate> dataController_categoryCreate { get; set; }
+    DbSet<dataController_dataFieldCreate> dataController_dataFieldCreate { get; set; }
+    DbSet<dataController_categoryEdit> dataController_categoryEdit { get; set; }
+    DbSet<dataController_dataFieldEdit> dataController_dataFieldEdit { get; set; }
     List<Object> GetEsSr_Proc_GetActiveItems();
   }
 }

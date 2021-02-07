@@ -52,6 +52,10 @@ namespace BackEnd.DAL.Context
     public virtual DbSet<dataController_fields_field> dataController_fields_field { get; set; }
     public virtual DbSet<dataController_views> dataController_views { get; set; }
     public DbSet<dataController_dataFieldsGrid> dataController_dataFieldsGrid { get; set; }
+    public DbSet<dataController_categoryCreate> dataController_categoryCreate { get; set; }
+    public DbSet<dataController_dataFieldCreate> dataController_dataFieldCreate { get; set; }
+    public DbSet<dataController_categoryEdit> dataController_categoryEdit { get; set; }
+    public DbSet<dataController_dataFieldEdit> dataController_dataFieldEdit { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

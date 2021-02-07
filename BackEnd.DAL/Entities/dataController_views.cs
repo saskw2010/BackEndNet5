@@ -28,5 +28,8 @@ namespace BackEnd.DAL.Entities
         public Nullable<int> datacontrollerFkId { get; set; }
         public virtual dataController dataController { get; set; }
         public virtual ICollection<dataController_dataFieldsGrid> dataController_dataFields { get; set; }
+        public virtual ICollection<dataController_categoryCreate> dataController_categoryCreate { get; set; }
+        public virtual ICollection<dataController_categoryEdit> dataController_categoryEdit { get; set; }
+
   }
 }

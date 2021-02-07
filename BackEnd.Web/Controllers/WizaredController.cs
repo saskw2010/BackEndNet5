@@ -347,7 +347,8 @@ namespace BackEnd.Web.Controllers
             datacontrollerView.dataController_views_view_commandId = view.CommandId;
             datacontrollerView.dataController_views_view_headerText = view.HeaderText;
             List<dataController_dataFieldsGridViewModel> dataFiledList = new List<dataController_dataFieldsGridViewModel>();
-            if (view.Id == "grid1") {
+            if (view.Id == "grid1")
+            {
               foreach (var element in view.DataFields.DataField)
               {
                 var dataFiledObjec = new dataController_dataFieldsGridViewModel();
@@ -357,7 +358,15 @@ namespace BackEnd.Web.Controllers
                 dataFiledList.Add(dataFiledObjec);
               }
             }
-           
+            List<dataController_categoryCreateVm> datacategoryCreateObjec = new List<dataController_categoryCreateVm>();
+            if (view.Id == "createForm1")
+            {
+              var dataController_categoryCreateObjec = new dataController_categoryCreateVm();
+              dataController_categoryCreateObjec.headerText = view.Categories.Category.HeaderText;
+              datacategoryCreateObjec.Add(dataController_categoryCreateObjec);
+
+            }
+
 
             datacontrollerView.dataController_dataFields = new List<dataController_dataFieldsGridViewModel>();
             datacontrollerView.dataController_dataFields.AddRange(dataFiledList);
