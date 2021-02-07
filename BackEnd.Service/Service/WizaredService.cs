@@ -241,15 +241,73 @@ namespace BackEnd.Service.Service
             datacontrollerView.dataController_views_view_commandId = obj.dataController_views_view_commandId;
             datacontrollerView.dataController_views_view_headerText = obj.dataController_views_view_headerText;
             List<dataController_dataFieldsGrid> dataFiledList = new List<dataController_dataFieldsGrid>();
-            foreach (var element in obj.dataController_dataFields) {
-              dataController_dataFieldsGrid dataController_dataFieldsObj = new dataController_dataFieldsGrid();
-              dataController_dataFieldsObj.FieldName = element.FieldName;
-              dataController_dataFieldsObj.AliasFieldName = element.AliasFieldName;
-              dataController_dataFieldsObj.Columns = element.Columns;
-              dataFiledList.Add(dataController_dataFieldsObj);
+            if (obj.dataController_dataFields != null) {
+              foreach (var element in obj.dataController_dataFields)
+              {
+                dataController_dataFieldsGrid dataController_dataFieldsObj = new dataController_dataFieldsGrid();
+                dataController_dataFieldsObj.FieldName = element.FieldName;
+                dataController_dataFieldsObj.AliasFieldName = element.AliasFieldName;
+                dataController_dataFieldsObj.Columns = element.Columns;
+                dataFiledList.Add(dataController_dataFieldsObj);
+              }
             }
             datacontrollerView.dataController_dataFields = dataFiledList;
+            List<dataController_categoryCreate> categoryCreate = new List<dataController_categoryCreate>();
+            List<dataController_categoryEdit> categoryEdit = new List<dataController_categoryEdit>();
+            if (obj.dataController_categoryCreate.Count() > 0)
+              {
+              List<dataController_dataFieldCreate> dataController_dataFieldCreatList = new List<dataController_dataFieldCreate>();
+              foreach (var categoryCreateVm in obj.dataController_categoryCreate)
+                {
+                foreach (var catDataField in categoryCreateVm.dataController_dataFieldCreate) {
+                  dataController_dataFieldCreate dataController_dataFieldCreat = new dataController_dataFieldCreate();
+                  dataController_dataFieldCreat.FieldName = catDataField.FieldName;
+                  dataController_dataFieldCreat.AliasFieldName = catDataField.AliasFieldName;
+                  dataController_dataFieldCreat.Columns = catDataField.Columns;
+                  dataController_dataFieldCreatList.Add(dataController_dataFieldCreat);
+                }
+                  dataController_categoryCreate dataControllerCreateObj = new dataController_categoryCreate();
+                  dataControllerCreateObj.headerText = categoryCreateVm.headerText;
+                  dataControllerCreateObj.flow = categoryCreateVm.flow;
+                  dataControllerCreateObj.description = categoryCreateVm.description;
+                  dataControllerCreateObj.id = categoryCreateVm.id;
+                  dataControllerCreateObj.dataController_dataFieldCreate = dataController_dataFieldCreatList;
+                   categoryCreate.Add(dataControllerCreateObj);
+                }
+              datacontrollerView.dataController_categoryCreate = categoryCreate;
+            }
+          
+     
+
+            //------------------------------------------------------------------------------
+            if (obj.dataController_categoryEdit.Count() > 0)
+            {
+              List<dataController_dataFieldEdit> dataController_dataFieldEditList = new List<dataController_dataFieldEdit>();
+              foreach (var categoryCreateVm in obj.dataController_categoryEdit)
+              {
+                foreach (var catDataField in categoryCreateVm.dataController_dataFieldEdit)
+                {
+                  dataController_dataFieldEdit dataController_dataFieldEdit = new dataController_dataFieldEdit();
+                  dataController_dataFieldEdit.FieldName = catDataField.FieldName;
+                  dataController_dataFieldEdit.AliasFieldName = catDataField.AliasFieldName;
+                  dataController_dataFieldEdit.Columns = catDataField.Columns;
+                  dataController_dataFieldEditList.Add(dataController_dataFieldEdit);
+                }
+                dataController_categoryEdit dataControllerEditObj = new dataController_categoryEdit();
+                dataControllerEditObj.headerText = categoryCreateVm.headerText;
+                dataControllerEditObj.flow = categoryCreateVm.flow;
+                dataControllerEditObj.description = categoryCreateVm.description;
+                dataControllerEditObj.id = categoryCreateVm.id;
+                dataControllerEditObj.dataController_dataFieldEdit = dataController_dataFieldEditList;
+                categoryEdit.Add(dataControllerEditObj);
+              }
+              datacontrollerView.dataController_categoryEdit = categoryEdit;
+            }
+
+           
             dataController.dataController_views.Add(datacontrollerView);
+            //------------------------------------------------------------------------------
+
           }
           dataControllerList.Add(dataController);
 

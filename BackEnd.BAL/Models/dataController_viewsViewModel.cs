@@ -15,5 +15,7 @@ namespace BackEnd.BAL.Models
     public string dataController_views_view_headerText { get; set; }
     public Nullable<int> datacontrollerFkId { get; set; }
     public List<dataController_dataFieldsGridViewModel> dataController_dataFields { get; set; }
+    public virtual List<dataController_categoryCreateVm> dataController_categoryCreate { get; set; }
+    public virtual List<dataController_categoryEditVm> dataController_categoryEdit { get; set; }
   }
 }

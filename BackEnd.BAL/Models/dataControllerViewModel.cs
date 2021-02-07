@@ -17,7 +17,5 @@ namespace BackEnd.BAL.Models
     public List<dataController_commandsViewModel> dataController_commands { get; set; }
     public List<dataController_viewsViewModel> dataController_views { get; set; }
     public List<dataController_fields_fieldViewModel> dataController_fields_field { get; set; }
-    public virtual ICollection<dataController_categoryCreateVm> dataController_categoryCreate { get; set; }
-    public virtual ICollection<dataController_categoryEditVm> dataController_categoryEdit { get; set; }
   }
 }

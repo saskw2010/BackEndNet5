@@ -337,8 +337,12 @@ namespace BackEnd.Web.Controllers
           //--end of Fields
           //----map view
           List<dataController_viewsViewModel> dataController_viewsList = new List<dataController_viewsViewModel>();
+        
           foreach (var view in datacontrollerObj.Views.View)
           {
+            List<dataController_categoryCreateVm> datacategoryCreateObjec = new List<dataController_categoryCreateVm>();
+            List<dataController_categoryEditVm> datacategorEditList = new List<dataController_categoryEditVm>();
+
             var datacontrollerView = new dataController_viewsViewModel();
             datacontrollerView.dataController_name = NameOfController;
             datacontrollerView.dataController_views_view_id = view.Id;
@@ -357,23 +361,62 @@ namespace BackEnd.Web.Controllers
                 dataFiledObjec.Columns = element.Columns;
                 dataFiledList.Add(dataFiledObjec);
               }
+              datacontrollerView.dataController_dataFields = new List<dataController_dataFieldsGridViewModel>();
+              datacontrollerView.dataController_dataFields.AddRange(dataFiledList);
+             
             }
-            List<dataController_categoryCreateVm> datacategoryCreateObjec = new List<dataController_categoryCreateVm>();
+          
             if (view.Id == "createForm1")
             {
-              var dataController_categoryCreateObjec = new dataController_categoryCreateVm();
-              dataController_categoryCreateObjec.headerText = view.Categories.Category.HeaderText;
-              datacategoryCreateObjec.Add(dataController_categoryCreateObjec);
+           
+              List<dataController_dataFieldCreateVm> dataController_dataFieldCreateList = new List<dataController_dataFieldCreateVm>();
+              foreach (var dataField in view.Categories.Category.DataFields.DataField) {
+                var dataController_dataFieldCreateObj = new dataController_dataFieldCreateVm();
+                dataController_dataFieldCreateObj.FieldName = dataField.FieldName;
+                dataController_dataFieldCreateObj.AliasFieldName = dataField.AliasFieldName;
+                dataController_dataFieldCreateObj.Columns = dataField.Columns;
+                dataController_dataFieldCreateList.Add(dataController_dataFieldCreateObj);
+              }
 
+              var dataController_categoryCreateObjec = new dataController_categoryCreateVm();
+              dataController_categoryCreateObjec.id = view.Categories.Category.Id;
+              dataController_categoryCreateObjec.headerText = view.Categories.Category.HeaderText;
+              dataController_categoryCreateObjec.flow = view.Categories.Category.Flow;
+              dataController_categoryCreateObjec.description = view.Categories.Category.description;
+              dataController_categoryCreateObjec.dataController_dataFieldCreate = dataController_dataFieldCreateList;
+              datacategoryCreateObjec.Add(dataController_categoryCreateObjec);
             }
 
+            if (view.Id == "editForm1")
+            {
 
-            datacontrollerView.dataController_dataFields = new List<dataController_dataFieldsGridViewModel>();
-            datacontrollerView.dataController_dataFields.AddRange(dataFiledList);
+              List<dataController_dataFieldEditVm> dataController_dataFieldEditList = new List<dataController_dataFieldEditVm>();
+              foreach (var dataField in view.Categories.Category.DataFields.DataField)
+              {
+                var dataController_dataFieldEditObj = new dataController_dataFieldEditVm();
+                dataController_dataFieldEditObj.FieldName = dataField.FieldName;
+                dataController_dataFieldEditObj.AliasFieldName = dataField.AliasFieldName;
+                dataController_dataFieldEditObj.Columns = dataField.Columns;
+                dataController_dataFieldEditList.Add(dataController_dataFieldEditObj);
+              }
+
+              var dataController_categoryEditObjec = new dataController_categoryEditVm();
+              dataController_categoryEditObjec.id = view.Categories.Category.Id;
+              dataController_categoryEditObjec.headerText = view.Categories.Category.HeaderText;
+              dataController_categoryEditObjec.flow = view.Categories.Category.Flow;
+              dataController_categoryEditObjec.description = view.Categories.Category.description;
+              dataController_categoryEditObjec.dataController_dataFieldEdit = dataController_dataFieldEditList;
+              datacategorEditList.Add(dataController_categoryEditObjec);
+            }
+            datacontrollerView.dataController_categoryCreate = new List<dataController_categoryCreateVm>();
+            datacontrollerView.dataController_categoryCreate.AddRange(datacategoryCreateObjec);
+            datacontrollerView.dataController_categoryEdit = new List<dataController_categoryEditVm>();
+            datacontrollerView.dataController_categoryEdit.AddRange(datacategorEditList);
             dataController_viewsList.Add(datacontrollerView);
           }
+          
           //--end of view
-        
+
           dataControllerViewModel dataControllerVM = new dataControllerViewModel
           {
             dataController_name = datacontrollerObj.Name,
@@ -384,8 +427,8 @@ namespace BackEnd.Web.Controllers
             xmlFkId = item.Id,
             dataController_commandstableslist = dataControllerTableList,
             dataController_commands = datacontrollerCommandList,
-           dataController_views= dataController_viewsList,
-           dataController_fields_field= dataController_fieldsList
+            dataController_views = dataController_viewsList,
+            dataController_fields_field = dataController_fieldsList
 
 
           };

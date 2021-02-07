@@ -13,6 +13,7 @@ namespace BackEnd.DAL.Entities
     public string headerText { get; set; }
     public string flow { get; set; }
     public string description { get; set; }
+    public string id { get; set; }
     [ForeignKey("dataController_views")]
     public Nullable<long> ViewFkId { get; set; }
 

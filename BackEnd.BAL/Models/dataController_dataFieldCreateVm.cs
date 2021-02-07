@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BackEnd.BAL.Models
 {
- public class dataController_dataFieldEditVm
+  public class dataController_dataFieldCreateVm
   {
     public long FieldId { get; set; }
     public string FieldName { get; set; }
