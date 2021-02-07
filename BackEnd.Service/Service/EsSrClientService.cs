@@ -244,11 +244,11 @@ namespace BackEnd.Service.Service
     {
       try
       {
-        var User = FindByEmailCustome(userName);
-        EsSrClient esSrClient = new EsSrClient();
-        var obje = _mapper.Map(User, esSrClient);
-        obje.ModifiedOn = DateTime.Now;
-        _unitOfWork.EsSrClientRepository.Update(obje);
+        var User = _unitOfWork.EsSrClientRepository.GetEntity(x => x.Email == userName);// FindByEmailCustome(userName);
+                                                                                        //EsSrClient esSrClient = new EsSrClient();
+                                                                                        //var obje = _mapper.Map(User, esSrClient);
+        User.ModifiedOn = DateTime.Now;
+        _unitOfWork.EsSrClientRepository.Update(User);
         var result1 = await _unitOfWork.SaveAsync();
         if (result1 == 200)
         {
